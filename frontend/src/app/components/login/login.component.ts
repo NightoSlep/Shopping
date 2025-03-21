@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule,
-            
             FormsModule,
             MatInputModule,
             MatButtonModule,
@@ -29,6 +28,7 @@ import { CommonModule } from '@angular/common';
 export class LoginComponent {
   username = '';
   password = '';
+  hidePassword: boolean = true; 
 
   constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
 
@@ -37,6 +37,7 @@ export class LoginComponent {
     this.authService.login({ username: this.username, password: this.password }).subscribe(
       response => {
         localStorage.setItem('token', response.access_token);
+        localStorage.setItem('username', this.username); 
         this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
         this.router.navigate(['/']); // Chuyển hướng sau khi đăng nhập
       },
@@ -45,4 +46,20 @@ export class LoginComponent {
       }
     );
   }
+
+  loginWithGoogle() {
+    alert('Chức năng đăng nhập bằng Google chưa được triển khai!');
+  }
+
+  loginWithFacebook() {
+    alert('Chức năng đăng nhập bằng Facebook chưa được triển khai!');
+  }
+
+  navigateToRegister() {
+    this.router.navigate(['/register']);
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
+}
 }

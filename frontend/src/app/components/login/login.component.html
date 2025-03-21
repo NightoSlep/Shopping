@@ -1,20 +1,48 @@
 <div class="center">
     <mat-card class="login-card">
-      <h2>Đăng Nhập</h2>
-      <form (submit)="onLogin()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Tên đăng nhập</mat-label>
-          <input matInput type="text" [(ngModel)]="username" name="username" required>
-        </mat-form-field>
-  
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Mật khẩu</mat-label>
-          <input matInput type="password" [(ngModel)]="password" name="password" required>
-          <mat-icon matSuffix>lock</mat-icon>
-        </mat-form-field>
-  
-        <button mat-raised-button color="primary" class="full-width">Đăng Nhập</button>
-      </form>
+        <h2>Đăng Nhập</h2>
+        
+        <form (submit)="onLogin()" #loginForm="ngForm">
+            <!-- Tên đăng nhập -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Tên đăng nhập</mat-label>
+                <input matInput type="text" [(ngModel)]="username" name="username" required #usernameInput="ngModel">
+                <mat-error *ngIf="usernameInput.invalid && usernameInput.touched">Vui lòng nhập tên đăng nhập</mat-error>
+            </mat-form-field>
+
+            <!-- Mật khẩu -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Mật khẩu</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password" required #passwordInput="ngModel">
+                <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+                    <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="passwordInput.invalid && passwordInput.touched">Vui lòng nhập mật khẩu</mat-error>
+            </mat-form-field>
+
+            <!-- Đăng ký -->
+            <p class="register-text">
+                Chưa có tài khoản?
+                <a (click)="navigateToRegister()" class="register-link">Đăng ký</a>
+            </p>
+
+            <!-- Nút Đăng Nhập -->
+            <button mat-raised-button color="primary" class="full-width" [disabled]="loginForm.invalid">Đăng Nhập</button>
+        </form>
+
+        <!-- Gạch ngang -->
+        <div class="separator">
+            <span>hoặc</span>
+        </div>
+
+        <!-- Đăng nhập bằng MXH -->
+        <div class="social-login">
+            <button mat-raised-button color="warn" class="social-btn google-btn" (click)="loginWithGoogle()">
+                <mat-icon>g_translate</mat-icon> Google
+            </button>
+            <button mat-raised-button color="primary" class="social-btn facebook-btn" (click)="loginWithFacebook()">
+                <mat-icon>facebook</mat-icon> Facebook
+            </button>
+        </div>
     </mat-card>
-  </div>
-  
+</div>

@@ -11,13 +11,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
             FormsModule, 
-            
             MatInputModule,
             MatButtonModule,
             MatCardModule,
@@ -31,7 +31,7 @@ export class RegisterComponent {
   username = '';
   password = '';
 
-  constructor(private authService: AuthService, private snackBar: MatSnackBar) {}
+  constructor(private authService: AuthService, private snackBar: MatSnackBar, private router:Router) {}
 
   onRegister() {
     console.log("register");
@@ -43,5 +43,9 @@ export class RegisterComponent {
         this.snackBar.open('Đăng ký thất bại!', 'OK', { duration: 3000 });
       }
     );
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 }
