@@ -63,11 +63,6 @@
   margin-top: 2px;
 }
 
-.icon-box:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-}
-
 .mat-menu-panel {
   min-width: 150px;
 }

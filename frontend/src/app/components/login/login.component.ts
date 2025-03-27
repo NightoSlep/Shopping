@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +21,8 @@ import { CommonModule } from '@angular/common';
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
-        MatSnackBarModule],
+        MatSnackBarModule,
+        MatToolbarModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
@@ -27,15 +30,19 @@ export class LoginComponent {
   username = '';
   password = '';
   hidePassword: boolean = true; 
+  user: SocialUser | null = null;
 
-  constructor(private authService: AuthService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router, 
+    private snackBar: MatSnackBar, 
+    private socialAuthService: SocialAuthService) {}
 
   onLogin() {
-
     this.authService.login({ username: this.username, password: this.password }).subscribe(
       response => {
         localStorage.setItem('token', response.access_token);
-        localStorage.setItem('username', this.username); 
+        this.authService.setUser(this.username); 
         this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
         this.router.navigate(['/']); // Chuyển hướng sau khi đăng nhập
       },
@@ -46,18 +53,38 @@ export class LoginComponent {
   }
 
   loginWithGoogle() {
-    alert('Chức năng đăng nhập bằng Google chưa được triển khai!');
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
+      this.user = user;
+      localStorage.setItem('token', user.idToken);
+      this.authService.setUser(this.username); 
+      this.snackBar.open(`Đăng nhập thành công: ${user.name}`, 'OK', { duration: 3000 });
+      this.router.navigate(['/']);
+    }).catch(error => {
+      this.snackBar.open('Đăng nhập Google thất bại!', 'OK', { duration: 3000 });
+    });
   }
 
   loginWithFacebook() {
-    alert('Chức năng đăng nhập bằng Facebook chưa được triển khai!');
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then(user => {
+      this.user = user;
+      localStorage.setItem('token', user.authToken);
+      this.authService.setUser(this.username); 
+      this.snackBar.open(`Đăng nhập thành công: ${user.name}`, 'OK', { duration: 3000 });
+      this.router.navigate(['/']);
+    }).catch(error => {
+      this.snackBar.open('Đăng nhập Facebook thất bại!', 'OK', { duration: 3000 });
+    });
   }
 
   navigateToRegister() {
     this.router.navigate(['/register']);
   }
 
+  navigateToHome(){
+    this.router.navigate(['/']);
+  }
+
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
-}
+  }
 }

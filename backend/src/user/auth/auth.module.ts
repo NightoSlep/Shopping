@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './jwt.guard';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { FacebookStrategy } from './strategies/facebook.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -14,7 +17,13 @@ import { JwtAuthGuard } from './jwt.guard';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [AuthService, JwtAuthGuard],
+  providers: [
+    AuthService,
+    JwtAuthGuard,
+    GoogleStrategy,
+    FacebookStrategy,
+    ConfigModule,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

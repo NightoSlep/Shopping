@@ -27,14 +27,6 @@ export class HomeComponent {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
-    // Kiểm tra xem có token trong localStorage không
-    const token = localStorage.getItem('token');
-    const storedUsername = localStorage.getItem('username');
-
-    if (token && storedUsername) {
-      this.username = storedUsername;
-    }
-
     this.authService.getUser().subscribe(user => {
       this.username = user;
     });
@@ -54,6 +46,10 @@ export class HomeComponent {
 
   navigateToSettings(){
 
+  }
+
+  navigateToHome(){
+    this.router.navigate(['/']);
   }
 
   logout(){

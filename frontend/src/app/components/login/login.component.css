@@ -1,12 +1,50 @@
-.center {
+/* Navbar */
+.navbar {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+  padding: 8px 20px;
+  background-color: white;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logo mat-icon {
+  margin-right: 8px;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; 
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 64px); /* Trừ đi chiều cao của navbar */
+  gap: 40px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+
+.login-form {
+  flex: 1;
+  max-width: 400px;
 }
 
 .login-card {
-  width: 360px;
+  width: 100%;
   padding: 20px;
   text-align: center;
 }
@@ -16,7 +54,7 @@
 }
 
 mat-form-field {
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
 }
 
 .register-text {
@@ -33,7 +71,6 @@ mat-form-field {
   text-decoration: underline;
 }
 
-/* Gạch ngang phân cách */
 .separator {
   display: flex;
   align-items: center;
@@ -41,7 +78,8 @@ mat-form-field {
   margin: 15px 0;
 }
 
-.separator::before, .separator::after {
+.separator::before,
+.separator::after {
   content: "";
   flex: 1;
   border-bottom: 1px solid #ccc;
@@ -53,11 +91,10 @@ mat-form-field {
   color: #666;
 }
 
-/* Nút mạng xã hội */
 .social-login {
   display: flex;
   justify-content: space-between;
-  gap: 12px; 
+  gap: 12px;
 }
 
 .social-btn {
@@ -78,4 +115,21 @@ mat-form-field {
 .facebook-btn {
   background-color: #4267B2;
   color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    text-align: center;
+    height: auto;
+  }
+
+  .login-image {
+    max-width: 250px;
+  }
+
+  .login-form {
+    max-width: 100%;
+  }
 }

@@ -33,8 +33,12 @@ export class AuthService {
     return localStorage.getItem('username');
   }
 
-  // Lấy thông tin user từ localStorage
+  setUser(username: string) {
+    localStorage.setItem('username', username);
+    this.userSubject.next(username); 
+  }
+
   getUser(): Observable<string | null> {
-    return this.userSubject.asObservable();
+    return this.userSubject.asObservable();  
   }
 }
