@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './components/client/home/home.component';
+import { LoginComponent } from './components/client/login/login.component';
+import { RegisterComponent } from './components/client/register/register.component';
+import { ClientLayoutComponent } from './components/client/client-layout/client-layout.component';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent }
+    {   
+        path: '', 
+        component: ClientLayoutComponent, 
+        children: [
+            { path: '', component: HomeComponent },
+            { path: 'login', component: LoginComponent },
+            { path: 'register', component: RegisterComponent },
+        ]},
 ];

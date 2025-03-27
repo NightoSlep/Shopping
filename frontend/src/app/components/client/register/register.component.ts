@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/client/auth.service';
 import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 
 // Import Material
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +15,7 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'app-register',
     imports: [
+        CommonModule,
         FormsModule,
         MatInputModule,
         MatButtonModule,
