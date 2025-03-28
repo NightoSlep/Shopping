@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { AuthService } from '../../../services/client/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
