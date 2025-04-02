@@ -3,8 +3,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModuleOptions } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './user/auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true, // Đảm bảo ConfigModule có thể được sử dụng ở mọi module
     }),
     AuthModule,
+    CategoryModule,
     ConfigModule,
   ],
   controllers: [AppController],

@@ -10,12 +10,14 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthDto } from './dto/auth.dto';
-import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './jwt.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from './role.guard';
-import { Roles } from './role.decorator';
+import { RolesGuard } from '../guards/role.guard';
+import { AuthService } from '../services/auth.service';
+import { Roles } from '../role.decorator';
+import { RegisterDto } from '../dto/register.dto';
+import { LoginDto } from '../dto/login.dto';
+import { UserRole } from 'src/user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -23,13 +25,13 @@ export class AuthController {
 
   // Đăng ký tài khoản (Username, Email, Password, Phone, Address)
   @Post('register')
-  async register(@Body() authDto: AuthDto) {
+  async register(@Body() authDto: RegisterDto) {
     return this.authService.register(authDto);
   }
 
   // Đăng nhập bằng username hoặc email
   @Post('login')
-  async login(@Body() authDto: AuthDto) {
+  async login(@Body() authDto: LoginDto) {
     return this.authService.login(authDto);
   }
 
@@ -69,7 +71,7 @@ export class AuthController {
       id: req.user.id,
       username: req.user.username,
       email: req.user.email,
-      role: req.user.role, // Trả về role
+      role: req.user.role,
       phone: req.user.phone,
       address: req.user.address,
     };
@@ -82,7 +84,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles(UserRole.ADMIN)
   @Get('admin/users')
   async getAllUsers() {
     return this.authService.getAllUsers();
