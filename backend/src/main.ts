@@ -1,29 +1,42 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as fs from 'fs';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const httpsOptions = {
+    key: fs.readFileSync('ssl/rootCA-key.pem'),
+    cert: fs.readFileSync('ssl/rootCA.pem'),
+  };
 
-  // ✅ Bật CORS cho toàn bộ API
+  const app = await NestFactory.create(AppModule, { httpsOptions });
+
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: 'https://localhost:4200',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
 
-  app.setGlobalPrefix('api'); // Thêm API prefix
+  app.setGlobalPrefix('api');
 
-  // 🔹 Cấu hình Swagger
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
   const config = new DocumentBuilder()
-    .setTitle('Shopping API') // Tiêu đề API
-    .setDescription('API documentation for Shopping App') // Mô tả
-    .setVersion('1.0') // Phiên bản API
-    .addBearerAuth() // Thêm xác thực Bearer Token (JWT)
+    .setTitle('Shopping API')
+    .setDescription('API documentation for Shopping App')
+    .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document); // Định nghĩa URL Swagger
+  SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 443);
 }
 bootstrap();

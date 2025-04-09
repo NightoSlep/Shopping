@@ -1,4 +1,3 @@
-/* Navbar */
 .navbar {
   display: flex;
   align-items: center;
@@ -6,7 +5,7 @@
   background-color: white;
 }
 
-/* Logo */
+
 .logo {
   display: flex;
   align-items: center;

@@ -29,11 +29,21 @@ export class AuthService {
   }
 
   private async generateTokens(user: User) {
-    const payload = { id: user.id, email: user.email, role: user.role };
-    const access_token = this.jwtService.sign(payload, { expiresIn: '15m' });
-    const refresh_token = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const payload = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
+    const access_token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_ACCESS_SECRET,
+      expiresIn: '15m',
+    });
+    const refresh_token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: '7d',
+    });
 
-    // Lưu refresh token vào DB (đã mã hóa)
     const hashedRefreshToken = await this.hashPassword(refresh_token);
     await this.userRepository.update(user.id, {
       refreshToken: hashedRefreshToken,
@@ -45,22 +55,16 @@ export class AuthService {
   async register(registerDto: RegisterDto) {
     const { username, email, password, phone, address, role } = registerDto;
 
-    const existingUser = await this.userRepository.findOne({
-      where: [{ username }, { email }],
-    });
-
-    if (existingUser) {
-      throw new ConflictException('Username or email already exists');
-    }
+    await this.isUserExist({ username, email, phone });
 
     const hashedPassword = await this.hashPassword(password);
     const user = this.userRepository.create({
       username,
       email,
+      phone,
       password: hashedPassword,
-      phone: phone || '',
-      address: address || '',
-      role: role || UserRole.USER,
+      address: address ?? '',
+      role: role ?? UserRole.USER,
     });
 
     await this.userRepository.save(user);
@@ -68,10 +72,10 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const { email, password } = loginDto;
+    const { username, password } = loginDto;
 
     const user = await this.userRepository.findOne({
-      where: [{ email }],
+      where: [{ username }],
     });
 
     if (!user || !(await this.comparePasswords(password, user.password))) {
@@ -81,7 +85,6 @@ export class AuthService {
     return this.generateTokens(user);
   }
 
-  // Xử lý Google & Facebook OAuth (Nhận user từ Google/Facebook)
   async validateOAuthUser(oAuthUser: IOAuthUser) {
     let user = await this.userRepository.findOne({
       where: { email: oAuthUser.email },
@@ -98,12 +101,13 @@ export class AuthService {
     return this.generateTokens(user);
   }
 
-  // Xử lý Refresh Token
   async refreshToken(token: string) {
     if (!token) throw new UnauthorizedException('Refresh token is required');
 
     try {
-      const decoded: JwtPayload = this.jwtService.verify(token);
+      const decoded: JwtPayload = this.jwtService.verify(token, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
 
       if (!decoded?.id)
         throw new UnauthorizedException('Invalid refresh token');
@@ -126,9 +130,33 @@ export class AuthService {
     }
   }
 
-  async getAllUsers() {
-    return this.userRepository.find({
-      select: ['id', 'username', 'email', 'role', 'phone', 'address'],
-    });
+  private async isUserExist({
+    username,
+    email,
+    phone,
+  }: Partial<User>): Promise<void> {
+    const existingUsername = username
+      ? await this.userRepository.findOne({ where: { username } })
+      : null;
+
+    if (existingUsername) {
+      throw new ConflictException('Username already existed');
+    }
+
+    const existingEmail = email
+      ? await this.userRepository.findOne({ where: { email } })
+      : null;
+
+    if (existingEmail) {
+      throw new ConflictException('Email already existed');
+    }
+
+    const existingPhone = phone
+      ? await this.userRepository.findOne({ where: { phone } })
+      : null;
+
+    if (existingPhone) {
+      throw new ConflictException('Phone already existed');
+    }
   }
 }

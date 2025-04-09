@@ -28,13 +28,13 @@ export class NavbarComponent {
   constructor(private router: Router, private authService: AuthService) {
     this.router.events.subscribe(() => {
       const currentUrl = this.router.url;
-      this.hideSearchAndCart = currentUrl.includes('/login') || currentUrl.includes('/register');
+      this.hideSearchAndCart = currentUrl.includes('/login') || currentUrl.includes('/register')|| currentUrl.includes('/profile');
     });
   }
 
   ngOnInit() {
-    this.authService.getUser().subscribe(user => {
-      this.username = user;
+    this.authService.currentUsername$.subscribe(name => {
+      this.username = name;
     });
   }
 
@@ -47,7 +47,7 @@ export class NavbarComponent {
   }
 
   navigateToProfile(){
-
+    this.router.navigate(['profile']);
   }
 
   navigateToSettings(){

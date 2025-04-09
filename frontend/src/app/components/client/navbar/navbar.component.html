@@ -5,7 +5,6 @@
         <span class="brand">V-Shop</span>
     </div>
 
-    <!-- Ở giữa: Thanh tìm kiếm (ẩn trên trang Login & Register) -->
     <div class="search-bar" *ngIf="!hideSearchAndCart">
         <mat-form-field appearance="outline">
             <mat-label>Tìm kiếm sản phẩm...</mat-label>
@@ -14,7 +13,6 @@
         </mat-form-field>
     </div>
 
-    <!-- Bên phải: Đơn hàng, User, Giỏ hàng (ẩn trên trang Login & Register) -->
     <div class="right-section" *ngIf="!hideSearchAndCart">
         <div class="icon-box" (click)="navigateToOrders()">
             <mat-icon>receipt_long</mat-icon>

@@ -58,9 +58,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     }
   }
 
-  // Một phương thức giả định lưu dữ liệu vào database
   private async saveUserToDatabase(user: any): Promise<any> {
-    // Giả định có thao tác async như gọi API hoặc database
     return new Promise((resolve) => setTimeout(() => resolve(user), 100));
   }
 }

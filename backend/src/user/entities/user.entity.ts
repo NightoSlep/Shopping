@@ -19,7 +19,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ default: '' })
+  @Column({ unique: true })
   phone: string;
 
   @Column({ default: '' })

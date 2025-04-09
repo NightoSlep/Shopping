@@ -8,12 +8,16 @@ import { provideHttpClient } from '@angular/common/http';
 import { SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from '../environments/environment';
+import { provideToastr } from 'ngx-toastr';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
               provideRouter(routes), 
               provideAnimationsAsync(), 
               provideHttpClient(),
+              provideAnimations(),
+              provideToastr(),
               importProvidersFrom(SocialLoginModule), // Import module để sử dụng trong Standalone API
               {
                 provide: 'SocialAuthServiceConfig',

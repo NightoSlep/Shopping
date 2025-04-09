@@ -1,0 +1,141 @@
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User, UserRole } from '../entities/user.entity';
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
+
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+  ) {}
+
+  async create(
+    createUserDto: CreateUserDto,
+    hashedPassword?: string,
+  ): Promise<Omit<User, 'password' | 'refreshToken'>> {
+    const existingUser = await this.userRepository.findOne({
+      where: [
+        { email: createUserDto.email },
+        { username: createUserDto.username },
+      ],
+    });
+
+    if (existingUser) {
+      if (existingUser.email === createUserDto.email) {
+        throw new ConflictException(
+          `Email "${createUserDto.email}" đã tồn tại.`,
+        );
+      }
+      if (existingUser.username === createUserDto.username) {
+        throw new ConflictException(
+          `Username "${createUserDto.username}" đã tồn tại.`,
+        );
+      }
+    }
+
+    if (!hashedPassword) {
+      console.error(
+        'Password hashing should be done before calling UserService.create',
+      );
+      throw new InternalServerErrorException('Lỗi xử lý nội bộ.');
+    }
+
+    const newUser = this.userRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+      role: createUserDto.role || UserRole.USER,
+    });
+
+    try {
+      await this.userRepository.save(newUser);
+      return sanitizeUser(newUser);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException('Email hoặc Username đã tồn tại.');
+      }
+      console.error('Error saving user:', error);
+      throw new InternalServerErrorException('Không thể tạo người dùng.');
+    }
+  }
+
+  async findAll(): Promise<Omit<User, 'password' | 'refreshToken'>[]> {
+    return this.userRepository.find({
+      select: ['id', 'email', 'username', 'phone', 'address', 'role'],
+    });
+  }
+
+  async findOneById(id: string): Promise<User | null> {
+    return await this.userRepository.findOneBy({ id });
+  }
+
+  async findOneByEmail(email: string): Promise<User | null> {
+    return this.userRepository.findOneBy({ email });
+  }
+
+  async findOneByUsername(username: string): Promise<User | null> {
+    return this.userRepository.findOneBy({ username });
+  }
+
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<Omit<User, 'password' | 'refreshToken'>> {
+    if (updateUserDto.username) {
+      const existingUser = await this.userRepository.findOne({
+        where: { username: updateUserDto.username },
+      });
+      if (existingUser && existingUser.id !== id) {
+        throw new ConflictException(
+          `Username "${updateUserDto.username}" đã được sử dụng.`,
+        );
+      }
+    }
+
+    delete updateUserDto.email;
+    delete updateUserDto.password;
+
+    const result = await this.userRepository.update(id, updateUserDto);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Không tìm thấy người dùng với ID "${id}"`);
+    }
+
+    const updatedUser = await this.findOneById(id);
+    if (!updatedUser) {
+      throw new NotFoundException(
+        `Không tìm thấy người dùng với ID "${id}" sau khi cập nhật.`,
+      );
+    }
+
+    const { password, refreshToken, ...safeUser } = updatedUser;
+    return safeUser;
+  }
+
+  async remove(id: string): Promise<void> {
+    const result = await this.userRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Không tìm thấy người dùng với ID "${id}"`);
+    }
+  }
+
+  async updateRefreshToken(
+    userId: string,
+    refreshTokenHash?: string | null,
+  ): Promise<void> {
+    await this.userRepository.update(userId, {
+      refreshToken: refreshTokenHash ?? undefined,
+    });
+  }
+}
+
+function sanitizeUser(user: User): Omit<User, 'password' | 'refreshToken'> {
+  const { password, refreshToken, ...safeUser } = user;
+  return safeUser;
+}

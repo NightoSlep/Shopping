@@ -1,0 +1,34 @@
+<mat-card class="profile-card">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <mat-card-title>Thông tin cá nhân</mat-card-title>
+    <button mat-button color="accent" (click)="toggleEditMode()">
+      {{ isEditMode ? 'Hủy' : 'Chỉnh sửa' }}
+    </button>
+  </div>
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tên</mat-label>
+      <input matInput formControlName="username" [readonly]="!isEditMode" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" [readonly]="!isEditMode" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Số điện thoại</mat-label>
+      <input matInput formControlName="phone" [readonly]="!isEditMode" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Địa chỉ</mat-label>
+      <input matInput formControlName="address" [readonly]="!isEditMode" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" *ngIf="isEditMode">
+      Cập nhật
+    </button>
+  </form>
+</mat-card>

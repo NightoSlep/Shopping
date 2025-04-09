@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '../../../services/auth.service';
+import { Login, LoginResponse } from '../../../models/user.model';
 
 @Component({
     selector: 'app-login',
@@ -39,12 +40,12 @@ export class LoginComponent {
     private socialAuthService: SocialAuthService) {}
 
   onLogin() {
-    this.authService.login({ username: this.username, password: this.password }).subscribe(
-      response => {
+    const loginData: Login = { username: this.username, password: this.password };
+    this.authService.login(loginData).subscribe(
+      (response: LoginResponse) => {
         localStorage.setItem('token', response.access_token);
-        this.authService.setUser(this.username); 
         this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
-        this.router.navigate(['/']); // Chuyển hướng sau khi đăng nhập
+        this.router.navigate(['/']);
       },
       error => {
         this.snackBar.open('Sai tên đăng nhập hoặc mật khẩu!', 'OK', { duration: 3000 });
@@ -55,8 +56,7 @@ export class LoginComponent {
   loginWithGoogle() {
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
       this.user = user;
-      localStorage.setItem('token', user.idToken);
-      this.authService.setUser(this.username); 
+      this.authService.socialLogin(user.idToken, user.name);
       this.snackBar.open(`Đăng nhập thành công: ${user.name}`, 'OK', { duration: 3000 });
       this.router.navigate(['/']);
     }).catch(error => {
@@ -67,8 +67,7 @@ export class LoginComponent {
   loginWithFacebook() {
     this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then(user => {
       this.user = user;
-      localStorage.setItem('token', user.authToken);
-      this.authService.setUser(this.username); 
+      this.authService.socialLogin(user.idToken, user.name);
       this.snackBar.open(`Đăng nhập thành công: ${user.name}`, 'OK', { duration: 3000 });
       this.router.navigate(['/']);
     }).catch(error => {
