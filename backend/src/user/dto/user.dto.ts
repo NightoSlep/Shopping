@@ -58,14 +58,12 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
 export class UserResponseDto {
   id: string;
-  email: string;
   username: string;
+  password: string;
+  email: string;
   phone: string;
   address: string;
   role: UserRole;
-
-  @Exclude()
-  password: string;
 
   @Exclude()
   refreshToken?: string;

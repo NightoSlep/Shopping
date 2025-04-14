@@ -26,12 +26,14 @@ import { StorageService } from '../../../services/storage.service';
 })
 export class NavbarComponent {
   username: string = '';
-  hideSearchAndCart: boolean = false;
+  hideSearchBar: boolean = false;
+  hideCart: boolean = false;  
 
   constructor(private router: Router, private authService: AuthService, private userService: UserService, private storage: StorageService) {
     this.router.events.subscribe(() => {
       const currentUrl = this.router.url;
-      this.hideSearchAndCart = currentUrl.includes('/login') || currentUrl.includes('/register')|| currentUrl.includes('/profile');
+      this.hideSearchBar = currentUrl.includes('/login') || currentUrl.includes('/register')|| currentUrl.includes('/profile') ;
+      this.hideCart = currentUrl.includes('/login') || currentUrl.includes('/register');
     });
   }
 
