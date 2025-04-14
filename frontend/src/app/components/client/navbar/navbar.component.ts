@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,6 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../models/user.model';
+import { UserService } from '../../../services/client/user.service';
+import { StorageService } from '../../../services/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,10 +25,10 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  username: string | null = null;
+  username: string = '';
   hideSearchAndCart: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService, private userService: UserService, private storage: StorageService) {
     this.router.events.subscribe(() => {
       const currentUrl = this.router.url;
       this.hideSearchAndCart = currentUrl.includes('/login') || currentUrl.includes('/register')|| currentUrl.includes('/profile');
@@ -33,8 +36,14 @@ export class NavbarComponent {
   }
 
   ngOnInit() {
-    this.authService.currentUsername$.subscribe(name => {
-      this.username = name;
+    this.userService.currentUser$.subscribe((user: User | null) => {
+      if (user) {
+        this.username = user.username;
+        console.log("day là username",this.username);
+      } else {
+        const storedUsername = localStorage.getItem('username');
+        this.username = storedUsername ? storedUsername : '';
+      }
     });
   }
 
@@ -60,6 +69,7 @@ export class NavbarComponent {
 
   logout(){
     this.authService.logout();
-    this.username = null;
+    localStorage.removeItem('username');
+    this.username = '';
   }
 }

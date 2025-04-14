@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CategoryModule } from './category/category.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -21,11 +22,12 @@ import { CategoryModule } from './category/category.module';
     }),
     AuthModuleOptions,
     ConfigModule.forRoot({
-      isGlobal: true, // Đảm bảo ConfigModule có thể được sử dụng ở mọi module
+      isGlobal: true,
     }),
     AuthModule,
     CategoryModule,
     ConfigModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

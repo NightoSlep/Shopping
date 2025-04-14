@@ -1,34 +1,90 @@
-<mat-card class="profile-card">
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    <mat-card-title>Thông tin cá nhân</mat-card-title>
-    <button mat-button color="accent" (click)="toggleEditMode()">
-      {{ isEditMode ? 'Hủy' : 'Chỉnh sửa' }}
-    </button>
-  </div>
+<mat-accordion multi="true" class="profile-accordion">
 
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Tên</mat-label>
-      <input matInput formControlName="username" [readonly]="!isEditMode" />
-    </mat-form-field>
+    <mat-expansion-panel [expanded]="expandedPanel === 'profile'" (opened)="expandedPanel = 'profile'"
+        (closed)="expandedPanel = null">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Thông tin cá nhân</mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" [readonly]="!isEditMode" />
-    </mat-form-field>
+        <mat-card class="profile-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <mat-card-title>Thông tin cá nhân</mat-card-title>
+                <button mat-button color="accent" (click)="toggleEditMode()">
+                    {{ isEditMode ? 'Hủy' : 'Chỉnh sửa' }}
+                </button>
+            </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Số điện thoại</mat-label>
-      <input matInput formControlName="phone" [readonly]="!isEditMode" />
-    </mat-form-field>
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                <div class="full-width">
+                    <label><strong>Tên:</strong></label>
+                    <div *ngIf="!isEditMode">{{ user . username }}</div>
+                    <mat-form-field *ngIf="isEditMode" appearance="outline" class="full-width">
+                        <mat-label>Tên</mat-label>
+                        <input matInput formControlName="username" />
+                    </mat-form-field>
+                </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Địa chỉ</mat-label>
-      <input matInput formControlName="address" [readonly]="!isEditMode" />
-    </mat-form-field>
+                <div class="full-width">
+                    <label><strong>Email:</strong></label>
+                    <div *ngIf="!isEditMode">{{ user . email }}</div>
+                    <mat-form-field *ngIf="isEditMode" appearance="outline" class="full-width">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" />
+                    </mat-form-field>
+                </div>
 
-    <button mat-raised-button color="primary" type="submit" *ngIf="isEditMode">
-      Cập nhật
-    </button>
-  </form>
-</mat-card>
+                <div class="full-width">
+                    <label><strong>Số điện thoại:</strong></label>
+                    <div *ngIf="!isEditMode">{{ user . phone }}</div>
+                    <mat-form-field *ngIf="isEditMode" appearance="outline" class="full-width">
+                        <mat-label>Số điện thoại</mat-label>
+                        <input matInput formControlName="phone" />
+                    </mat-form-field>
+                </div>
+
+                <div class="full-width">
+                    <label><strong>Địa chỉ:</strong></label>
+                    <div *ngIf="!isEditMode">{{ user . address }}</div>
+                    <mat-form-field *ngIf="isEditMode" appearance="outline" class="full-width">
+                        <mat-label>Địa chỉ</mat-label>
+                        <input matInput formControlName="address" />
+                    </mat-form-field>
+                </div>
+
+                <div class="full-width" *ngIf="isEditMode">
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Mật khẩu mới (nếu muốn thay đổi)</mat-label>
+                        <input matInput type="password" formControlName="password" />
+                    </mat-form-field>
+                </div>
+
+                <button mat-raised-button color="primary" type="submit" *ngIf="isEditMode">
+                    Cập nhật
+                </button>
+            </form>
+        </mat-card>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="expandedPanel === 'invoices'" (opened)="expandedPanel = 'invoices'"
+        (closed)="expandedPanel = null">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Hóa đơn</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card class="profile-card">
+            <p>Danh sách hóa đơn sẽ hiển thị ở đây.</p>
+            <!-- Bạn có thể dùng *ngFor để hiển thị danh sách hóa đơn -->
+        </mat-card>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="expandedPanel === 'orders'" (opened)="expandedPanel = 'orders'"
+        (closed)="expandedPanel = null">
+        <mat-expansion-panel-header>
+            <mat-panel-title>Đơn hàng</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card class="profile-card">
+            <p>Danh sách đơn hàng sẽ hiển thị ở đây.</p>
+            <!-- Dùng *ngFor để render đơn hàng -->
+        </mat-card>
+    </mat-expansion-panel>
+
+</mat-accordion>

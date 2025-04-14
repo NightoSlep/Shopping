@@ -5,13 +5,16 @@
             <form (submit)="onLogin()" #loginForm="ngForm">
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Tên đăng nhập</mat-label>
-                    <input matInput type="text" [(ngModel)]="username" name="username" required #usernameInput="ngModel">
-                    <mat-error *ngIf="usernameInput.invalid && usernameInput.touched">Vui lòng nhập tên đăng nhập</mat-error>
+                    <input matInput type="text" [(ngModel)]="username" name="username" required
+                        #usernameInput="ngModel">
+                    <mat-error *ngIf="usernameInput.invalid && usernameInput.touched">Vui lòng nhập tên đăng
+                        nhập</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Mật khẩu</mat-label>
-                    <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password" required #passwordInput="ngModel">
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password"
+                        required #passwordInput="ngModel">
                     <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
                         <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                     </button>
@@ -22,13 +25,18 @@
                     Chưa có tài khoản?
                     <a (click)="navigateToRegister()" class="register-link">Đăng ký</a>
                 </p>
-                <button mat-raised-button color="primary" class="full-width" [disabled]="loginForm.invalid">Đăng Nhập</button>
+                <button mat-raised-button color="primary" class="full-width"
+                    [disabled]="loginForm.invalid || isLoggingIn">
+                    <mat-spinner *ngIf="isLoggingIn" diameter="20"></mat-spinner>
+                    <span *ngIf="!isLoggingIn">Đăng Nhập</span>
+                </button>
+
             </form>
 
             <div class="separator">
                 <span>hoặc</span>
             </div>
-            
+
             <div class="social-login">
                 <button mat-raised-button color="warn" class="social-btn google-btn" (click)="loginWithGoogle()">
                     <mat-icon>g_translate</mat-icon> Google

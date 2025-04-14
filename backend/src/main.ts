@@ -4,10 +4,13 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { ValidationPipe } from '@nestjs/common';
 
+import { exec } from 'child_process';
+import * as os from 'os';
+
 async function bootstrap() {
   const httpsOptions = {
-    key: fs.readFileSync('ssl/rootCA-key.pem'),
-    cert: fs.readFileSync('ssl/rootCA.pem'),
+    key: fs.readFileSync('ssl/localhost-key.pem'),
+    cert: fs.readFileSync('ssl/localhost-cert.pem'),
   };
 
   const app = await NestFactory.create(AppModule, { httpsOptions });
@@ -34,9 +37,27 @@ async function bootstrap() {
     .setVersion('1.0')
     .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(process.env.PORT ?? 443);
+  const port = process.env.PORT ?? 443;
+  await app.listen(port);
+
+  const swaggerUrl = `https://localhost:${port}/api/docs`;
+  console.log(`🚀 Swagger is running at ${swaggerUrl}`);
+
+  const openSwagger = () => {
+    const platform = os.platform();
+    if (platform === 'win32') {
+      exec(`start ${swaggerUrl}`);
+    } else if (platform === 'darwin') {
+      exec(`open ${swaggerUrl}`);
+    } else if (platform === 'linux') {
+      exec(`xdg-open ${swaggerUrl}`);
+    }
+  };
+  openSwagger();
 }
+
 bootstrap();

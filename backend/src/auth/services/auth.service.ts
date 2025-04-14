@@ -30,21 +30,24 @@ export class AuthService {
 
   private async generateTokens(user: User) {
     const payload = {
-      id: user.id,
+      userId: user.id,
       username: user.username,
       email: user.email,
       role: user.role,
     };
+
     const access_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_ACCESS_SECRET,
       expiresIn: '15m',
     });
+
     const refresh_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_REFRESH_SECRET,
       expiresIn: '7d',
     });
 
     const hashedRefreshToken = await this.hashPassword(refresh_token);
+
     await this.userRepository.update(user.id, {
       refreshToken: hashedRefreshToken,
     });
@@ -78,8 +81,14 @@ export class AuthService {
       where: [{ username }],
     });
 
-    if (!user || !(await this.comparePasswords(password, user.password))) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const isMatch = await this.comparePasswords(password, user.password);
+
+    if (!isMatch) {
+      throw new UnauthorizedException('Invalid password');
     }
 
     return this.generateTokens(user);
@@ -109,11 +118,12 @@ export class AuthService {
         secret: process.env.JWT_REFRESH_SECRET,
       });
 
-      if (!decoded?.id)
+      if (!decoded?.userId)
         throw new UnauthorizedException('Invalid refresh token');
 
       const user = await this.userRepository.findOne({
-        where: { id: String(decoded.id) },
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        where: { id: decoded.userId },
       });
 
       if (
@@ -125,8 +135,11 @@ export class AuthService {
       }
 
       return this.generateTokens(user);
-    } catch {
-      throw new UnauthorizedException('Invalid refresh token');
+    } catch (err) {
+      throw new UnauthorizedException({
+        message: 'Invalid refresh token',
+        cause: err instanceof Error ? err.message : String(err),
+      });
     }
   }
 

@@ -1,57 +1,42 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Login, LoginResponse, Register } from '../models/user.model';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
- 
-  private currentUsernameSubject = new BehaviorSubject<string | null>(this.getStoredUsername());
-  public currentUsername$ = this.currentUsernameSubject.asObservable();
   
-  constructor(private http: HttpClient) {}
-  
-  private getStoredUsername(): string | null {
-    return localStorage.getItem('username');
-  }
+  constructor(private http: HttpClient, private storage: StorageService) {}
   
   register(userData: Register): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, userData);
   }
-
+  
   login(userData: Login): Observable<any> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, userData).pipe(
-      tap((res) => {
-        localStorage.setItem('token', res.access_token);
-        localStorage.setItem('username', userData.username);
-        this.currentUsernameSubject.next(userData.username);
-      })
-    );
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, userData);
+  }
+
+  socialLogin(token: string, userId: string): void {
+    this.storage.setToken(token);
+    this.storage.setUserId(userId);
   }
 
   logout() {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    this.currentUsernameSubject.next(null);
+    this.storage.clear();
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  isLoggedIn(): boolean {
+    const token = this.storage.getToken();
+    return !!token;
   }
 
-  getUsername(): string | null {
-    return this.currentUsernameSubject.value;
+  isAdmin(): boolean {
+    const roleId = this.storage.getRole();
+    return roleId === 'AD';
   }
-
-  socialLogin(token: string, username: string): void {
-    localStorage.setItem('token', token);
-    localStorage.setItem('username', username);
-    this.currentUsernameSubject.next(username);
-  }
-  
 }

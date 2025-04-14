@@ -16,7 +16,7 @@ import { RolesGuard } from './guards/role.guard';
     ConfigModule.forRoot(),
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'secret_key', // Đổi key này trong thực tế
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
   ],
@@ -29,5 +29,6 @@ import { RolesGuard } from './guards/role.guard';
     FacebookStrategy,
   ],
   controllers: [AuthController],
+  exports: [JwtModule],
 })
 export class AuthModule {}

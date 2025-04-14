@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -12,6 +12,9 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUs
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '../../../services/auth.service';
 import { Login, LoginResponse } from '../../../models/user.model';
+import { StorageService } from '../../../services/storage.service';
+import { UserService } from '../../../services/client/user.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-login',
@@ -23,34 +26,50 @@ import { Login, LoginResponse } from '../../../models/user.model';
         MatFormFieldModule,
         MatIconModule,
         MatSnackBarModule,
-        MatToolbarModule],
+        MatToolbarModule,
+        MatProgressSpinnerModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent{
   username = '';
   password = '';
   hidePassword: boolean = true; 
   user: SocialUser | null = null;
+  isLoggingIn = false;
 
   constructor(
     private authService: AuthService, 
     private router: Router, 
     private snackBar: MatSnackBar, 
-    private socialAuthService: SocialAuthService) {}
-
+    private socialAuthService: SocialAuthService,
+    private storage: StorageService,
+    private userService: UserService) {}
+    
   onLogin() {
+    this.isLoggingIn = true; 
+
     const loginData: Login = { username: this.username, password: this.password };
-    this.authService.login(loginData).subscribe(
-      (response: LoginResponse) => {
-        localStorage.setItem('token', response.access_token);
-        this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
-        this.router.navigate(['/']);
+    this.authService.login(loginData).subscribe({
+      next: (response: LoginResponse) => {
+        this.storage.setToken(response.access_token);
+        this.userService.getMyProfile().subscribe({
+          next: (userData) => {
+            console.log(userData);
+            this.userService.setCurrentUser(userData);
+            localStorage.setItem('username', userData.username); 
+            this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
+            this.router.navigate(['/']);
+          },
+          error: (err) => {
+            this.snackBar.open('Đăng nhập thất bại!', 'OK', { duration: 3000 });
+          }
+        });
       },
-      error => {
+      error: () => {
         this.snackBar.open('Sai tên đăng nhập hoặc mật khẩu!', 'OK', { duration: 3000 });
       }
-    );
+    });
   }
 
   loginWithGoogle() {

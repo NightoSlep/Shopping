@@ -20,7 +20,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
-  password: string; // Lưu ý: Đây là mật khẩu gốc, cần hash trước khi lưu
+  password: string;
 
   @IsOptional()
   @IsString()
@@ -30,14 +30,12 @@ export class CreateUserDto {
   @IsString()
   address?: string;
 
-  // Role thường không được set trực tiếp khi user đăng ký
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-  // Ghi đè hoặc thêm validation nếu cần
   @IsOptional()
   @IsString()
   username?: string;
