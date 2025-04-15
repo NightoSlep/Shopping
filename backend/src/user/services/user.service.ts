@@ -56,8 +56,8 @@ export class UserService {
     try {
       await this.userRepository.save(newUser);
       return sanitizeUser(newUser);
-    } catch (error) {
-      if (error.code === '23505') {
+    } catch (error: any) {
+      if ((error as { code?: string }).code === '23505') {
         throw new ConflictException('Email hoặc Username đã tồn tại.');
       }
       console.error('Error saving user:', error);
@@ -114,6 +114,7 @@ export class UserService {
       );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, refreshToken, ...safeUser } = updatedUser;
     return safeUser;
   }
@@ -136,6 +137,7 @@ export class UserService {
 }
 
 function sanitizeUser(user: User): Omit<User, 'password' | 'refreshToken'> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password, refreshToken, ...safeUser } = user;
   return safeUser;
 }

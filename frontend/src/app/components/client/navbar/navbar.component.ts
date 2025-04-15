@@ -71,7 +71,6 @@ export class NavbarComponent {
 
   logout(){
     this.authService.logout();
-    localStorage.removeItem('username');
     this.username = '';
   }
 }

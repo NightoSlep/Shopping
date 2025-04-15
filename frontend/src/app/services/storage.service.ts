@@ -53,5 +53,6 @@ export class StorageService {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userId);
     localStorage.removeItem(this.roleKey);
+    localStorage.removeItem('username');
   }
 }
