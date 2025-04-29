@@ -37,6 +37,26 @@
     padding-top: 4px;
   }
   
+  .category-select {
+    margin-top: 19px;
+    display: flex;
+    justify-content: center;
+    flex: 5;
+    max-width: 120px;
+  }
+  
+  .category-select mat-form-field {
+    width: 100%;
+    --mat-form-field-container-height: 40px;
+    --mat-form-field-container-vertical-padding: 10px;
+  }
+
+  .mat-form-field-label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+
   .right-section {
     display: flex;
     align-items: center;
@@ -83,5 +103,23 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+  }
+  
+  .admin-button {
+    background-color: #ffffff; 
+    color: #3f51b5; 
+    border: 1px solid #3f51b5;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 15px; 
+  }
+  
+  .admin-button:hover {
+    background-color: #3f51b5; 
+    color: white;
   }
   

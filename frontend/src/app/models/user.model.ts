@@ -17,11 +17,19 @@ export interface Register {
     role: string;
   }
 
+  export interface UpdatedUser {
+    id: number
+    email: string
+    username: string
+    phone: string
+    address: string
+  }
+
   export interface User {
     id: number
     email: string
     username: string
-    password: string
+    password?: string
     phone: string
     address: string
     createdOn: string

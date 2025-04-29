@@ -7,10 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select'; 
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/client/user.service';
-import { StorageService } from '../../../services/storage.service';
+import { Category } from '../../../models/category.model';
 
 @Component({
   selector: 'app-navbar',
@@ -20,7 +21,8 @@ import { StorageService } from '../../../services/storage.service';
             MatFormFieldModule,
             MatInputModule,
             MatButtonModule,
-            MatMenuModule],
+            MatMenuModule,
+            MatSelectModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -29,7 +31,16 @@ export class NavbarComponent {
   hideSearchBar: boolean = false;
   hideCart: boolean = false;  
 
-  constructor(private router: Router, private authService: AuthService, private userService: UserService, private storage: StorageService) {
+  categories: Category[] = [
+    { id: 'all', name: 'Tất cả' },
+    { id: 'electronics', name: 'Điện tử' },
+    { id: 'fashion', name: 'Thời trang' },
+    { id: 'books', name: 'Sách' }
+  ];
+
+  selectedCategory: string = 'all';
+
+  constructor(private router: Router, public authService: AuthService, private userService: UserService) {
     this.router.events.subscribe(() => {
       const currentUrl = this.router.url;
       this.hideSearchBar = currentUrl.includes('/login') || currentUrl.includes('/register')|| currentUrl.includes('/profile') ;
@@ -41,7 +52,6 @@ export class NavbarComponent {
     this.userService.currentUser$.subscribe((user: User | null) => {
       if (user) {
         this.username = user.username;
-        console.log("day là username",this.username);
       } else {
         const storedUsername = localStorage.getItem('username');
         this.username = storedUsername ? storedUsername : '';
@@ -69,8 +79,13 @@ export class NavbarComponent {
     this.router.navigate(['/']);
   }
 
+  navigateToAdmin(){
+    this.router.navigate(['/admin/dashboard']);
+  }
+
   logout(){
     this.authService.logout();
     this.username = '';
+    this.router.navigate(['/']);
   }
 }

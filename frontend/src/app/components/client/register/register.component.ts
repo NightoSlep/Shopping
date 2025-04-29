@@ -33,7 +33,7 @@ export class RegisterComponent implements AfterViewInit{
   password = '';
   confirmPassword = '';
   email = '';
-  phone = '';
+  phone = ''; 
   address = '';
 
   hidePassword: boolean = true;

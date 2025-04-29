@@ -46,31 +46,36 @@ export class LoginComponent{
     private storage: StorageService,
     private userService: UserService) {}
     
-  onLogin() {
-    this.isLoggingIn = true; 
-
-    const loginData: Login = { username: this.username, password: this.password };
-    this.authService.login(loginData).subscribe({
-      next: (response: LoginResponse) => {
-        this.storage.setToken(response.access_token);
-        this.userService.getMyProfile().subscribe({
-          next: (userData) => {
-            console.log(userData);
-            this.userService.setCurrentUser(userData);
-            localStorage.setItem('username', userData.username); 
-            this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
-            this.router.navigate(['/']);
-          },
-          error: (err) => {
-            this.snackBar.open('Đăng nhập thất bại!', 'OK', { duration: 3000 });
-          }
-        });
-      },
-      error: () => {
-        this.snackBar.open('Sai tên đăng nhập hoặc mật khẩu!', 'OK', { duration: 3000 });
-      }
-    });
-  }
+    onLogin() {
+      this.isLoggingIn = true; 
+    
+      const loginData: Login = { username: this.username, password: this.password };
+      this.authService.login(loginData).subscribe({
+        next: (response: LoginResponse) => {
+          this.storage.setToken(response.access_token);
+          this.storage.setRefreshToken(response.refresh_token);
+    
+          this.userService.getMyProfile().subscribe({
+            next: (userData) => {
+              this.userService.setCurrentUser(userData);
+    
+              localStorage.setItem('username', userData.username);
+              this.storage.setRole(userData.role);
+    
+              this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
+              this.router.navigate(['/']);
+            },
+            error: (err) => {
+              this.snackBar.open('Không thể lấy thông tin người dùng!', 'OK', { duration: 3000 });
+            }
+          });
+        },
+        error: () => {
+          this.snackBar.open('Sai tên đăng nhập hoặc mật khẩu!', 'OK', { duration: 3000 });
+        }
+      });
+    }
+    
 
   loginWithGoogle() {
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {

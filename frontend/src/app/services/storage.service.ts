@@ -8,7 +8,9 @@ export class StorageService {
   private secretKey = 'my_secret_is_key';
   private tokenKey = 'token';
   private userId = 'userid';
-  private roleKey = 'roleid';
+  private roleKey = 'role';
+  private username = 'username';
+  private refreshKey = 'refresh_token';
   
   constructor() { }
 
@@ -30,6 +32,20 @@ export class StorageService {
     return token ? this.decrypt(token) : null;
   }
 
+  setRefreshToken(refresh_token: string): void {
+    const encrypted = this.encrypt(refresh_token);
+    localStorage.setItem(this.refreshKey, encrypted);
+  }
+  
+  getRefreshToken(): string | null {
+    const refresh_token = localStorage.getItem(this.refreshKey);
+    return refresh_token ? this.decrypt(refresh_token) : null;
+  }
+  
+  removeRefreshToken(): void {
+    localStorage.removeItem('refresh_token');
+  }
+  
   setUserId(userId: string): void {
     const encryptedId = CryptoJS.AES.encrypt(userId, this.secretKey).toString();
     localStorage.setItem(this.userId, encryptedId);
@@ -53,6 +69,7 @@ export class StorageService {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userId);
     localStorage.removeItem(this.roleKey);
-    localStorage.removeItem('username');
+    localStorage.removeItem(this.username);
+    localStorage.removeItem(this.refreshKey);
   }
 }

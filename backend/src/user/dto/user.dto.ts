@@ -47,13 +47,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
   @IsString()
   address?: string;
-
-  @IsOptional()
-  @IsEnum(UserRole)
-  role?: UserRole;
-
-  password?: never;
-  email?: never;
 }
 
 export class UserResponseDto {

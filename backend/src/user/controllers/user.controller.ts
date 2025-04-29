@@ -97,7 +97,6 @@ export class UserController {
     @Body(new ValidationPipe({ whitelist: true })) updateUserDto: UpdateUserDto,
   ): Promise<UserResponseDto> {
     const userId = req.user.userId;
-    delete updateUserDto.role;
     const updatedUser = await this.userService.update(userId, updateUserDto);
     return new UserResponseDto(updatedUser);
   }

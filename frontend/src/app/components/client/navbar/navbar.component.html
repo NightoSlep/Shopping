@@ -1,9 +1,19 @@
 <mat-toolbar color="primary" class="navbar">
-    <!-- Bên trái: Logo (luôn hiển thị) -->
     <div class="logo" (click)="navigateToHome()">
         <mat-icon>verified</mat-icon>
         <span class="brand">V-Shop</span>
     </div>
+
+    <div class="category-select" *ngIf="!hideSearchBar">
+        <mat-form-field appearance="outline">
+          <mat-label>Thể loại</mat-label>
+          <mat-select [(value)]="selectedCategory">
+            <mat-option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
     <div class="search-bar" *ngIf="!hideSearchBar">
         <mat-form-field appearance="outline">
@@ -41,4 +51,5 @@
             <span class="icon-label">Giỏ hàng</span>
         </div>
     </div>
+    <button *ngIf="authService.isAdmin()" class="admin-button" (click)="navigateToAdmin()">Trang quản trị</button>
 </mat-toolbar>

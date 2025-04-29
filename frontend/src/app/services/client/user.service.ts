@@ -35,4 +35,11 @@ export class UserService {
   updateMyProfile(user: User): Observable<User> {
     return this.http.patch<User>(`${this.apiUrl}/users/me`, user);
   }
+
+  changePassword(oldPassword: string, newPassword: string) {
+    return this.http.post('/api/users/change-password', {
+      oldPassword,
+      newPassword
+    });
+  }  
 }

@@ -1,0 +1,33 @@
+<div class="home-container">
+
+    <!-- 1. Banner quảng cáo -->
+    <section class="banner">
+      <img src="assets/banner-tech.jpg" alt="Banner khuyến mãi" />
+    </section>
+  
+    <!-- 2. Danh mục sản phẩm -->
+    <section class="category-section">
+      <h2>Danh mục sản phẩm</h2>
+      <div class="category-grid">
+        <div class="category-card" *ngFor="let category of categories">
+          <img [src]="category.image" alt="{{ category.name }}" />
+          <p>{{ category.name }}</p>
+        </div>
+      </div>
+    </section>
+  
+    <!-- 3. Sản phẩm nổi bật -->
+    <section class="product-section">
+      <h2>Sản phẩm nổi bật</h2>
+      <div class="product-grid">
+        <mat-card class="product-card" *ngFor="let product of featuredProducts">
+          <img mat-card-image [src]="product.image" alt="{{ product.name }}" />
+          <mat-card-title>{{ product.name }}</mat-card-title>
+          <mat-card-subtitle>{{ product.price | currency:'VND' }}</mat-card-subtitle>
+          <button mat-raised-button color="primary" (click)="addToCart(product)">Thêm vào giỏ</button>
+        </mat-card>
+      </div>
+    </section>
+  
+  </div>
+  

@@ -11,7 +11,6 @@ import { jwtDecode } from 'jwt-decode';
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private logoutTimer: any;
   
   constructor(private http: HttpClient, private storage: StorageService) {}
   
@@ -21,6 +20,10 @@ export class AuthService {
   
   login(userData: Login): Observable<any> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, userData);
+  }
+
+  refreshToken(refreshToken: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/refresh-token`, { refresh_token: refreshToken });
   }
 
   socialLogin(token: string, userId: string): void {
@@ -38,24 +41,7 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    const roleId = this.storage.getRole();
-    return roleId === 'AD';
-  }
-
-  setSession(token: string) {
-    localStorage.setItem('token', token);
-
-    const decoded: any = jwtDecode(token);
-    const expiresAt = decoded.exp * 1000; // convert to ms
-
-    const timeout = expiresAt - Date.now();
-
-    if (this.logoutTimer) {
-      clearTimeout(this.logoutTimer);
-    }
-
-    this.logoutTimer = setTimeout(() => {
-      this.logout();
-    }, timeout);
-  }
+    const role = this.storage.getRole();
+    return role === 'AD' || role === 'admin';
+  } 
 }

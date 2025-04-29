@@ -87,10 +87,16 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<Omit<User, 'password' | 'refreshToken'>> {
-    if (updateUserDto.username) {
+    const user = await this.findOneById(id);
+    if (!user) {
+      throw new NotFoundException(`Không tìm thấy người dùng với ID "${id}"`);
+    }
+
+    if (updateUserDto.username && updateUserDto.username !== user.username) {
       const existingUser = await this.userRepository.findOne({
         where: { username: updateUserDto.username },
       });
+
       if (existingUser && existingUser.id !== id) {
         throw new ConflictException(
           `Username "${updateUserDto.username}" đã được sử dụng.`,
@@ -98,14 +104,7 @@ export class UserService {
       }
     }
 
-    delete updateUserDto.email;
-    delete updateUserDto.password;
-
-    const result = await this.userRepository.update(id, updateUserDto);
-
-    if (result.affected === 0) {
-      throw new NotFoundException(`Không tìm thấy người dùng với ID "${id}"`);
-    }
+    await this.userRepository.update(id, updateUserDto);
 
     const updatedUser = await this.findOneById(id);
     if (!updatedUser) {
@@ -114,9 +113,7 @@ export class UserService {
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, refreshToken, ...safeUser } = updatedUser;
-    return safeUser;
+    return sanitizeUser(updatedUser);
   }
 
   async remove(id: string): Promise<void> {

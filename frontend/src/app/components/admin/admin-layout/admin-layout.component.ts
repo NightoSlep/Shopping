@@ -3,11 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
-  selector: 'app-client-layout',
+  selector: 'app-admin-layout',
   imports: [RouterOutlet, NavbarComponent],
-  templateUrl: './client-layout.component.html',
-  styleUrl: './client-layout.component.css'
+  templateUrl: './admin-layout.component.html',
+  styleUrl: './admin-layout.component.css'
 })
-export class ClientLayoutComponent {
+export class AdminLayoutComponent {
 
 }

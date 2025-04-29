@@ -1,0 +1,32 @@
+.home-container {
+    padding: 20px;
+  }
+  
+  .banner img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+  
+  .category-section, .product-section {
+    margin-top: 40px;
+  }
+  
+  .category-grid, .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .category-card, .product-card {
+    width: 200px;
+    text-align: center;
+  }
+  
+  .category-card img {
+    width: 100%;
+    border-radius: 8px;
+    height: 120px;
+    object-fit: cover;
+  }
+  

@@ -4,6 +4,9 @@ import { LoginComponent } from './components/client/login/login.component';
 import { RegisterComponent } from './components/client/register/register.component';
 import { ClientLayoutComponent } from './components/client/client-layout/client-layout.component';
 import { ProfileComponent } from './components/client/profile/profile.component';
+import { AdminLayoutComponent } from './components/admin/admin-layout/admin-layout.component';
+import { authGuard } from './guards/auth.guard';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 
 export const routes: Routes = [
     {   
@@ -15,4 +18,12 @@ export const routes: Routes = [
             { path: 'register', component: RegisterComponent },
             { path: 'profile', component: ProfileComponent}
         ]},
+        {
+            path: 'admin',
+            component: AdminLayoutComponent,
+            canActivate: [authGuard],
+            children: [
+                { path: 'dashboard', component: DashboardComponent },
+            ]
+          }
 ];

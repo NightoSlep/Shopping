@@ -9,6 +9,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../../../services/client/user.service';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
               MatCardModule,
               MatSnackBarModule,
               MatButtonModule,
+              MatIconModule,
               ToastrModule,
               CommonModule,
               MatExpansionModule
@@ -30,6 +32,10 @@ export class ProfileComponent {
   user!: User;
   isEditMode: boolean = false;
   isLoading = true;
+  hidePassword = true;
+  isChangingPassword: boolean = false;
+  
+  passwordForm!: FormGroup;
 
   expandedPanel: string | null = 'profile'; 
 
@@ -43,14 +49,14 @@ export class ProfileComponent {
   ngOnInit(): void {    
     this.initForm();
     this.loadUserProfile();
+    this.initPasswordForm();
   }
 
   initForm(): void {
     this.userForm = this.fb.group({
       username: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
-      address: ['', Validators.required],
+      address: ['', Validators.required]
     });
   }
   
@@ -92,11 +98,56 @@ export class ProfileComponent {
     });
   }
 
+  initPasswordForm(): void {
+    this.passwordForm = this.fb.group({
+      oldPassword: ['', Validators.required],
+      newPassword: ['', [Validators.required]],
+      confirmPassword: ['', Validators.required]
+    });
+  }
+  
+  changePassword(): void {
+    if (this.passwordForm.invalid) {
+      this.toastr.error('Vui lòng điền đầy đủ thông tin.', 'Lỗi');
+      return;
+    }
+  
+    const { oldPassword, newPassword, confirmPassword } = this.passwordForm.value;
+  
+    if (newPassword !== confirmPassword) {
+      this.toastr.error('Mật khẩu mới không khớp.', 'Lỗi');
+      return;
+    }
+  
+    this.userService.changePassword(oldPassword, newPassword).subscribe({
+      next: () => {
+        this.toastr.success('Đổi mật khẩu thành công!');
+        this.isChangingPassword = false;
+        this.passwordForm.reset();
+      },
+      error: () => {
+        this.toastr.error('Không thể đổi mật khẩu. Kiểm tra mật khẩu cũ.', 'Lỗi');
+      }
+    });
+  }
+  
+  onForgotPassword(): void {
+    this.toastr.info('Chức năng quên mật khẩu đang được phát triển.');
+  }
+
+  closeChangingPassword(): void {
+    this.isChangingPassword = false;
+  }
+
   toggleEditMode(): void {
     this.isEditMode = !this.isEditMode;
 
     if (!this.isEditMode) {
       this.userForm.patchValue(this.user);
     }
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword = !this.hidePassword;
   }
 }
