@@ -6,14 +6,14 @@
 
     <div class="category-select" *ngIf="!hideSearchBar">
         <mat-form-field appearance="outline">
-          <mat-label>Thể loại</mat-label>
-          <mat-select [(value)]="selectedCategory">
-            <mat-option *ngFor="let category of categories" [value]="category.id">
-              {{ category.name }}
-            </mat-option>
-          </mat-select>
+            <mat-label>Thể loại</mat-label>
+            <mat-select [(value)]="selectedCategory">
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                    {{ category . name }}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
-      </div>
+    </div>
 
     <div class="search-bar" *ngIf="!hideSearchBar">
         <mat-form-field appearance="outline">
@@ -23,14 +23,15 @@
         </mat-form-field>
     </div>
 
-    <div class="right-section" *ngIf="!hideCart">
+    <div class="right-section" *ngIf="!hideCart && !isProfilePage">
         <div class="icon-box" (click)="navigateToOrders()">
             <mat-icon>receipt_long</mat-icon>
             <span class="icon-label">Đơn hàng</span>
         </div>
+        
         <div class="icon-box" *ngIf="username; else loginAction" [matMenuTriggerFor]="accountMenu">
             <mat-icon>account_circle</mat-icon>
-            <span class="icon-label">{{ this.username }}</span>
+            <span class="icon-label">{{ this . username }}</span>
         </div>
         <ng-template #loginAction>
             <div class="icon-box" (click)="navigateToLogin()">
@@ -45,11 +46,16 @@
                 <button mat-menu-item (click)="logout()">Đăng xuất</button>
             </ng-container>
         </mat-menu>
+
         <div class="icon-box cart-box">
             <mat-icon>shopping_cart</mat-icon>
             <span class="cart-count">0</span>
             <span class="icon-label">Giỏ hàng</span>
         </div>
+
+        <div class="icon-box admin-highlight" *ngIf="authService.isAdmin()" (click)="navigateToAdmin()">
+            <mat-icon color="accent">admin_panel_settings</mat-icon>
+            <span class="icon-label">Trang quản trị</span>
+        </div>
     </div>
-    <button *ngIf="authService.isAdmin()" class="admin-button" (click)="navigateToAdmin()">Trang quản trị</button>
 </mat-toolbar>

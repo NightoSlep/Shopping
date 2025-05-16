@@ -1,0 +1,42 @@
+<mat-toolbar color="primary">
+    <span>Quản lý thể loại</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" (click)="addCategory()">Thêm thể loại</button>
+</mat-toolbar>
+
+<div class="search-bar">
+    <mat-form-field appearance="outline" class="filter">
+        <mat-label>Tìm kiếm thể loại</mat-label>
+        <input matInput [(ngModel)]="searchText" (input)="onSearch()" placeholder="Tên thể loại...">
+    </mat-form-field>
+</div>
+
+<div class="category-table">
+    <table mat-table [dataSource]="dataSource" class="full-width" matSort>
+        <ng-container matColumnDef="stt">
+            <th mat-header-cell *matHeaderCellDef> STT </th>
+            <td mat-cell *matCellDef="let element; let i = index">{{ i + paginator.pageIndex * paginator.pageSize + 1 }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên thể loại </th>
+            <td mat-cell *matCellDef="let element"> {{ element . name }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Hành động </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="editCategory(element)">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteCategory(element.id)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['stt', 'name', 'actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['stt', 'name', 'actions'];"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

@@ -1,0 +1,12 @@
+.admin-container {
+    display: flex;
+    height: calc(100vh - 64px); /* trừ navbar */
+  }
+  
+  .admin-content {
+    flex-grow: 1;
+    padding: 24px;
+    background-color: #f4f6f8;
+    overflow-y: auto;
+  }
+  

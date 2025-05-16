@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>{{ data.title || (isEditMode ? 'Chỉnh sửa thể loại' : 'Thêm thể loại mới') }}</h2>
+
+<mat-dialog-content style="padding-top: 12px;">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Tên thể loại</mat-label>
+    <input matInput [(ngModel)]="categoryName" placeholder="Nhập tên thể loại">
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">{{ data.cancelText || 'Hủy' }}</button>
+  <button mat-raised-button color="primary" (click)="onSave()">
+    {{ data.confirmText || (isEditMode ? 'Cập nhật' : 'Lưu') }}
+  </button>
+</mat-dialog-actions>

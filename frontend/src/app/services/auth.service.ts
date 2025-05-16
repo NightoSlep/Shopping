@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Login, LoginResponse, Register } from '../models/user.model';
 import { StorageService } from './storage.service';
-import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'

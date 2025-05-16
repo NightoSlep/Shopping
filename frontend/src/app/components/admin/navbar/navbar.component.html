@@ -1,18 +1,21 @@
-<nav class="admin-navbar">
-    <div class="nav-left">
-      <a routerLink="/admin/dashboard" class="logo">Admin Panel</a>
-    </div>
-  
-    <div class="nav-links">
-      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
-      <a routerLink="/admin/products" routerLinkActive="active">Sản phẩm</a>
-      <a routerLink="/admin/customers" routerLinkActive="active">Khách hàng</a>
-      <a routerLink="/admin/orders" routerLinkActive="active">Đơn hàng</a>
-    </div>
-  
-    <div class="nav-right">
-      <span class="user-info">Xin chào, Admin</span>
-      <button class="logout-btn" (click)="logout()">Đăng xuất</button>
-    </div>
-  </nav>
-  
+<mat-toolbar color="primary" class="admin-navbar">
+  <span class="logo" (click)="goToDashboard()">V-Shop Admin</span>
+  <span class="spacer"></span>
+
+  <button mat-button class="back-button" (click)="goToClient()">
+    <mat-icon>arrow_back</mat-icon>
+    <span>Trang người dùng</span>
+  </button>
+
+  <div class="admin-user" [matMenuTriggerFor]="adminMenu">
+    <mat-icon>account_circle</mat-icon>
+    <span class="admin-name">{{ username }}</span>
+  </div>
+
+  <mat-menu #adminMenu="matMenu">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Đăng xuất</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

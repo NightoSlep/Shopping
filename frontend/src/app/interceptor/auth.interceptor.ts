@@ -33,6 +33,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     if (refreshToken && !isExpired(refreshToken)) {
       return from(authService.refreshToken(refreshToken)).pipe(
         switchMap((res: any) => {
+          console.log("refresh token: ",isExpired(refreshToken));
           storageService.setToken(res.access_token);
           if (res.refresh_token) {
             storageService.setRefreshToken(res.refresh_token);

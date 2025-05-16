@@ -29,13 +29,13 @@ import { Category } from '../../../models/category.model';
 export class NavbarComponent {
   username: string = '';
   hideSearchBar: boolean = false;
-  hideCart: boolean = false;  
+  hideCart: boolean = false;
 
   categories: Category[] = [
-    { id: 'all', name: 'Tất cả' },
-    { id: 'electronics', name: 'Điện tử' },
-    { id: 'fashion', name: 'Thời trang' },
-    { id: 'books', name: 'Sách' }
+    { id: 1, name: 'Tất cả' },
+    { id: 2, name: 'Điện tử' },
+    { id: 3, name: 'Thời trang' },
+    { id: 4, name: 'Sách' }
   ];
 
   selectedCategory: string = 'all';
@@ -57,6 +57,10 @@ export class NavbarComponent {
         this.username = storedUsername ? storedUsername : '';
       }
     });
+  }
+
+  get isProfilePage(): boolean {
+    return this.router.url.includes('/profile');
   }
 
   navigateToLogin() {
