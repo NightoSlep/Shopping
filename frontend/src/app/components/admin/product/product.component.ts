@@ -98,28 +98,28 @@ export class ProductComponent {
     // Mở dialog hoặc điều hướng đến form edit
   }
 
-addProduct() {
-  const dialogRef = this.dialog.open(ProductFormComponent, {
-    width: '500px',
-    data: {}
-  });
+  addProduct() {
+    const dialogRef = this.dialog.open(ProductFormComponent, {
+      width: '500px',
+      data: {}
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      const newProduct: NewProduct = {
-        productName: result.name,
-        price: result.price,
-        description: result.description,
-        quantity: result.quantity,
-        categoryId: 0, 
-        image: '' 
-      };
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Image URL:', result.image);
+        const newProduct: NewProduct = {
+          productName: result.productName,
+          price: result.price,
+          description: result.description,
+          quantity: result.quantity,
+          categoryId: result.categoryId,
+          image: result.image
+        };
 
-      this.productService.createProduct(newProduct).subscribe(() => {
-        this.loadProducts();
-      });
-    }
-  });
-}
-
+        this.productService.createProduct(newProduct).subscribe(() => {
+          this.loadProducts();
+        });
+      }
+    });
+  }
 }

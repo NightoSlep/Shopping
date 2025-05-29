@@ -22,7 +22,10 @@ export class Product {
   quantity: number;
 
   @Column()
-  imageUrl: string;
+  description: string;
+
+  @Column()
+  image: string;
 
   @Column()
   categoryId: number;

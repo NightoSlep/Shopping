@@ -8,6 +8,9 @@ import { ConfigModule } from '@nestjs/config';
 import { CategoryModule } from './category/category.module';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
+import { CloudinaryModule } from './common/providers/cloudinary/cloudinary.module';
+import { CloudinaryProvider } from './common/providers/cloudinary/cloudinary.provider';
+import { BannerModule } from './banner/banner.module';
 
 @Module({
   imports: [
@@ -30,8 +33,10 @@ import { ProductModule } from './product/product.module';
     ConfigModule,
     UserModule,
     ProductModule,
+    CloudinaryModule,
+    BannerModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CloudinaryProvider],
 })
 export class AppModule {}

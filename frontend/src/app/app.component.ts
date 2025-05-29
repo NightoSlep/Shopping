@@ -5,7 +5,6 @@ import { AuthService } from './services/auth.service';
 import { UserService } from './services/client/user.service';
 import { LoginResponse } from './models/user.model';
 
-
 @Component({
     selector: 'app-root',
     imports: [RouterOutlet],

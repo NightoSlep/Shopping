@@ -20,9 +20,9 @@ export class CategoryController {
 
   @Post()
   async createCategory(
-    @Body() CreateCategoryDto: CreateCategoryDto,
+    @Body() createCategoryDto: CreateCategoryDto,
   ): Promise<Category> {
-    return this.categoryService.createCategory(CreateCategoryDto);
+    return this.categoryService.createCategory(createCategoryDto);
   }
 
   @Get()

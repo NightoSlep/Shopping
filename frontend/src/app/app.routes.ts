@@ -9,6 +9,7 @@ import { authGuard } from './guards/auth.guard';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { ProductComponent } from './components/admin/product/product.component';
 import { CategoryComponent } from './components/admin/category/category.component';
+import { BannerManagementComponent } from './components/admin/banner-management/banner-management.component';
 
 export const routes: Routes = [
     {   
@@ -28,6 +29,7 @@ export const routes: Routes = [
                 { path: 'dashboard', component: DashboardComponent },
                 { path: 'products', component: ProductComponent },
                 { path: 'categories', component: CategoryComponent },
+                { path: 'banners', component: BannerManagementComponent }
             ]
           }
 ];

@@ -24,8 +24,9 @@ export class SidebarComponent {
     { path: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
     { path: 'products', label: 'Sản phẩm', icon: 'inventory_2' },
     { path: 'categories', label: 'Thể loại', icon: 'category' },
-    { path: 'orders', label: 'Đơn hàng', icon: 'receipt_long' },
-    { path: 'customers', label: 'Khách hàng', icon: 'group' },
+    // { path: 'orders', label: 'Đơn hàng', icon: 'receipt_long' },
+    // { path: 'customers', label: 'Khách hàng', icon: 'group' },
+    { path: 'banners', label: 'Banner', icon: 'image' }
   ];
   
   goTo(path: string) {

@@ -3,14 +3,14 @@
 <mat-dialog-content class="dialog-content-wide">
   <mat-form-field appearance="fill" class="form-field full-width">
     <mat-label>Tên sản phẩm*</mat-label>
-    <input matInput [(ngModel)]="productData.name" name="name" required>
+    <input matInput [(ngModel)]="productData.productName" name="productName" required>
   </mat-form-field>
 
 <mat-form-field appearance="fill" class="form-field full-width">
   <mat-label>Danh mục*</mat-label>
   <mat-select [(ngModel)]="productData.categoryId" name="categoryId" required>
-    <mat-option *ngFor="let cat of categoryList" [value]="cat.id">
-      {{ cat.name }}
+    <mat-option *ngFor="let category of categoryList" [value]="category.id">
+      {{ category.name }}
     </mat-option>
   </mat-select>
 </mat-form-field>
@@ -41,7 +41,7 @@
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancel()">Hủy</button>
-  <button mat-raised-button color="primary" (click)="save()">
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!imageUrl && !isEdit">
     {{ isEdit ? 'Cập nhật' : 'Tạo' }}
   </button>
 </mat-dialog-actions>

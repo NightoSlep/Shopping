@@ -54,6 +54,9 @@ export class ProductService {
 
   async remove(id: number): Promise<void> {
     const result = await this.productRepo.delete(id);
-    if (result.affected === 0) throw new NotFoundException('Product not found');
+    console.log('DELETE RESULT:', result);
+    if (result.affected === 0) {
+      throw new NotFoundException('Product not found');
+    }
   }
 }

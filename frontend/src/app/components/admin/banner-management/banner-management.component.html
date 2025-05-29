@@ -1,0 +1,26 @@
+<input #fileInput type="file" (change)="onFileSelected($event)" hidden />
+<button mat-raised-button color="primary" (click)="triggerFileSelect()">Chọn ảnh</button>
+
+<img *ngIf="uploadedImageUrl" [src]="uploadedImageUrl" alt="Banner Preview" class="banner-preview" />
+
+<mat-form-field appearance="fill" *ngIf="uploadedImageUrl">
+    <mat-label>Tên banner</mat-label>
+    <input matInput [(ngModel)]="bannerName" />
+</mat-form-field>
+
+<button mat-raised-button color="accent" *ngIf="uploadedImageUrl" (click)="saveBanner()">
+    Lưu banner
+</button>
+
+<mat-card *ngFor="let banner of banners" class="banner-card">
+    <mat-card-content class="banner-name">
+      {{ banner.name }}
+    </mat-card-content>
+  <div class="banner-row">
+    <img [src]="banner.url" alt="Banner" class="banner-image" />
+    <button mat-raised-button color="warn" (click)="deleteBanner(banner.id!)" class="delete-button">
+      <mat-icon>delete</mat-icon>
+      Xóa
+    </button>
+  </div>
+</mat-card>

@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { Product } from '../../../../models/product.model';
+import { NewProduct, Product } from '../../../../models/product.model';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class ProductFormComponent {
   productData = {
-    name: '',
+    productName: '',
     categoryId: 0,
     price: 0,
     description: '',
@@ -39,17 +39,17 @@ export class ProductFormComponent {
 
   constructor(private categoryService: CategoryService,
     public dialogRef: MatDialogRef<ProductFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { product?: Product }
+    @Inject(MAT_DIALOG_DATA) public data: { newProduct?: NewProduct }
   ) {
-    this.isEdit = !!data.product;
-    if (this.isEdit && data.product) {
+    this.isEdit = !!data.newProduct;
+    if (this.isEdit && data.newProduct) {
       this.productData = {
-        name: data.product.productName || '',
-        categoryId: data.product.categoryId,
-        price: data.product.price || 0,
-        description: data.product.description || '',
-        quantity: data.product.quantity || 0,
-        image: data.product.image || ''
+        productName: data.newProduct.productName || '',
+        categoryId: data.newProduct.categoryId,
+        price: data.newProduct.price || 0,
+        description: data.newProduct.description || '',
+        quantity: data.newProduct.quantity || 0,
+        image: data.newProduct.image || ''
       };
     }
   }
@@ -71,28 +71,32 @@ export class ProductFormComponent {
     if (file) {
       this.imageFile = file;
 
+      const selectedCategory = this.categoryList.find(c => c.id === this.productData.categoryId);
+      let categoryName = selectedCategory?.name?.toLowerCase() || 'default';
+      categoryName = categoryName.replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+
       const formData = new FormData();
       formData.append('file', this.imageFile);
-      formData.append('upload_preset', 'YOUR_UPLOAD_PRESET');
+      formData.append('upload_preset', 'shop_preset');
+      formData.append('folder', `shop/${categoryName}`);
 
-      fetch('https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload', {
+      fetch('https://api.cloudinary.com/v1_1/dprb29hfv/image/upload', {
         method: 'POST',
         body: formData
       })
       .then(res => res.json())
       .then(data => {
         this.imageUrl = data.secure_url;
-        console.log('Image URL:', this.imageUrl);
       })
       .catch(err => console.error('Upload failed:', err));
     }
   }
 
 save() {
-  if (this.productData.name && this.productData.price > 0) {
+  if (this.productData.productName && this.productData.price > 0) {
     const productToSave = {
       ...this.productData,
-      imageUrl: this.imageUrl
+      image: this.imageUrl
     };
     this.dialogRef.close(productToSave);
   }
