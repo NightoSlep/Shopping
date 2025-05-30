@@ -1,6 +1,10 @@
 <div class="home-container">
   <section class="banner">
-    
+    <div class="banner-grid">
+      <div *ngFor="let banner of banners" class="banner-card">
+        <img [src]="banner.url" [alt]="banner.name" class="banner-image" />
+      </div>
+    </div>
   </section>
 
   <section class="category-section">

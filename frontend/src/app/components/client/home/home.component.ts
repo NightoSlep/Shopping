@@ -6,6 +6,8 @@ import { Product } from '../../../models/product.model';
 import { ProductService } from '../../../services/admin/product/product.service';
 import { CategoryService } from '../../../services/admin/category/category.service';
 import { MatButtonModule } from '@angular/material/button';
+import { BannerService } from '../../../services/admin/banner/banner.service';
+import { Banner } from '../../../models/banner.model';
 
 @Component({
     selector: 'app-home',
@@ -17,15 +19,18 @@ import { MatButtonModule } from '@angular/material/button';
 export class HomeComponent {
   categories: Category[] = [];
   featuredProducts: Product[] = [];
+  banners: Banner[] = [];
 
     constructor(
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private bannerService: BannerService
   ) {}
 
     ngOnInit(): void {
     this.loadCategories();
     this.loadProducts();
+    this.loadBanners();
   }
 
   loadCategories(): void {
@@ -39,6 +44,13 @@ export class HomeComponent {
     this.productService.getAllProducts().subscribe({
       next: (data) => this.featuredProducts = data,
       error: (err) => console.error('Lỗi tải sản phẩm:', err)
+    });
+  }
+
+  loadBanners(): void {
+    this.bannerService.getBanners().subscribe({
+      next: (data) => this.banners = data,
+      error: (err) => console.error('Lỗi tải banner:', err)
     });
   }
 
