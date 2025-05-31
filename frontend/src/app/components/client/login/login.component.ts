@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
+
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '../../../services/auth.service';
@@ -18,16 +18,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-login',
-    imports: [CommonModule,
-        FormsModule,
-        MatInputModule,
-        MatButtonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatSnackBarModule,
-        MatToolbarModule,
-        MatProgressSpinnerModule],
+    imports: [FormsModule, MatInputModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatSnackBarModule, MatToolbarModule, MatProgressSpinnerModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })

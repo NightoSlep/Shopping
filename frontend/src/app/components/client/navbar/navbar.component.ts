@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,14 +15,7 @@ import { Category } from '../../../models/category.model';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule,
-            MatToolbarModule,
-            MatIconModule,
-            MatFormFieldModule,
-            MatInputModule,
-            MatButtonModule,
-            MatMenuModule,
-            MatSelectModule],
+  imports: [MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatMenuModule, MatSelectModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })

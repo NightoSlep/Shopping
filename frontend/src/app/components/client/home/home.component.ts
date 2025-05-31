@@ -17,17 +17,19 @@ import { Banner } from '../../../models/banner.model';
     styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  categories: Category[] = [];
+categories: Category[] = [];
   featuredProducts: Product[] = [];
   banners: Banner[] = [];
+  currentBannerIndex = 0;
+  bannerInterval: any;
 
-    constructor(
+  constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private bannerService: BannerService
   ) {}
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.loadCategories();
     this.loadProducts();
     this.loadBanners();
@@ -49,9 +51,24 @@ export class HomeComponent {
 
   loadBanners(): void {
     this.bannerService.getBanners().subscribe({
-      next: (data) => this.banners = data,
+      next: (data) => {
+        this.banners = data;
+        if (this.banners.length > 1) {
+          this.startBannerRotation();
+        }
+      },
       error: (err) => console.error('Lỗi tải banner:', err)
     });
+  }
+
+  startBannerRotation(): void {
+    this.bannerInterval = setInterval(() => {
+      this.currentBannerIndex = (this.currentBannerIndex + 1) % this.banners.length;
+    }, 3000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.bannerInterval);
   }
 
   addToCart(product: Product) {

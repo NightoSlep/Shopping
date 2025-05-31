@@ -1,61 +1,69 @@
 <mat-toolbar color="primary" class="navbar">
-    <div class="logo" (click)="navigateToHome()">
-        <mat-icon>verified</mat-icon>
-        <span class="brand">V-Shop</span>
+  <div class="logo" (click)="navigateToHome()">
+    <mat-icon>verified</mat-icon>
+    <span class="brand">V-Shop</span>
+  </div>
+
+  @if (!hideSearchBar) {
+    <div class="category-select">
+      <mat-form-field appearance="outline">
+        <mat-label>Thể loại</mat-label>
+        <mat-select [(value)]="selectedCategory">
+          @for (category of categories; track category) {
+            <mat-option [value]="category.id">
+              {{ category . name }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
+  }
 
-    <div class="category-select" *ngIf="!hideSearchBar">
-        <mat-form-field appearance="outline">
-            <mat-label>Thể loại</mat-label>
-            <mat-select [(value)]="selectedCategory">
-                <mat-option *ngFor="let category of categories" [value]="category.id">
-                    {{ category . name }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+  @if (!hideSearchBar) {
+    <div class="search-bar">
+      <mat-form-field appearance="outline">
+        <mat-label>Tìm kiếm sản phẩm...</mat-label>
+        <input matInput type="text">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
     </div>
+  }
 
-    <div class="search-bar" *ngIf="!hideSearchBar">
-        <mat-form-field appearance="outline">
-            <mat-label>Tìm kiếm sản phẩm...</mat-label>
-            <input matInput type="text">
-            <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
+  @if (!hideCart && !isProfilePage) {
+    <div class="right-section">
+      <div class="icon-box" (click)="navigateToOrders()">
+        <mat-icon>receipt_long</mat-icon>
+        <span class="icon-label">Đơn hàng</span>
+      </div>
+      @if (username) {
+        <div class="icon-box" [matMenuTriggerFor]="accountMenu">
+          <mat-icon>account_circle</mat-icon>
+          <span class="icon-label">{{ this . username }}</span>
+        </div>
+      } @else {
+        <div class="icon-box" (click)="navigateToLogin()">
+          <mat-icon>account_circle</mat-icon>
+          <span class="icon-label">Đăng nhập</span>
+        </div>
+      }
+      <mat-menu #accountMenu="matMenu">
+        @if (username) {
+          <button mat-menu-item (click)="navigateToProfile()">Tài khoản</button>
+          <button mat-menu-item (click)="navigateToSettings()">Cài đặt</button>
+          <button mat-menu-item (click)="logout()">Đăng xuất</button>
+        }
+      </mat-menu>
+      <div class="icon-box cart-box">
+        <mat-icon>shopping_cart</mat-icon>
+        <span class="cart-count">0</span>
+        <span class="icon-label">Giỏ hàng</span>
+      </div>
+      @if (authService.isAdmin()) {
+        <div class="icon-box admin-highlight" (click)="navigateToAdmin()">
+          <mat-icon color="accent">admin_panel_settings</mat-icon>
+          <span class="icon-label">Trang quản trị</span>
+        </div>
+      }
     </div>
-
-    <div class="right-section" *ngIf="!hideCart && !isProfilePage">
-        <div class="icon-box" (click)="navigateToOrders()">
-            <mat-icon>receipt_long</mat-icon>
-            <span class="icon-label">Đơn hàng</span>
-        </div>
-        
-        <div class="icon-box" *ngIf="username; else loginAction" [matMenuTriggerFor]="accountMenu">
-            <mat-icon>account_circle</mat-icon>
-            <span class="icon-label">{{ this . username }}</span>
-        </div>
-        <ng-template #loginAction>
-            <div class="icon-box" (click)="navigateToLogin()">
-                <mat-icon>account_circle</mat-icon>
-                <span class="icon-label">Đăng nhập</span>
-            </div>
-        </ng-template>
-        <mat-menu #accountMenu="matMenu">
-            <ng-container *ngIf="username">
-                <button mat-menu-item (click)="navigateToProfile()">Tài khoản</button>
-                <button mat-menu-item (click)="navigateToSettings()">Cài đặt</button>
-                <button mat-menu-item (click)="logout()">Đăng xuất</button>
-            </ng-container>
-        </mat-menu>
-
-        <div class="icon-box cart-box">
-            <mat-icon>shopping_cart</mat-icon>
-            <span class="cart-count">0</span>
-            <span class="icon-label">Giỏ hàng</span>
-        </div>
-
-        <div class="icon-box admin-highlight" *ngIf="authService.isAdmin()" (click)="navigateToAdmin()">
-            <mat-icon color="accent">admin_panel_settings</mat-icon>
-            <span class="icon-label">Trang quản trị</span>
-        </div>
-    </div>
+  }
 </mat-toolbar>

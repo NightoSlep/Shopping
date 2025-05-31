@@ -1,8 +1,12 @@
 <div class="home-container">
-  <section class="banner">
+  <section class="banner" *ngIf="banners.length > 0">
     <div class="banner-grid">
-      <div *ngFor="let banner of banners" class="banner-card">
-        <img [src]="banner.url" [alt]="banner.name" class="banner-image" />
+      <div class="banner-card">
+        <img
+          [src]="banners[currentBannerIndex].url"
+          [alt]="banners[currentBannerIndex].name"
+          class="banner-image"
+        />
       </div>
     </div>
   </section>
@@ -10,21 +14,25 @@
   <section class="category-section">
     <h2>Danh mục sản phẩm</h2>
     <div class="category-grid">
-      <div class="category-card" *ngFor="let category of categories">
-        <p>{{ category.name }}</p>
-      </div>
+      @for (category of categories; track category) {
+        <div class="category-card">
+          <p>{{ category.name }}</p>
+        </div>
+      }
     </div>
   </section>
 
   <section class="product-section">
     <h2>Sản phẩm nổi bật</h2>
     <div class="product-grid">
-      <mat-card class="product-card" *ngFor="let product of featuredProducts">
-        <img mat-card-image [src]="product.image" alt="{{ product.productName }}" />
-        <mat-card-title>{{ product.productName }}</mat-card-title>
-        <mat-card-subtitle>{{ product.price | currency:'VND' }}</mat-card-subtitle>
-        <button mat-raised-button color="primary" (click)="addToCart(product)">Thêm vào giỏ</button>
-      </mat-card>
+      @for (product of featuredProducts; track product) {
+        <mat-card class="product-card">
+          <img mat-card-image [src]="product.image" alt="{{ product.productName }}" />
+          <mat-card-title>{{ product.productName }}</mat-card-title>
+          <mat-card-subtitle>{{ product.price | currency:'VND' }}</mat-card-subtitle>
+          <button mat-raised-button color="primary" (click)="addToCart(product)">Thêm vào giỏ</button>
+        </mat-card>
+      }
     </div>
   </section>
 

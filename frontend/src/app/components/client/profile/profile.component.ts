@@ -7,23 +7,13 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { User } from '../../../models/user.model';
 import { Component } from '@angular/core';
 import { UserService } from '../../../services/client/user.service';
-import { CommonModule } from '@angular/common';
+
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-profile',
-  imports: [ FormsModule,
-              ReactiveFormsModule,
-              MatInputModule,
-              MatCardModule,
-              MatSnackBarModule,
-              MatButtonModule,
-              MatIconModule,
-              ToastrModule,
-              CommonModule,
-              MatExpansionModule
-              ],
+  imports: [FormsModule, ReactiveFormsModule, MatInputModule, MatCardModule, MatSnackBarModule, MatButtonModule, MatIconModule, ToastrModule, MatExpansionModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

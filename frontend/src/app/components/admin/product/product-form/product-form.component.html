@@ -6,14 +6,16 @@
     <input matInput [(ngModel)]="productData.productName" name="productName" required>
   </mat-form-field>
 
-<mat-form-field appearance="fill" class="form-field full-width">
-  <mat-label>Danh mục*</mat-label>
-  <mat-select [(ngModel)]="productData.categoryId" name="categoryId" required>
-    <mat-option *ngFor="let category of categoryList" [value]="category.id">
-      {{ category.name }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field appearance="fill" class="form-field full-width">
+    <mat-label>Danh mục*</mat-label>
+    <mat-select [(ngModel)]="productData.categoryId" name="categoryId" required>
+      @for (category of categoryList; track category) {
+        <mat-option [value]="category.id">
+          {{ category.name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 
   <mat-form-field appearance="fill" class="form-field full-width">
     <mat-label>Giá*</mat-label>
@@ -33,9 +35,11 @@
   <div class="image-upload">
     <label>Ảnh sản phẩm:</label>
     <input type="file" (change)="onImageSelected($event)">
-    <div *ngIf="imageUrl">
-      <img [src]="imageUrl" alt="Preview" class="image-preview">
-    </div>
+    @if (imageUrl) {
+      <div>
+        <img [src]="imageUrl" alt="Preview" class="image-preview">
+      </div>
+    }
   </div>
 </mat-dialog-content>
 

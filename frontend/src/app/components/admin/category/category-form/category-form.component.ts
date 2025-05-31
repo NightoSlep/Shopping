@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -9,12 +9,7 @@ import { Category } from '../../../../models/category.model';
 
 @Component({
   selector: 'app-category-form',
-  imports: [ CommonModule,
-            FormsModule,
-            MatDialogModule,
-            MatFormFieldModule,
-            MatInputModule,
-            MatButtonModule],
+  imports: [FormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule],
   templateUrl: './category-form.component.html',
   styleUrl: './category-form.component.css'
 })

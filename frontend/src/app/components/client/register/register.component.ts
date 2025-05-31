@@ -9,22 +9,21 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { Register } from '../../../models/user.model';
 
 @Component({
     selector: 'app-register',
     imports: [
-        CommonModule,
-        FormsModule,
-        MatInputModule,
-        MatButtonModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatSnackBarModule
-    ],
+    FormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatSnackBarModule
+],
     templateUrl: './register.component.html',
     styleUrl: './register.component.css'
 })

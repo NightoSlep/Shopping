@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -14,15 +14,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-banner-management',
   standalone: true,
-  imports: [CommonModule,
-          FormsModule,
-          MatCardModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatButtonModule,
-          MatIconModule,
-          MatProgressSpinnerModule
-        ],
+  imports: [FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './banner-management.component.html',
   styleUrls: ['./banner-management.component.css']
 })

@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NewProduct, Product } from '../../../../models/product.model';
-import { CommonModule } from '@angular/common';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,13 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-product-form',
-  imports: [CommonModule,
-            FormsModule,
-            MatDialogModule,
-            MatFormFieldModule,
-            MatInputModule,
-            MatButtonModule,
-            MatSelectModule],
+  imports: [FormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule],
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.css'
 })
