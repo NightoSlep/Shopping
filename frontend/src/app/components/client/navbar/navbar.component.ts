@@ -24,15 +24,6 @@ export class NavbarComponent {
   hideSearchBar: boolean = false;
   hideCart: boolean = false;
 
-  categories: Category[] = [
-    { id: 1, name: 'Tất cả' },
-    { id: 2, name: 'Điện tử' },
-    { id: 3, name: 'Thời trang' },
-    { id: 4, name: 'Sách' }
-  ];
-
-  selectedCategory: string = 'all';
-
   constructor(private router: Router, public authService: AuthService, private userService: UserService) {
     this.router.events.subscribe(() => {
       const currentUrl = this.router.url;

@@ -5,21 +5,6 @@
   </div>
 
   @if (!hideSearchBar) {
-    <div class="category-select">
-      <mat-form-field appearance="outline">
-        <mat-label>Thể loại</mat-label>
-        <mat-select [(value)]="selectedCategory">
-          @for (category of categories; track category) {
-            <mat-option [value]="category.id">
-              {{ category . name }}
-            </mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
-  }
-
-  @if (!hideSearchBar) {
     <div class="search-bar">
       <mat-form-field appearance="outline">
         <mat-label>Tìm kiếm sản phẩm...</mat-label>

@@ -1,24 +1,33 @@
 <div class="home-container">
-  <section class="banner" *ngIf="banners.length > 0">
-    <div class="banner-grid">
-      <div class="banner-card">
-        <img
-          [src]="banners[currentBannerIndex].url"
-          [alt]="banners[currentBannerIndex].name"
-          class="banner-image"
-        />
+  <section class="banner-section" *ngIf="banners.length > 0">
+    <div class="category-side">
+      <h3>Danh mục</h3>
+      <div class="category-inline-list">
+        @for (category of categories; track category) {
+          <span class="category-inline-item">{{ category.name }}</span>
+        }
       </div>
     </div>
-  </section>
 
-  <section class="category-section">
-    <h2>Danh mục sản phẩm</h2>
-    <div class="category-grid">
-      @for (category of categories; track category) {
-        <div class="category-card">
-          <p>{{ category.name }}</p>
+    <div class="banner-wrapper">
+      <div class="banner-grid">
+        <div class="banner-card">
+          <img
+            [src]="banners[currentBannerIndex].url"
+            [alt]="banners[currentBannerIndex].name"
+            class="banner-image"
+          />
+
+          <div class="banner-dots">
+            <button
+              class="dot"
+              *ngFor="let banner of banners; let i = index"
+              [class.active]="i === currentBannerIndex"
+              (click)="goToBanner(i)">
+            </button>
+          </div>
         </div>
-      }
+      </div>
     </div>
   </section>
 
@@ -26,7 +35,7 @@
     <h2>Sản phẩm nổi bật</h2>
     <div class="product-grid">
       @for (product of featuredProducts; track product) {
-        <mat-card class="product-card">
+        <mat-card class="product-card" @fadeInUp>
           <img mat-card-image [src]="product.image" alt="{{ product.productName }}" />
           <mat-card-title>{{ product.productName }}</mat-card-title>
           <mat-card-subtitle>{{ product.price | currency:'VND' }}</mat-card-subtitle>
@@ -35,5 +44,4 @@
       }
     </div>
   </section>
-
 </div>

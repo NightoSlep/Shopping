@@ -8,11 +8,20 @@ import { CategoryService } from '../../../services/admin/category/category.servi
 import { MatButtonModule } from '@angular/material/button';
 import { BannerService } from '../../../services/admin/banner/banner.service';
 import { Banner } from '../../../models/banner.model';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
     selector: 'app-home',
     imports: [MatCardModule,
             CommonModule, MatButtonModule],
+    animations: [
+      trigger('fadeInUp', [
+        transition(':enter', [
+          style({ opacity: 0, transform: 'translateY(40px)' }),
+          animate('600ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+        ])
+      ])
+    ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.css'
 })
@@ -64,11 +73,24 @@ categories: Category[] = [];
   startBannerRotation(): void {
     this.bannerInterval = setInterval(() => {
       this.currentBannerIndex = (this.currentBannerIndex + 1) % this.banners.length;
-    }, 3000);
+    }, 5000);
   }
 
   ngOnDestroy(): void {
     clearInterval(this.bannerInterval);
+  }
+
+  prevBanner(): void {
+    this.currentBannerIndex =
+      (this.currentBannerIndex - 1 + this.banners.length) % this.banners.length;
+  }
+
+  nextBanner(): void {
+    this.currentBannerIndex = (this.currentBannerIndex + 1) % this.banners.length;
+  }
+
+  goToBanner(index: number): void {
+    this.currentBannerIndex = index;
   }
 
   addToCart(product: Product) {
