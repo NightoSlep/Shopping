@@ -94,7 +94,9 @@ export class AuthService {
     return this.generateTokens(user);
   }
 
-  async validateOAuthUser(oAuthUser: IOAuthUser) {
+  async validateOAuthUser(
+    oAuthUser: IOAuthUser,
+  ): Promise<{ access_token: string; refresh_token: string }> {
     let user = await this.userRepository.findOne({
       where: { email: oAuthUser.email },
     });
@@ -103,6 +105,9 @@ export class AuthService {
       user = this.userRepository.create({
         email: oAuthUser.email,
         username: oAuthUser.username || oAuthUser.email.split('@')[0],
+        password: await this.hashPassword('password'),
+        phone: null,
+        address: '',
         role: UserRole.USER,
       });
       await this.userRepository.save(user);

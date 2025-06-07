@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { User } from '../../models/user.model';
+import { environment } from '../../../../environments/environment';
+import { User } from '../../../models/user.model';
 
 
 @Injectable({
@@ -29,7 +29,7 @@ export class UserService {
   }
 
   getMyProfile(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/profile`);
+    return this.http.get<User>(`${this.apiUrl}/users/profile`, { withCredentials: true });
   }
 
   updateMyProfile(user: User): Observable<User> {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
@@ -8,13 +8,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 
-import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/shared/auth/auth.service';
 import { Login, LoginResponse } from '../../../models/user.model';
-import { StorageService } from '../../../services/storage.service';
-import { UserService } from '../../../services/client/user.service';
+import { StorageService } from '../../../services/shared/storage/storage.service';
+import { UserService } from '../../../services/client/user/user.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-login',
@@ -26,68 +26,79 @@ export class LoginComponent{
   username = '';
   password = '';
   hidePassword: boolean = true; 
-  user: SocialUser | null = null;
   isLoggingIn = false;
 
   constructor(
     private authService: AuthService, 
     private router: Router, 
     private snackBar: MatSnackBar, 
-    private socialAuthService: SocialAuthService,
     private storage: StorageService,
-    private userService: UserService) {}
+    private userService: UserService,
+    private route: ActivatedRoute) {}
     
-    onLogin() {
-      this.isLoggingIn = true; 
-    
-      const loginData: Login = { username: this.username, password: this.password };
-      this.authService.login(loginData).subscribe({
-        next: (response: LoginResponse) => {
-          this.storage.setToken(response.access_token);
-          this.storage.setRefreshToken(response.refresh_token);
-    
-          this.userService.getMyProfile().subscribe({
-            next: (userData) => {
-              this.userService.setCurrentUser(userData);
-    
-              localStorage.setItem('username', userData.username);
-              this.storage.setRole(userData.role);
-    
-              this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
-              this.router.navigate(['/']);
-            },
-            error: (err) => {
-              this.snackBar.open('Không thể lấy thông tin người dùng!', 'OK', { duration: 3000 });
-            }
-          });
-        },
-        error: () => {
-          this.snackBar.open('Sai tên đăng nhập hoặc mật khẩu!', 'OK', { duration: 3000 });
-        }
-      });
-    }
-    
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const token = params['token'];
+      const refreshToken = params['refreshToken'];
 
-  loginWithGoogle() {
-    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
-      this.user = user;
-      this.authService.socialLogin(user.idToken, user.name);
-      this.snackBar.open(`Đăng nhập thành công: ${user.name}`, 'OK', { duration: 3000 });
-      this.router.navigate(['/']);
-    }).catch(error => {
-      this.snackBar.open('Đăng nhập Google thất bại!', 'OK', { duration: 3000 });
+      if (token && refreshToken) {
+        this.storage.setToken(token);
+        this.storage.setRefreshToken(refreshToken);
+
+        this.userService.getMyProfile().subscribe({
+          next: (userData) => {
+            this.userService.setCurrentUser(userData);
+
+            localStorage.setItem('username', userData.username);
+            this.storage.setRole(userData.role);
+
+            this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
+            this.router.navigate(['/']);
+          },
+          error: () => {
+            this.snackBar.open('Không thể lấy thông tin người dùng!', 'OK', { duration: 3000 });
+          }
+        });
+      }
     });
   }
 
-  loginWithFacebook() {
-    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).then(user => {
-      this.user = user;
-      this.authService.socialLogin(user.idToken, user.name);
-      this.snackBar.open(`Đăng nhập thành công: ${user.name}`, 'OK', { duration: 3000 });
-      this.router.navigate(['/']);
-    }).catch(error => {
-      this.snackBar.open('Đăng nhập Facebook thất bại!', 'OK', { duration: 3000 });
+  onLogin() {
+    this.isLoggingIn = true; 
+  
+    const loginData: Login = { username: this.username, password: this.password };
+    this.authService.login(loginData).subscribe({
+      next: (response: LoginResponse) => {
+        this.storage.setToken(response.access_token);
+        this.storage.setRefreshToken(response.refresh_token);
+  
+        this.userService.getMyProfile().subscribe({
+          next: (userData) => {
+            this.userService.setCurrentUser(userData);
+  
+            localStorage.setItem('username', userData.username);
+            this.storage.setRole(userData.role);
+  
+            this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
+            this.router.navigate(['/']);
+          },
+          error: (err) => {
+            this.snackBar.open('Không thể lấy thông tin người dùng!', 'OK', { duration: 3000 });
+          }
+        });
+      },
+      error: () => {
+        this.snackBar.open('Sai tên đăng nhập hoặc mật khẩu!', 'OK', { duration: 3000 });
+      }
     });
+  }
+  
+  loginWithGoogle() {
+    this.authService.loginWithGoogle();
+  }
+
+  loginWithFacebook() {
+    this.authService.loginWithFacebook();
   }
 
   navigateToRegister() {

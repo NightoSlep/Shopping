@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
@@ -56,9 +55,5 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     } catch (error) {
       done(error, false);
     }
-  }
-
-  private async saveUserToDatabase(user: any): Promise<any> {
-    return new Promise((resolve) => setTimeout(() => resolve(user), 100));
   }
 }

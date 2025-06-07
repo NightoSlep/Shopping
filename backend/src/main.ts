@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 import { exec } from 'child_process';
 import * as os from 'os';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const httpsOptions = {
@@ -14,6 +15,9 @@ async function bootstrap() {
   };
 
   const app = await NestFactory.create(AppModule, { httpsOptions });
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  app.use(cookieParser());
 
   app.enableCors({
     origin: 'https://localhost:4200',

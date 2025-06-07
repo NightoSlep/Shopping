@@ -10,6 +10,9 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { ProductComponent } from './components/admin/product/product.component';
 import { CategoryComponent } from './components/admin/category/category.component';
 import { BannerManagementComponent } from './components/admin/banner-management/banner-management.component';
+import { CartComponent } from './components/client/cart/cart.component';
+import { CheckoutComponent } from './components/client/checkout/checkout.component';
+import { OauthCallbackComponent } from './components/client/oauth-callback/oauth-callback.component';
 
 export const routes: Routes = [
     {   
@@ -19,7 +22,9 @@ export const routes: Routes = [
             { path: '', component: HomeComponent },
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },
-            { path: 'profile', component: ProfileComponent}
+            { path: 'profile', component: ProfileComponent },
+            { path: 'cart', component: CartComponent },
+            { path: 'checkout', component: CheckoutComponent }
         ]},
         {
             path: 'admin',
@@ -31,5 +36,6 @@ export const routes: Routes = [
                 { path: 'categories', component: CategoryComponent },
                 { path: 'banners', component: BannerManagementComponent }
             ]
-          }
+          },
+          { path: 'oauth-callback', component: OauthCallbackComponent }
 ];

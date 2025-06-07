@@ -35,27 +35,19 @@ export class CreateUserDto {
   role?: UserRole;
 }
 
-export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @IsOptional()
-  @IsString()
-  username?: string;
-
-  @IsOptional()
-  @IsString()
-  phone?: string;
-
-  @IsOptional()
-  @IsString()
-  address?: string;
-}
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class UserResponseDto {
   id: string;
   username: string;
+
+  @Exclude()
   password: string;
   email: string;
-  phone: string;
-  address: string;
+  phone: string | null;
+
+  @IsOptional()
+  address: string | null;
   role: UserRole;
 
   @Exclude()

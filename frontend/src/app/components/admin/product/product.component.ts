@@ -32,7 +32,6 @@ import { ProductFormComponent } from './product-form/product-form.component';
 })
 export class ProductComponent {
   products: Product[] = [];
-  filteredProducts: Product[] = [];
   searchText: string = '';
 
   displayedColumns: string[] = [
@@ -60,18 +59,29 @@ export class ProductComponent {
     this.loadProducts();
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
   loadProducts() {
     this.productService.getAllProducts().subscribe((res) => {
       this.products = res;
-      this.filteredProducts = res;
+      this.dataSource = new MatTableDataSource<Product>(res);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+
+      this.dataSource.filterPredicate = (data: Product, filter: string) => {
+        return data.productName.toLowerCase().includes(filter.trim().toLowerCase());
+      };
     });
   }
 
   onSearch() {
-    const term = this.searchText.toLowerCase();
-    this.filteredProducts = this.products.filter(p =>
-      p.productName.toLowerCase().includes(term)
-    );
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+    }
   }
 
   deleteProduct(product: Product) {

@@ -38,9 +38,9 @@
           <button mat-menu-item (click)="logout()">Đăng xuất</button>
         }
       </mat-menu>
-      <div class="icon-box cart-box">
+      <div class="icon-box cart-box" (click)="navigateToCart()">
         <mat-icon>shopping_cart</mat-icon>
-        <span class="cart-count">0</span>
+        <span class="cart-count">{{ cartItemCount }}</span>
         <span class="icon-label">Giỏ hàng</span>
       </div>
       @if (authService.isAdmin()) {

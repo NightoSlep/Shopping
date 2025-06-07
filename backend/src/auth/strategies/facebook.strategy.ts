@@ -14,10 +14,6 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
       profileFields: ['id', 'displayName', 'emails'],
       scope: ['email', 'public_profile'],
     });
-    console.log(
-      'FACEBOOK_REDIRECT_URL:',
-      configService.get<string>('FACEBOOK_REDIRECT_URL'),
-    );
 
     if (
       !configService.get<string>('FACEBOOK_APP_ID') ||
@@ -30,6 +26,7 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
 
   validate(
     accessToken: string,
+    refreshToken: string,
     profile: FacebookProfile,
     done: (error: any, user?: any) => void,
   ) {
@@ -43,7 +40,6 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
       if (!emails || emails.length === 0) {
         throw new UnauthorizedException('Email is required for authentication');
       }
-
       const user = {
         providerId: id,
         provider: 'facebook',

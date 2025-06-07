@@ -1,10 +1,23 @@
+<div *ngIf="isLoading" class="loading-overlay">
+  <mat-spinner diameter="60"></mat-spinner>
+</div>
+
 <div class="home-container">
   <section class="banner-section" *ngIf="banners.length > 0">
     <div class="category-side">
       <h3>Danh mục</h3>
       <div class="category-inline-list">
+        <span class="category-inline-item"
+              (click)="filterByCategory(null)"
+              [class.active-category]="selectedCategoryId === null"
+              style="cursor: pointer;">
+          Tất cả
+        </span>
         @for (category of categories; track category) {
-          <span class="category-inline-item">{{ category.name }}</span>
+          <span class="category-inline-item" (click)="filterByCategory(category.id || null)" 
+              [class.active-category]="category.id === selectedCategoryId">
+            {{ category.name }}
+          </span>
         }
       </div>
     </div>
@@ -12,10 +25,10 @@
     <div class="banner-wrapper">
       <div class="banner-grid">
         <div class="banner-card">
-          <img
-            [src]="banners[currentBannerIndex].url"
-            [alt]="banners[currentBannerIndex].name"
-            class="banner-image"
+          <img *ngIf="banners.length > 0"
+              [src]="banners[currentBannerIndex].url"
+              [alt]="banners[currentBannerIndex].name"
+              class="banner-image"
           />
 
           <div class="banner-dots">

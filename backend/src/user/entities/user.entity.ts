@@ -19,11 +19,11 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ unique: true })
-  phone: string;
+  @Column('varchar', { unique: true, nullable: true })
+  phone: string | null;
 
-  @Column({ default: '' })
-  address: string;
+  @Column('varchar', { nullable: true })
+  address: string | null;
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.ADMIN })
   role: UserRole;

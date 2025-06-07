@@ -1,6 +1,9 @@
 export interface IOAuthUser {
   email: string;
   username?: string;
+  password: 'password';
+  phone: '';
+  address: '';
   provider: 'google' | 'facebook';
 }
 

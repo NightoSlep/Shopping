@@ -1,0 +1,28 @@
+<h2 class="cart-title">Giỏ hàng</h2>
+
+<div *ngIf="cartItems.length === 0" class="cart-empty">
+  Giỏ hàng của bạn đang trống.
+</div>
+
+<div class="cart-container" *ngIf="cartItems.length > 0">
+  <div class="cart-items">
+    <mat-card *ngFor="let item of cartItems" class="cart-item">
+      <div class="item-left">
+        <img [src]="item.image" alt="{{item.productName}}" />
+      </div>
+      <div class="item-middle">
+        <h3 class="item-name">{{ item.productName }}</h3>
+        <p class="item-price">{{ item.price | currency:'VND' }}</p>
+      </div>
+      <div class="item-right">
+        <button mat-raised-button color="warn" (click)="removeItem(item.id)">Xóa</button>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="cart-total">
+    <p><strong>Tổng tiền:</strong> {{ getTotal() | currency:'VND' }}</p>
+    <button mat-stroked-button color="warn" (click)="clearCart()">Xóa tất cả</button>
+    <a routerLink="/checkout"><button mat-flat-button color="primary">Thanh toán</button></a>
+  </div>
+</div>

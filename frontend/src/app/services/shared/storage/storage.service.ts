@@ -66,10 +66,6 @@ export class StorageService {
   }
 
   clear(){
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userId);
-    localStorage.removeItem(this.roleKey);
-    localStorage.removeItem(this.username);
-    localStorage.removeItem(this.refreshKey);
+    localStorage.clear(); 
   }
 }

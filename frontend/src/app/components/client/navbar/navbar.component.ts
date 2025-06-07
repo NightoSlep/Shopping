@@ -8,10 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select'; 
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/shared/auth/auth.service';
 import { User } from '../../../models/user.model';
-import { UserService } from '../../../services/client/user.service';
+import { UserService } from '../../../services/client/user/user.service';
 import { Category } from '../../../models/category.model';
+import { CartService } from '../../../services/client/cart/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -23,12 +24,19 @@ export class NavbarComponent {
   username: string = '';
   hideSearchBar: boolean = false;
   hideCart: boolean = false;
+  cartItemCount = 0;
 
-  constructor(private router: Router, public authService: AuthService, private userService: UserService) {
+  constructor(private router: Router,
+              public authService: AuthService, 
+              private userService: UserService, 
+              private cartService: CartService) {
     this.router.events.subscribe(() => {
       const currentUrl = this.router.url;
       this.hideSearchBar = currentUrl.includes('/login') || currentUrl.includes('/register')|| currentUrl.includes('/profile') ;
       this.hideCart = currentUrl.includes('/login') || currentUrl.includes('/register');
+    });
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItemCount = items.length;
     });
   }
 
@@ -61,6 +69,10 @@ export class NavbarComponent {
 
   navigateToSettings(){
 
+  }
+
+  navigateToCart() {
+    this.router.navigate(['/cart']);
   }
 
   navigateToHome(){

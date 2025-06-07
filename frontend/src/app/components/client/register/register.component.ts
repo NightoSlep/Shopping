@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/shared/auth/auth.service';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
 
 // Import Material

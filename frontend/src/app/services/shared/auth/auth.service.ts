@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Login, LoginResponse, Register } from '../models/user.model';
-import { StorageService } from './storage.service';
+import { Login, LoginResponse, Register } from '../../../models/user.model';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,16 +18,23 @@ export class AuthService {
   }
   
   login(userData: Login): Observable<any> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, userData);
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, userData, {
+      withCredentials: true
+    });
   }
 
-  refreshToken(refreshToken: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/refresh-token`, { refresh_token: refreshToken });
+  refreshToken(): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/refresh-token`, {}, {
+      withCredentials: true
+    });
   }
 
-  socialLogin(token: string, userId: string): void {
-    this.storage.setToken(token);
-    this.storage.setUserId(userId);
+  loginWithGoogle() {
+    window.location.href = `${environment.apiUrl}/auth/google`;
+  }
+
+  loginWithFacebook() {
+    window.location.href = `${environment.apiUrl}/auth/facebook`;
   }
 
   logout() {

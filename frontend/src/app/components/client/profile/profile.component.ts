@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { User } from '../../../models/user.model';
 import { Component } from '@angular/core';
-import { UserService } from '../../../services/client/user.service';
+import { UserService } from '../../../services/client/user/user.service';
 
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';

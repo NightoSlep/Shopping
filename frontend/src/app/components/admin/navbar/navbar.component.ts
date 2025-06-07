@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/shared/auth/auth.service';
 import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { StorageService } from '../../../services/storage.service';
+import { StorageService } from '../../../services/shared/storage/storage.service';
 
 
 @Component({

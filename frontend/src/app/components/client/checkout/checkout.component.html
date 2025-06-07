@@ -1,0 +1,9 @@
+<h2>Thanh toán</h2>
+
+<div *ngFor="let item of cartItems">
+  <p>{{ item.productName }} - {{ item.price | currency:'VND' }}</p>
+</div>
+
+<p><strong>Tổng tiền:</strong> {{ total | currency:'VND' }}</p>
+
+<button (click)="submitOrder()">Xác nhận đặt hàng</button>

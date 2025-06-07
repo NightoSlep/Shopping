@@ -11,6 +11,10 @@ import { ProductModule } from './product/product.module';
 import { CloudinaryModule } from './common/providers/cloudinary/cloudinary.module';
 import { CloudinaryProvider } from './common/providers/cloudinary/cloudinary.provider';
 import { BannerModule } from './banner/banner.module';
+import { OrdersController } from './orders/controllers/orders.controller';
+import { OrdersService } from './orders/services/orders.service';
+import { OrdersModule } from './orders/orders.module';
+import { OrderDetailsModule } from './order-details/order-details.module';
 
 @Module({
   imports: [
@@ -35,8 +39,10 @@ import { BannerModule } from './banner/banner.module';
     ProductModule,
     CloudinaryModule,
     BannerModule,
+    OrdersModule,
+    OrderDetailsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, CloudinaryProvider],
+  controllers: [AppController, OrdersController],
+  providers: [AppService, CloudinaryProvider, OrdersService],
 })
 export class AppModule {}
