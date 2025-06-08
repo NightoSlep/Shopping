@@ -1,36 +1,41 @@
 import { Category } from 'src/category/entities/category.entity';
+import { OrderDetail } from 'src/order-details/entities/order-detail.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('products')
 export class Product {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column()
+  @Column({ name: 'product_name', type: 'varchar', nullable: false })
   productName: string;
 
   @Column('decimal')
   price: number;
 
-  @Column()
+  @Column('int', { nullable: false })
   quantity: number;
 
-  @Column()
+  @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column()
   image: string;
 
-  @Column()
-  categoryId: number;
-
-  @ManyToOne(() => Category, { eager: true })
-  @JoinColumn({ name: 'categoryId' })
+  @ManyToOne(() => Category, (category) => category.products, { eager: true })
+  @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  @Column({ name: 'category_id' })
+  categoryId: string;
+
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.product)
+  orderDetails: OrderDetail[];
 }

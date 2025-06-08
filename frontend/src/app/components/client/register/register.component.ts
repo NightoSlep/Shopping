@@ -12,18 +12,20 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { Router } from '@angular/router';
 import { Register } from '../../../models/user.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-register',
     imports: [
-    FormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatSnackBarModule
-],
+      CommonModule,
+      FormsModule,
+      MatInputModule,
+      MatButtonModule,
+      MatCardModule,
+      MatFormFieldModule,
+      MatIconModule,
+      MatSnackBarModule
+    ],
     templateUrl: './register.component.html',
     styleUrl: './register.component.css'
 })
@@ -50,7 +52,6 @@ export class RegisterComponent implements AfterViewInit{
               private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
-    // Clear server errors when user types something new
     this.clearServerError(this.usernameField);
     this.clearServerError(this.emailField);
     this.clearServerError(this.phoneField);

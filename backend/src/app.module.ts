@@ -11,10 +11,8 @@ import { ProductModule } from './product/product.module';
 import { CloudinaryModule } from './common/providers/cloudinary/cloudinary.module';
 import { CloudinaryProvider } from './common/providers/cloudinary/cloudinary.provider';
 import { BannerModule } from './banner/banner.module';
-import { OrdersController } from './orders/controllers/orders.controller';
-import { OrdersService } from './orders/services/orders.service';
-import { OrdersModule } from './orders/orders.module';
-import { OrderDetailsModule } from './order-details/order-details.module';
+import { OrderModule } from './orders/order.module';
+import { OrderDetailModule } from './order-details/order-detail.module';
 
 @Module({
   imports: [
@@ -39,10 +37,10 @@ import { OrderDetailsModule } from './order-details/order-details.module';
     ProductModule,
     CloudinaryModule,
     BannerModule,
-    OrdersModule,
-    OrderDetailsModule,
+    OrderModule,
+    OrderDetailModule,
   ],
-  controllers: [AppController, OrdersController],
-  providers: [AppService, CloudinaryProvider, OrdersService],
+  controllers: [AppController],
+  providers: [AppService, CloudinaryProvider],
 })
 export class AppModule {}

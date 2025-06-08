@@ -17,10 +17,11 @@ export class ProductService {
   ) {}
 
   async create(dto: CreateProductDto): Promise<Product> {
-    const category = await this.categoryRepo.findOneBy({ id: dto.categoryId });
+    const { categoryId, ...rest } = dto;
+    const category = await this.categoryRepo.findOneBy({ id: categoryId });
     if (!category) throw new NotFoundException('Category not found');
 
-    const product = this.productRepo.create({ ...dto, category });
+    const product = this.productRepo.create({ ...rest, category });
     return this.productRepo.save(product);
   }
 
@@ -28,23 +29,23 @@ export class ProductService {
     return this.productRepo.find();
   }
 
-  async findOne(id: number): Promise<Product> {
+  async findOne(id: string): Promise<Product> {
     const product = await this.productRepo.findOneBy({ id });
     if (!product) throw new NotFoundException('Product not found');
     return product;
   }
 
-  async update(id: number, dto: UpdateProductDto): Promise<Product> {
+  async update(id: string, dto: UpdateProductDto): Promise<Product> {
+    const { categoryId, ...rest } = dto;
+
     const product = await this.productRepo.preload({
       id,
-      ...dto,
+      ...rest,
     });
-    if (!product) throw new NotFoundException('Product not found');
 
-    if (dto.categoryId) {
-      const category = await this.categoryRepo.findOneBy({
-        id: dto.categoryId,
-      });
+    if (!product) throw new NotFoundException('Product not found');
+    if (categoryId) {
+      const category = await this.categoryRepo.findOneBy({ id: categoryId });
       if (!category) throw new NotFoundException('Category not found');
       product.category = category;
     }
@@ -52,7 +53,7 @@ export class ProductService {
     return this.productRepo.save(product);
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     const result = await this.productRepo.delete(id);
     console.log('DELETE RESULT:', result);
     if (result.affected === 0) {

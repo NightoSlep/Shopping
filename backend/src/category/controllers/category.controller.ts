@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Delete,
-  ParseIntPipe,
   Param,
   NotFoundException,
   Put,
@@ -31,9 +30,7 @@ export class CategoryController {
   }
 
   @Get(':id')
-  async getCategoryById(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Category> {
+  async getCategoryById(@Param('id') id: string): Promise<Category> {
     const category = await this.categoryService.getCategoryById(id);
     if (!category) throw new NotFoundException('Category not found');
     return category;
@@ -41,14 +38,14 @@ export class CategoryController {
 
   @Put(':id')
   async updateCategory(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ): Promise<Category> {
     return this.categoryService.updateCategory(id, updateCategoryDto);
   }
 
   @Delete(':id')
-  async deleteCategory(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  async deleteCategory(@Param('id') id: string): Promise<void> {
     return this.categoryService.deleteCategory(id);
   }
 }

@@ -7,6 +7,7 @@
 }
 
 .register-card {
+  position: relative; /* cần cho nút back-button định vị */
   width: 600px;
   padding: 20px;
   border-radius: 12px;
@@ -50,6 +51,16 @@ mat-form-field {
   text-transform: uppercase;
   border-radius: 6px;
   transition: background 0.3s ease-in-out;
+  margin-top: 10px;
+}
+
+.back-button {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  background-color: transparent;
+  color: #3f51b5;
 }
 
 @media (max-width: 400px) {
@@ -57,4 +68,3 @@ mat-form-field {
     width: 90%;
   }
 }
-

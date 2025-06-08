@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [CommonModule,
           MatButtonModule,
           MatCardModule,
-          MatIconModule 
+          MatIconModule
     ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'

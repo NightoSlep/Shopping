@@ -1,121 +1,93 @@
 <div class="center">
   <mat-card class="register-card">
+    <button mat-icon-button class="back-button" (click)="navigateToLogin()" matTooltip="Quay về đăng nhập">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
     <h2>Đăng Ký</h2>
+
     <form (ngSubmit)="onRegister()" #registerForm="ngForm">
       <div class="form-row">
         <mat-form-field appearance="outline" class="half-width">
           <mat-label>Tên đăng nhập</mat-label>
-          <input matInput type="text" [(ngModel)]="username" name="username" required
-            #usernameField="ngModel">
-            @if (usernameField.hasError('required') && (usernameField.touched || registerForm.submitted)) {
-              <mat-error
-                >Tên
-                đăng nhập không
-              được để trống.</mat-error>
-            }
-            @if (usernameField.errors?.['server']) {
-              <mat-error>Tên đăng
-              nhập đã tồn tại.</mat-error>
-            }
-          </mat-form-field>
+          <input matInput type="text" [(ngModel)]="username" name="username" required #usernameField="ngModel">
+          <mat-error *ngIf="usernameField.hasError('required') && (usernameField.touched || registerForm.submitted)">
+            Tên đăng nhập không được để trống.
+          </mat-error>
+          <mat-error *ngIf="usernameField.errors?.['server']">
+            Tên đăng nhập đã tồn tại.
+          </mat-error>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" [(ngModel)]="email" name="email" required email
-              #emailField="ngModel">
-              @if ((emailField.invalid && (emailField.touched || registerForm.submitted)) && emailField.hasError('required')) {
-                <mat-error
-                  >
-                  Email không được để trống.
-                </mat-error>
-              }
-              @if (emailField.hasError('email') && !emailField.hasError('server') && (emailField.touched || registerForm.submitted)) {
-                <mat-error
-                  >
-                  Email không hợp lệ.
-                </mat-error>
-              }
-              @if (emailField.errors?.['server']) {
-                <mat-error>
-                  Email đã tồn tại.
-                </mat-error>
-              }
-            </mat-form-field>
-          </div>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" [(ngModel)]="email" name="email" required email #emailField="ngModel">
+          <mat-error *ngIf="emailField.hasError('required') && (emailField.touched || registerForm.submitted)">
+            Email không được để trống.
+          </mat-error>
+          <mat-error *ngIf="emailField.hasError('email') && !emailField.hasError('server') && (emailField.touched || registerForm.submitted)">
+            Email không hợp lệ.
+          </mat-error>
+          <mat-error *ngIf="emailField.errors?.['server']">
+            Email đã tồn tại.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="half-width">
-              <mat-label>Số điện thoại</mat-label>
-              <input matInput type="tel" [(ngModel)]="phone" name="phone" required #phoneField="ngModel"
-                pattern="^[0-9]{9,15}$">
-                @if (phoneField.hasError('required') && phoneField.touched) {
-                  <mat-error>
-                    Số điện thoại không được để trống.
-                  </mat-error>
-                }
-                @if (phoneField.hasError('pattern') && (phoneField.touched || registerForm.submitted)) {
-                  <mat-error>
-                    Số điện thoại chỉ được chứa số (9-15 chữ số).
-                  </mat-error>
-                }
-                @if (phoneField.errors?.['server']) {
-                  <mat-error>
-                    Số điện thoại đã tồn tại.
-                  </mat-error>
-                }
-              </mat-form-field>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Số điện thoại</mat-label>
+          <input matInput type="tel" [(ngModel)]="phone" name="phone" required pattern="^[0-9]{9,15}$" #phoneField="ngModel">
+          <mat-error *ngIf="phoneField.hasError('required') && phoneField.touched">
+            Số điện thoại không được để trống.
+          </mat-error>
+          <mat-error *ngIf="phoneField.hasError('pattern') && (phoneField.touched || registerForm.submitted)">
+            Số điện thoại chỉ được chứa số (9-15 chữ số).
+          </mat-error>
+          <mat-error *ngIf="phoneField.errors?.['server']">
+            Số điện thoại đã tồn tại.
+          </mat-error>
+        </mat-form-field>
 
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Địa chỉ</mat-label>
-                <input matInput type="text" [(ngModel)]="address" name="address" required
-                  #addressField="ngModel">
-                  @if (addressField.invalid && addressField.touched) {
-                    <mat-error>Địa chỉ không được để
-                    trống.</mat-error>
-                  }
-                </mat-form-field>
-              </div>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Địa chỉ</mat-label>
+          <input matInput type="text" [(ngModel)]="address" name="address" required #addressField="ngModel">
+          <mat-error *ngIf="addressField.invalid && addressField.touched">
+            Địa chỉ không được để trống.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-              <div class="form-row">
-                <mat-form-field appearance="outline" class="half-width">
-                  <mat-label>Mật khẩu</mat-label>
-                  <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password"
-                    required #passwordField="ngModel" />
-                    <button mat-icon-button matSuffix class="hide-password-icon" type="button"
-                      (click)="toggleHidePassword()">
-                      <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                    </button>
-                    @if (passwordField.invalid && passwordField.touched) {
-                      <mat-error>
-                        Mật khẩu không được để trống.
-                      </mat-error>
-                    }
-                  </mat-form-field>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Mật khẩu</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password" required #passwordField="ngModel">
+          <button mat-icon-button matSuffix type="button" class="hide-password-icon" (click)="toggleHidePassword()">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="passwordField.invalid && passwordField.touched">
+            Mật khẩu không được để trống.
+          </mat-error>
+        </mat-form-field>
 
-                  <mat-form-field appearance="outline" class="half-width">
-                    <mat-label>Xác nhận mật khẩu</mat-label>
-                    <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" [(ngModel)]="confirmPassword"
-                      name="confirmPassword" required #confirmPasswordField="ngModel" />
-                      <button mat-icon-button matSuffix class="hide-password-icon" type="button"
-                        (click)="toggleHideConfirmPassword()">
-                        <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                      </button>
-                      @if (confirmPasswordField.hasError('required') && (confirmPasswordField.touched || registerForm.submitted)) {
-                        <mat-error>
-                          Xác nhận mật khẩu không được để trống.
-                        </mat-error>
-                      }
-                      @if (confirmPasswordField.hasError('mismatch') && (confirmPasswordField.touched || registerForm.submitted)) {
-                        <mat-error>
-                          Mật khẩu xác nhận không khớp.
-                        </mat-error>
-                      }
-                    </mat-form-field>
-                  </div>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Xác nhận mật khẩu</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" [(ngModel)]="confirmPassword" name="confirmPassword" required #confirmPasswordField="ngModel">
+          <button mat-icon-button matSuffix type="button" class="hide-password-icon" (click)="toggleHideConfirmPassword()">
+            <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="confirmPasswordField.hasError('required') && (confirmPasswordField.touched || registerForm.submitted)">
+            Xác nhận mật khẩu không được để trống.
+          </mat-error>
+          <mat-error *ngIf="confirmPasswordField.hasError('mismatch') && (confirmPasswordField.touched || registerForm.submitted)">
+            Mật khẩu xác nhận không khớp.
+          </mat-error>
+        </mat-form-field>
+      </div>
 
-                  <button mat-raised-button color="primary" class="register-button"
-                    [disabled]="registerForm.invalid || isSubmitting">Đăng
-                  Ký</button>
-                </form>
-              </mat-card>
-            </div>
+      <button mat-raised-button color="primary" class="register-button" [disabled]="registerForm.invalid || isSubmitting">
+        Đăng ký
+      </button>
+    </form>
+  </mat-card>
+</div>
