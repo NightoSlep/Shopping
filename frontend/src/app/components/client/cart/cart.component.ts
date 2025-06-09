@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { CartItemModel } from '../../../models/cart.model';
 
 @Component({
   selector: 'app-cart',
@@ -17,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
-  cartItems: Product[] = [];
+  cartItems: CartItemModel[] = [];
 
   constructor(private cartService: CartService) {}
 
@@ -27,7 +28,7 @@ export class CartComponent {
     });
   }
 
-  removeItem(productId: number) {
+  removeItem(productId: string) {
     this.cartService.removeItem(productId);
   }
 

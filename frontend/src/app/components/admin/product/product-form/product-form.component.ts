@@ -19,7 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 export class ProductFormComponent {
   productData = {
     productName: '',
-    categoryId: 0,
+    categoryId: '',
     price: 0,
     description: '',
     image: '',

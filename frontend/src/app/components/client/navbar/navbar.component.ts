@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,14 +9,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select'; 
 import { AuthService } from '../../../services/shared/auth/auth.service';
+
 import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/client/user/user.service';
-import { Category } from '../../../models/category.model';
 import { CartService } from '../../../services/client/cart/cart.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatToolbarModule, MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatMenuModule, MatSelectModule],
+  imports: [
+    CommonModule, 
+    MatToolbarModule, 
+    MatIconModule, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatButtonModule, 
+    MatMenuModule, 
+    MatSelectModule
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -30,57 +40,27 @@ export class NavbarComponent {
               public authService: AuthService, 
               private userService: UserService, 
               private cartService: CartService) {
-    this.router.events.subscribe(() => {
-      const currentUrl = this.router.url;
-      this.hideSearchBar = currentUrl.includes('/login') || currentUrl.includes('/register')|| currentUrl.includes('/profile') ;
-      this.hideCart = currentUrl.includes('/login') || currentUrl.includes('/register');
-    });
+    this.router.events.subscribe(() => this.updateViewVisibility());
     this.cartService.cartItems$.subscribe(items => {
-      this.cartItemCount = items.length;
+      this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
     });
   }
 
   ngOnInit() {
     this.userService.currentUser$.subscribe((user: User | null) => {
-      if (user) {
-        this.username = user.username;
-      } else {
-        const storedUsername = localStorage.getItem('username');
-        this.username = storedUsername ? storedUsername : '';
-      }
+      this.username = user?.username ?? localStorage.getItem('username') ?? '';
     });
+  }
+
+  private updateViewVisibility() {
+    const url = this.router.url;
+    const authPages = ['/login', '/register'];
+    this.hideSearchBar = authPages.some(p => url.includes(p)) || url.includes('/profile');
+    this.hideCart = authPages.some(p => url.includes(p));
   }
 
   get isProfilePage(): boolean {
     return this.router.url.includes('/profile');
-  }
-
-  navigateToLogin() {
-    this.router.navigate(['/login']);
-  }
-
-  navigateToOrders(){
-
-  }
-
-  navigateToProfile(){
-    this.router.navigate(['profile']);
-  }
-
-  navigateToSettings(){
-
-  }
-
-  navigateToCart() {
-    this.router.navigate(['/cart']);
-  }
-
-  navigateToHome(){
-    this.router.navigate(['/']);
-  }
-
-  navigateToAdmin(){
-    this.router.navigate(['/admin/dashboard']);
   }
 
   logout(){
@@ -88,4 +68,12 @@ export class NavbarComponent {
     this.username = '';
     this.router.navigate(['/']);
   }
+
+  navigateToLogin() { this.router.navigate(['/login']);}
+  navigateToProfile(){ this.router.navigate(['profile']); }
+  navigateToCart() { this.router.navigate(['/cart']); }
+  navigateToHome(){ this.router.navigate(['/']); }
+  navigateToAdmin(){ this.router.navigate(['/admin/dashboard']); }
+  navigateToOrders(){ }
+  navigateToSettings(){ }
 }

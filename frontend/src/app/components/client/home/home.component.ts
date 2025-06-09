@@ -30,7 +30,7 @@ import { CartService } from '../../../services/client/cart/cart.service';
 export class HomeComponent {
   categories: Category[] = [];
   allProducts: Product[] = [];
-  selectedCategoryId: number | null = null;
+  selectedCategoryId: string | null = null;
   featuredProducts: Product[] = [];
   banners: Banner[] = [];
 
@@ -38,7 +38,6 @@ export class HomeComponent {
   isLoading = true;
   
   currentBannerIndex = 0;
-
 
   constructor(
     private productService: ProductService,
@@ -129,7 +128,7 @@ export class HomeComponent {
     this.currentBannerIndex = index;
   }
 
-  filterByCategory(categoryId: number | null): void {
+  filterByCategory(categoryId: string | null): void {
     this.selectedCategoryId = categoryId;
     if (categoryId === null) {
       this.featuredProducts = this.allProducts;
@@ -141,7 +140,9 @@ export class HomeComponent {
   }
 
   addToCart(product: Product) {
-    console.log('Thêm vào giỏ hàng:', product);
+    console.log('PRODUCT ID:', product.id);
+    console.log('PRODUCT:', product);
+
     this.cartService.addToCart(product);
   }
 }

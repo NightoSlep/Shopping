@@ -16,8 +16,7 @@ export class CheckoutComponent {
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
-    this.cartItems = this.cartService.getCartItems();
-    this.total = this.cartService.getTotalPrice();
+    
   }
 
   submitOrder() {

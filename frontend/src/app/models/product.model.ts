@@ -1,7 +1,7 @@
 export interface Product {
-  id: number;
+  id: string;
   productName: string;
-  categoryId: number;
+  categoryId: string;
   description: string;
   image: string;
   quantity: number;
@@ -10,12 +10,9 @@ export interface Product {
 
 export interface NewProduct {
   productName: string;
-  categoryId: number;
+  categoryId: string;
   price: number;
   quantity: number;
   description?: string;
   image?: string;
 }
-
-  
-  
