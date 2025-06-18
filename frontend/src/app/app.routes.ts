@@ -13,6 +13,7 @@ import { BannerManagementComponent } from './components/admin/banner-management/
 import { CartComponent } from './components/client/cart/cart.component';
 import { CheckoutComponent } from './components/client/checkout/checkout.component';
 import { OauthCallbackComponent } from './components/client/oauth-callback/oauth-callback.component';
+import { OrderComponent } from './components/client/order/order.component';
 
 export const routes: Routes = [
     {   
@@ -24,7 +25,8 @@ export const routes: Routes = [
             { path: 'register', component: RegisterComponent },
             { path: 'profile', component: ProfileComponent },
             { path: 'cart', component: CartComponent },
-            { path: 'checkout', component: CheckoutComponent }
+            { path: 'checkout', component: CheckoutComponent },
+            { path: 'order', component: OrderComponent }
         ]},
         {
             path: 'admin',
@@ -36,6 +38,7 @@ export const routes: Routes = [
                 { path: 'categories', component: CategoryComponent },
                 { path: 'banners', component: BannerManagementComponent }
             ]
-          },
-          { path: 'oauth-callback', component: OauthCallbackComponent }
+        },
+        { path: 'oauth-callback', component: OauthCallbackComponent },
+
 ];

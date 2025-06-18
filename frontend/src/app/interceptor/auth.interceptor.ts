@@ -12,7 +12,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const accessToken = storageService.getToken();
   const refreshToken = storageService.getRefreshToken();
 
-  const excludedUrls = ['/auth/login', '/auth/refresh', '/oauth-callback'];
+  const excludedUrls = ['/auth/login', '/auth/refresh-token', '/oauth-callback'];
   const isExcluded = excludedUrls.some(url => req.url.includes(url));
 
   if (isExcluded || !refreshToken) {

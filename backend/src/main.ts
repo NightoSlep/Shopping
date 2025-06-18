@@ -16,7 +16,6 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, { httpsOptions });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   app.use(cookieParser());
 
   app.enableCors({

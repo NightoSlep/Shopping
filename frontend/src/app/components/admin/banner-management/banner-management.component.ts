@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Banner } from '../../../models/banner.model';
@@ -18,7 +18,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './banner-management.component.html',
   styleUrls: ['./banner-management.component.css']
 })
-export class BannerManagementComponent {
+export class BannerManagementComponent implements OnInit{
   banners: Banner[] = [];
   selectedFile!: File;
   uploadedImageUrl: string = '';
@@ -91,7 +91,7 @@ export class BannerManagementComponent {
     });
   }
 
-  deleteBanner(id: number): void {
+  deleteBanner(id: string): void {
     this.bannerService.deleteBanner(id).subscribe(() => {
       this.banners = this.banners.filter(b => b.id !== id);
     });

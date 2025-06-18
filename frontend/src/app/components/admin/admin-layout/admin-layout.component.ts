@@ -9,9 +9,4 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.css'
 })
-export class AdminLayoutComponent {
-  ngOnInit() {
-    console.log('Admin layout loaded');
-  }
-  
-}
+export class AdminLayoutComponent {}

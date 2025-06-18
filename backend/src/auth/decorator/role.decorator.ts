@@ -1,4 +1,3 @@
-// role.decorator.ts
 import { SetMetadata } from '@nestjs/common';
 import { UserRole } from 'src/user/entities/user.entity';
 

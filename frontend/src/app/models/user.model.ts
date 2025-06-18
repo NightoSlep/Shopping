@@ -18,7 +18,7 @@ export interface Register {
   }
 
   export interface UpdatedUser {
-    id: number
+    id: string
     email: string
     username: string
     phone: string
@@ -26,7 +26,7 @@ export interface Register {
   }
 
   export interface User {
-    id: number
+    id: string
     email: string
     username: string
     password?: string

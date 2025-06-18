@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NewProduct, Product } from '../../../models/product.model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductService } from '../../../services/admin/product/product.service';
@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ProductFormComponent } from './product-form/product-form.component';
+import { Category } from '../../../models/category.model';
+import { CategoryService } from '../../../services/admin/category/category.service';
 
 @Component({
   selector: 'app-admin-product',
@@ -30,14 +32,14 @@ import { ProductFormComponent } from './product-form/product-form.component';
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit, AfterViewInit{
   products: Product[] = [];
   searchText: string = '';
-
+  categories: Category[] = [];
   displayedColumns: string[] = [
     'stt',
     'productName',
-    'categoryId',
+    'categoryName',
     'description',
     'image',
     'quantity',
@@ -52,16 +54,24 @@ export class ProductComponent {
 
   constructor(
     private productService: ProductService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadCategories();
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  loadCategories() {
+    this.categoryService.getAll().subscribe((res) => {
+      this.categories = res;
+    });
   }
 
   loadProducts() {
@@ -84,12 +94,17 @@ export class ProductComponent {
     }
   }
 
-  deleteProduct(product: Product) {
+  deleteProduct(id: string, productName: string) {
+    if (!id) {
+      console.error('ID is missing!');
+      return;
+    }
+
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '350px',
       data: <ConfirmDialogData>{
         title: 'Xác nhận xóa',
-        message: `Xác nhận xoá sản phẩm "${product.productName}"?`,
+        message: `Xác nhận xoá sản phẩm "${productName}"?`,
         confirmText: 'Xóa',
         cancelText: 'Hủy'
       }
@@ -97,15 +112,28 @@ export class ProductComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.productService.deleteProduct(product.id).subscribe(() => {
+        this.productService.deleteProduct(id).subscribe(() => {
           this.loadProducts();
         });
       }
     });
   }
 
-  editProduct(_product: Product) {
-    // Mở dialog hoặc điều hướng đến form edit
+  editProduct(product: Product) {
+    const dialogRef = this.dialog.open(ProductFormComponent, {
+      width: '500px',
+      data: { product }
+    });
+
+    dialogRef.afterClosed().subscribe((updatedProduct: Product) => {
+      if (updatedProduct && product.id) {
+        this.productService.updateProduct(product.id, updatedProduct).subscribe(() => {
+          this.loadProducts();
+        }, err => {
+          console.error('Update failed:', err);
+        });
+      }
+    });
   }
 
   addProduct() {
@@ -114,22 +142,17 @@ export class ProductComponent {
       data: {}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: NewProduct) => {
       if (result) {
-        console.log('Image URL:', result.image);
-        const newProduct: NewProduct = {
-          productName: result.productName,
-          price: result.price,
-          description: result.description,
-          quantity: result.quantity,
-          categoryId: result.categoryId,
-          image: result.image
-        };
-
-        this.productService.createProduct(newProduct).subscribe(() => {
+        this.productService.createProduct(result).subscribe(() => {
           this.loadProducts();
         });
       }
     });
+  }
+
+  getCategoryName(categoryId: string): string {
+    const category = this.categories.find(c => c.id === categoryId);
+    return category ? category.name : 'Không rõ';
   }
 }

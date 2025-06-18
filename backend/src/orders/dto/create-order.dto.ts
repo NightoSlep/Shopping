@@ -1,11 +1,12 @@
-import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, ValidateNested } from 'class-validator';
+import { CreateOrderDetailDto } from './create-order-detail.dto';
 
 export class CreateOrderDto {
-  @IsUUID()
-  @IsNotEmpty()
-  customerId: string;
+  @IsString()
+  paymentMethod: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  totalAmount: number;
+  @ValidateNested({ each: true })
+  @Type(() => CreateOrderDetailDto)
+  orderDetails: CreateOrderDetailDto[];
 }

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Category } from '../../../models/category.model';
 import { HttpClient } from '@angular/common/http';
 
@@ -22,7 +22,7 @@ import { CategoryFormComponent } from './category-form/category-form.component';
   templateUrl: './category.component.html',
   styleUrl: './category.component.css'
 })
-export class CategoryComponent {
+export class CategoryComponent implements OnInit, AfterViewInit{
   searchText: string = '';
 
   dataSource = new MatTableDataSource<Category>();

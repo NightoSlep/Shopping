@@ -22,7 +22,7 @@
       <div class="cell quantity">{{ item.quantity }}</div>
       <div class="cell total">{{ item.product.price * item.quantity | currency:'VND' }}</div>
       <div class="cell action">
-        <button mat-icon-button color="warn" (click)="removeItem(item.product.productId)">
+        <button mat-icon-button color="warn" (click)="removeItem(item.product.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
@@ -33,7 +33,7 @@
     <p><strong>Tổng tiền:</strong> {{ getTotal() | currency:'VND' }}</p>
     <div class="cart-actions">
       <button mat-stroked-button color="warn" (click)="clearCart()">Xóa tất cả</button>
-      <a routerLink="/checkout">
+      <a (click)="checkout()">
         <button mat-flat-button color="primary">Thanh toán</button>
       </a>
     </div>

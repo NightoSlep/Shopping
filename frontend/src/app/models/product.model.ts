@@ -8,11 +8,4 @@ export interface Product {
   price: number;
 }
 
-export interface NewProduct {
-  productName: string;
-  categoryId: string;
-  price: number;
-  quantity: number;
-  description?: string;
-  image?: string;
-}
+export type NewProduct = Omit<Product, 'id'>;

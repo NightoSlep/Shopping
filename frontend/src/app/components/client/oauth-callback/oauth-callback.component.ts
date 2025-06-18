@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { StorageService } from '../../../services/shared/storage/storage.service';
 import { UserService } from '../../../services/client/user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './oauth-callback.component.html',
   styleUrl: './oauth-callback.component.css'
 })
-export class OauthCallbackComponent {
+export class OauthCallbackComponent implements OnInit{
   constructor(private router: Router, private storageService: StorageService, 
           private userService: UserService,  private snackBar: MatSnackBar) {}
 

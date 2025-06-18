@@ -17,8 +17,16 @@ export class CategoryFormComponent {
   @Input() category?: Category;
   @Output() saved = new EventEmitter<Category>();
 
-  categoryName: string = '';
+  private _categoryName: string = '';
   isEditMode: boolean = false;
+
+  get categoryName(): string {
+    return this._categoryName;
+  }
+
+  set categoryName(value: string) {
+    this._categoryName = this.capitalizeFirstLetter(value);
+  }
 
   constructor(public dialogRef: MatDialogRef<CategoryFormComponent>,
               @Inject(MAT_DIALOG_DATA)  
@@ -49,5 +57,13 @@ export class CategoryFormComponent {
 
   onCancel(): void {
     this.dialogRef.close();
+  }
+
+  private capitalizeFirstLetter(value: string): string {
+    return value
+      .toLowerCase()
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 }

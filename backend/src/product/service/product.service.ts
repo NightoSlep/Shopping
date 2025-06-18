@@ -37,7 +37,6 @@ export class ProductService {
 
   async update(id: string, dto: UpdateProductDto): Promise<Product> {
     const { categoryId, ...rest } = dto;
-
     const product = await this.productRepo.preload({
       id,
       ...rest,
@@ -49,13 +48,11 @@ export class ProductService {
       if (!category) throw new NotFoundException('Category not found');
       product.category = category;
     }
-
     return this.productRepo.save(product);
   }
 
   async remove(id: string): Promise<void> {
     const result = await this.productRepo.delete(id);
-    console.log('DELETE RESULT:', result);
     if (result.affected === 0) {
       throw new NotFoundException('Product not found');
     }

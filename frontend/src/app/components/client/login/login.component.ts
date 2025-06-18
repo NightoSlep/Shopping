@@ -22,7 +22,7 @@ import { environment } from '../../../../environments/environment';
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
-export class LoginComponent{
+export class LoginComponent implements OnInit{
   username = '';
   password = '';
   hidePassword: boolean = true; 

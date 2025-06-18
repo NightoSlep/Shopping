@@ -1,0 +1,94 @@
+<div class="orders-container">
+  <h2 class="orders-title">🧾 Đơn hàng của tôi</h2>
+
+  <div class="order-card" 
+        *ngFor="let order of orders | paginate: { itemsPerPage: 5, currentPage: currentPage }" 
+        (click)="openOrderDetail(order.orderId)">
+    <div class="order-card-header">
+      <div>
+        <span class="order-id">#{{ order.orderId }}</span>
+        <span [ngClass]="[order.status.toLowerCase()]">
+          {{ getStatusText(order.status) }}
+        </span>
+      </div>
+      <div class="order-date">{{ order.createdAt | date: 'dd/MM/yyyy' }}</div>
+    </div>
+
+    <div class="order-card-footer">
+      <span class="order-total">Tổng: {{ order.totalAmount | currency:'VND' }}</span>
+      <button class="detail-btn">Xem chi tiết</button>
+    </div>
+  </div>
+  <pagination-controls
+    (pageChange)="currentPage = $event"
+    [responsive]="true"
+    [autoHide]="true"
+    class="my-pagination">
+  </pagination-controls>
+</div>
+
+<div class="order-detail-overlay" *ngIf="selectedOrderMeta">
+  <div class="order-detail-popup">
+    <button class="close-btn" (click)="closeOrderDetail()">✖</button>
+
+    <h3 class="popup-title">Chi tiết đơn hàng #{{ selectedOrderMeta.orderId }}</h3>
+
+    <div class="popup-info">
+      <p><strong>Ngày đặt:</strong> {{ selectedOrderMeta.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>Trạng thái:</strong>
+        <span [ngClass]="selectedOrderMeta.status.toLowerCase()">
+          {{ getStatusText(selectedOrderMeta.status) }}
+        </span>
+      </p>
+      <p><strong>Tổng tiền:</strong> {{ selectedOrderMeta.totalAmount | currency:'VND' }}</p>
+    </div>
+
+    <div class="order-progress-bar" *ngIf="selectedOrderMeta.status.toLowerCase() !== 'canceled' && selectedOrderMeta.status.toLowerCase() !== 'canceledbycustomer'; else canceledBlock">
+      <div class="progress-track">
+        <div
+          *ngFor="let step of stepOrder; let i = index"
+          class="progress-step"
+          [ngClass]="getStepStatusClass(step)"
+        >
+          <div class="step-circle">
+            <ng-container [ngSwitch]="step">
+              <span class="step-icon" *ngSwitchCase="'processing'">🛠️</span>
+              <span class="step-icon" *ngSwitchCase="'shipping'">🚚</span>
+              <span class="step-icon" *ngSwitchCase="'delivered'">📦</span>
+              <span class="step-icon" *ngSwitchCase="'completed'">✅</span>
+              <span class="step-icon" *ngSwitchDefault>❓</span>
+            </ng-container>
+          </div>
+          <div class="step-label">{{ getStatusText(step) }}</div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #canceledBlock>
+      <div class="canceled-block-container">
+        {{ getStatusText(selectedOrderMeta.status) }}
+      </div>
+    </ng-template>
+
+    <div class="product-table-wrapper">
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Đơn giá</th>
+            <th>Thành tiền</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of selectedOrderItems">
+            <td>{{ item.productName }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unitPrice | currency:'VND' }}</td>
+            <td>{{ item.quantity * item.unitPrice | currency:'VND' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

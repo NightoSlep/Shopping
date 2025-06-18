@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { Category } from '../../../models/category.model';
 import { Product } from '../../../models/product.model';
@@ -11,6 +11,8 @@ import { Banner } from '../../../models/banner.model';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CartService } from '../../../services/client/cart/cart.service';
+import { StorageService } from '../../../services/shared/storage/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-home',
@@ -27,27 +29,32 @@ import { CartService } from '../../../services/client/cart/cart.service';
     templateUrl: './home.component.html',
     styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   categories: Category[] = [];
   allProducts: Product[] = [];
   selectedCategoryId: string | null = null;
   featuredProducts: Product[] = [];
   banners: Banner[] = [];
 
+  currentBannerIndex = 0;
+  
   bannerInterval: any;
   isLoading = true;
-  
-  currentBannerIndex = 0;
+  isLoggedIn = false;
+  showLoginPrompt = false;
 
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
     private bannerService: BannerService,  
-    private cartService: CartService
+    private cartService: CartService,
+    private storageService: StorageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.isLoggedIn = !!this.storageService.getToken();
     Promise.all([
       this.loadCategories().catch(err => console.error(err)),
       this.loadProducts().catch(err => console.error(err)),
@@ -140,9 +147,10 @@ export class HomeComponent {
   }
 
   addToCart(product: Product) {
-    console.log('PRODUCT ID:', product.id);
-    console.log('PRODUCT:', product);
-
+    if (!this.storageService.getToken()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     this.cartService.addToCart(product);
   }
 }

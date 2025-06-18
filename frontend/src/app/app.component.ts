@@ -11,28 +11,28 @@ import { LoginResponse } from './models/user.model';
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })
-export class AppComponent{
+export class AppComponent {
   constructor(
     private storage: StorageService,
     private authService: AuthService,
     private userService: UserService
   ) {}
 
-  ngOnInit(): void {
-    this.authService.refreshToken().subscribe({
-      next: (response: LoginResponse) => {
-        this.storage.setToken(response.access_token);
-        if (response.refresh_token) {
-          this.storage.setRefreshToken(response.refresh_token); 
-        }
-        this.userService.getMyProfile().subscribe(userData => {
-          this.userService.setCurrentUser(userData);
-          localStorage.setItem('username', userData.username);
-        });
-      },
-      error: () => {
-        this.authService.logout();
-      }
-    });
-  }
+  // ngOnInit(): void {
+  //   this.authService.refreshToken().subscribe({
+  //     next: (response: LoginResponse) => {
+  //       this.storage.setToken(response.access_token);
+  //       if (response.refresh_token) {
+  //         this.storage.setRefreshToken(response.refresh_token); 
+  //       }
+  //       this.userService.getMyProfile().subscribe(userData => {
+  //         this.userService.setCurrentUser(userData);
+  //         localStorage.setItem('username', userData.username);
+  //       });
+  //     },
+  //     error: () => {
+  //       this.authService.logout();
+  //     }
+  //   });
+  // }
 }

@@ -9,7 +9,7 @@ import { User } from '../../../models/user.model';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/users`;
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
@@ -29,15 +29,15 @@ export class UserService {
   }
 
   getMyProfile(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/profile`, { withCredentials: true });
+    return this.http.get<User>(`${this.apiUrl}/profile`, { withCredentials: true });
   }
 
   updateMyProfile(user: User): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/users/me`, user);
+    return this.http.patch<User>(`${this.apiUrl}/me`, user);
   }
 
   changePassword(oldPassword: string, newPassword: string) {
-    return this.http.post('/api/users/change-password', {
+    return this.http.post(`${this.apiUrl}/change-password`, {
       oldPassword,
       newPassword
     });

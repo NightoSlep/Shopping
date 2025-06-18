@@ -1,9 +1,16 @@
-<h2>Thanh toán</h2>
+<h2>Xác nhận đơn hàng</h2>
 
 <div *ngFor="let item of cartItems">
-  <p>{{ item.productName }} - {{ item.price | currency:'VND' }}</p>
+  <p>{{ item.product.productName }} x {{ item.quantity }} = {{ item.product.price * item.quantity | currency:'VND' }}</p>
 </div>
 
-<p><strong>Tổng tiền:</strong> {{ total | currency:'VND' }}</p>
+<p><strong>Tổng cộng: </strong>{{ totalPrice | currency:'VND' }}</p>
 
-<button (click)="submitOrder()">Xác nhận đặt hàng</button>
+<h3>Chọn phương thức thanh toán:</h3>
+<select [(ngModel)]="selectedPaymentMethod">
+  <option value="momo">Momo</option>
+  <option value="cod">Thanh toán khi nhận hàng</option>
+</select>
+
+<br /><br />
+<button (click)="checkout()">Thanh toán</button>

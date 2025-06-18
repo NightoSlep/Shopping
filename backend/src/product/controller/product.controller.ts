@@ -21,12 +21,12 @@ export class ProductController {
   }
 
   @Get()
-  findAll() {
+  getAllProduct() {
     return this.productService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  getProduct(@Param('id') id: string) {
     return this.productService.findOne(id);
   }
 

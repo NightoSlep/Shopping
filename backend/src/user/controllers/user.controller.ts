@@ -22,7 +22,7 @@ import { UserRole } from '../entities/user.entity';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/role.guard';
-import { Roles } from 'src/auth/role.decorator';
+import { Roles } from 'src/auth/decorator/role.decorator';
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../dto/user.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
@@ -55,14 +55,14 @@ export class UserController {
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async findAll(): Promise<UserResponseDto[]> {
+  async getAllUser(): Promise<UserResponseDto[]> {
     const users = await this.userService.findAll();
     return users.map((user) => new UserResponseDto(user));
   }
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  async findMe(@Req() req: AuthenticatedRequest): Promise<UserResponseDto> {
+  async getProfile(@Req() req: AuthenticatedRequest): Promise<UserResponseDto> {
     const userId = req.user.userId;
     const user = await this.userService.findOneById(userId);
     if (!user) {
@@ -73,7 +73,7 @@ export class UserController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async findOne(
+  async getUser(
     @Param('id', ParseUUIDPipe) id: string,
     @Req() req: AuthenticatedRequest,
   ): Promise<UserResponseDto> {
@@ -82,7 +82,6 @@ export class UserController {
         'Bạn không có quyền xem thông tin người dùng này.',
       );
     }
-
     const user = await this.userService.findOneById(id);
     if (!user) {
       throw new NotFoundException(`Không tìm thấy người dùng với ID "${id}"`);

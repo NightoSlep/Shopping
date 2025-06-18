@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -14,6 +14,7 @@ import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/client/user/user.service';
 import { CartService } from '../../../services/client/cart/cart.service';
 import { CommonModule } from '@angular/common';
+import { StorageService } from '../../../services/shared/storage/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -30,7 +31,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit{
   username: string = '';
   hideSearchBar: boolean = false;
   hideCart: boolean = false;
@@ -39,7 +40,8 @@ export class NavbarComponent {
   constructor(private router: Router,
               public authService: AuthService, 
               private userService: UserService, 
-              private cartService: CartService) {
+              private cartService: CartService,
+              private storageService: StorageService) {
     this.router.events.subscribe(() => this.updateViewVisibility());
     this.cartService.cartItems$.subscribe(items => {
       this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
@@ -66,14 +68,29 @@ export class NavbarComponent {
   logout(){
     this.authService.logout();
     this.username = '';
+    this.cartService.clearCart();
     this.router.navigate(['/']);
+  }
+
+  navigateToCart() { 
+    if (!this.storageService.getToken()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.router.navigate(['/cart']); 
+  }
+
+  navigateToOrders() { 
+    if (!this.storageService.getToken()) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.router.navigate(['/order']); 
   }
 
   navigateToLogin() { this.router.navigate(['/login']);}
   navigateToProfile(){ this.router.navigate(['profile']); }
-  navigateToCart() { this.router.navigate(['/cart']); }
   navigateToHome(){ this.router.navigate(['/']); }
   navigateToAdmin(){ this.router.navigate(['/admin/dashboard']); }
-  navigateToOrders(){ }
   navigateToSettings(){ }
 }

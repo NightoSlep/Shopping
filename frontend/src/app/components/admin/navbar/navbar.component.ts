@@ -32,7 +32,6 @@ export class NavbarComponent {
   }
 
   goToClient(): void {
-  this.router.navigate(['/']);
-}
-  
+    this.router.navigate(['/']);
+  }
 }

@@ -13,10 +13,7 @@ export class CartService {
 
   addToCart(product: Product) {
     const currentCart = this.cartItemsSubject.getValue();
-    console.log('Adding to cart:', product);
-
     const existingItem = currentCart.find(item => item.product.id === product.id);
-    console.log('Existing item:', existingItem);
 
     if (existingItem) {
       existingItem.quantity += 1;
@@ -32,7 +29,6 @@ export class CartService {
       };
       currentCart.push(item);
     }
-
     this.cartItemsSubject.next([...currentCart]);
   }
 
@@ -52,4 +48,9 @@ export class CartService {
   getCartCount(): number {
     return this.cartItemsSubject.getValue().reduce((count, item) => count + item.quantity, 0);
   }
+
+  getCartItems(): CartItemModel[] {
+    return this.cartItemsSubject.getValue();
+  }
+
 }

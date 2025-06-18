@@ -5,7 +5,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { User } from '../../../models/user.model';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../../services/client/user/user.service';
 
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit{
   userForm!: FormGroup;
   user!: User;
   isEditMode: boolean = false;

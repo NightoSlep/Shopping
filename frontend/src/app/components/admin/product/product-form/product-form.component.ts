@@ -1,7 +1,7 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { NewProduct, Product } from '../../../../models/product.model';
+import { Product } from '../../../../models/product.model';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,7 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './product-form.component.html',
   styleUrl: './product-form.component.css'
 })
-export class ProductFormComponent {
+export class ProductFormComponent implements OnInit{
   productData = {
     productName: '',
     categoryId: '',
@@ -26,25 +26,29 @@ export class ProductFormComponent {
     quantity: 1
   };
 
+  productId: string | null = null;
+  isEdit = false;
   categoryList: Category[] = [];
-  isEdit: boolean;
   imageFile!: File;
   imageUrl: string = '';
 
   constructor(private categoryService: CategoryService,
     public dialogRef: MatDialogRef<ProductFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { newProduct?: NewProduct }
+    @Inject(MAT_DIALOG_DATA) public data: { product?: Product }
   ) {
-    this.isEdit = !!data.newProduct;
-    if (this.isEdit && data.newProduct) {
+    this.isEdit = !!data.product;
+    if (this.isEdit && data.product) {
+      const { id, categoryId, ...rest } = data.product;
       this.productData = {
-        productName: data.newProduct.productName || '',
-        categoryId: data.newProduct.categoryId,
-        price: data.newProduct.price || 0,
-        description: data.newProduct.description || '',
-        quantity: data.newProduct.quantity || 0,
-        image: data.newProduct.image || ''
+        productName: data.product.productName,
+        price: data.product.price,
+        quantity: data.product.quantity,
+        description: data.product.description,
+        image: data.product.image,
+        categoryId: data.product.categoryId || ''
       };
+      this.productId = id;
+      this.imageUrl = rest.image;
     }
   }
 
@@ -80,21 +84,28 @@ export class ProductFormComponent {
       })
       .then(res => res.json())
       .then(data => {
-        this.imageUrl = data.secure_url;
+        const originalUrl = data.secure_url;
+        const optimizedUrl = originalUrl.replace('/upload/', '/upload/f_auto,q_auto,w_1000/');
+        this.imageUrl = optimizedUrl;
       })
       .catch(err => console.error('Upload failed:', err));
     }
   }
 
-save() {
-  if (this.productData.productName && this.productData.price > 0) {
-    const productToSave = {
-      ...this.productData,
-      image: this.imageUrl
-    };
-    this.dialogRef.close(productToSave);
+  save() {
+  //     console.log('🧪 Dữ liệu sắp gửi:', {
+  //   ...this.productData,
+  //   image: this.imageUrl
+  // });
+    if (this.productData.productName && this.productData.price > 0) {
+      const productToSave = {
+        ...this.productData,
+        price: Number(this.productData.price),
+        image: this.imageUrl
+      };
+      this.dialogRef.close(productToSave);
+    }
   }
-}
 
   cancel() {
     this.dialogRef.close();
