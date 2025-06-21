@@ -1,41 +1,47 @@
-<div class="cart-container" *ngIf="cartItems.length > 0">
+<div class="cart-container">
   <div class="cart-header">
     <h2 class="cart-title">Giỏ hàng</h2>
   </div>
 
-  <div class="cart-table">
-    <div class="cart-row cart-header-row">
-      <div class="cell image">Ảnh</div>
-      <div class="cell name">Tên sản phẩm</div>
-      <div class="cell price">Đơn giá</div>
-      <div class="cell quantity">Số lượng</div>
-      <div class="cell total">Thành tiền</div>
-      <div class="cell action">Hành động</div>
+  <ng-container *ngIf="cartItems && cartItems.length > 0">
+    <div class="cart-table">
+      <div class="cart-row cart-header-row">
+        <div class="cell image">Ảnh</div>
+        <div class="cell name">Tên sản phẩm</div>
+        <div class="cell price">Đơn giá</div>
+        <div class="cell quantity">Số lượng</div>
+        <div class="cell total">Thành tiền</div>
+        <div class="cell action">Hành động</div>
+      </div>
+
+      <div class="cart-row" *ngFor="let item of cartItems">
+        <div class="cell image">
+          <img [src]="item.product.image" alt="{{item.product.productName}}" />
+        </div>
+        <div class="cell name">{{ item.product.productName }}</div>
+        <div class="cell price">{{ item.product.price | currency:'VND' }}</div>
+        <div class="cell quantity">{{ item.quantity }}</div>
+        <div class="cell total">{{ item.product.price * item.quantity | currency:'VND' }}</div>
+        <div class="cell action">
+          <button mat-icon-button color="warn" (click)="removeItem(item.product.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="cart-row" *ngFor="let item of cartItems">
-      <div class="cell image">
-        <img [src]="item.product.image" alt="{{item.product.productName}}" />
-      </div>
-      <div class="cell name">{{ item.product.productName }}</div>
-      <div class="cell price">{{ item.product.price | currency:'VND' }}</div>
-      <div class="cell quantity">{{ item.quantity }}</div>
-      <div class="cell total">{{ item.product.price * item.quantity | currency:'VND' }}</div>
-      <div class="cell action">
-        <button mat-icon-button color="warn" (click)="removeItem(item.product.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
+    <div class="cart-total">
+      <p><strong>Tổng tiền:</strong> {{ getTotal() | currency:'VND' }}</p>
+      <div class="cart-actions">
+        <button mat-stroked-button color="warn" (click)="clearCart()">Xóa tất cả</button>
+        <a (click)="checkout()">
+          <button mat-flat-button color="primary">Thanh toán</button>
+        </a>
       </div>
     </div>
-  </div>
+  </ng-container>
 
-  <div class="cart-total">
-    <p><strong>Tổng tiền:</strong> {{ getTotal() | currency:'VND' }}</p>
-    <div class="cart-actions">
-      <button mat-stroked-button color="warn" (click)="clearCart()">Xóa tất cả</button>
-      <a (click)="checkout()">
-        <button mat-flat-button color="primary">Thanh toán</button>
-      </a>
-    </div>
+  <div class="empty-cart-message" *ngIf="cartItems && cartItems.length === 0">
+    🛒 Giỏ hàng của bạn đang trống.
   </div>
 </div>

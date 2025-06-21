@@ -3,9 +3,11 @@ import { OpenOrderDetail, Order } from '../../../models/order.model';
 import { OrderService } from '../../../services/client/order/order.service';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-order',
-  imports: [CommonModule, NgxPaginationModule],
+  imports: [CommonModule, NgxPaginationModule, MatDialogModule],
   templateUrl: './order.component.html',
   styleUrl: './order.component.css'
 })
@@ -24,7 +26,7 @@ export class OrderComponent implements OnInit, OnDestroy{
     }
   };
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.orderService.getMyOrders().subscribe(data => {
@@ -73,5 +75,49 @@ export class OrderComponent implements OnInit, OnDestroy{
     if (stepIndex < currentIndex) return 'step-passed';
     if (stepIndex === currentIndex) return 'step-current';
     return 'step-upcoming';
+  }
+
+  canCancelOrder(status: string | undefined): boolean {
+    if (!status) return false;
+    const s = status.toLowerCase();
+    return !['canceled', 'canceledbycustomer', 'completed', 'delivered', 'shipping'].includes(s);
+  }
+
+  cancelMyOrder(orderId: string, event: MouseEvent): void {
+    event.stopPropagation();
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        width: '350px',
+        data: {
+          title: 'Xác nhận hủy đơn hàng',
+          message: `Bạn có chắc chắn muốn hủy đơn hàng "${orderId}"?`,
+          confirmText: 'Hủy đơn',
+          cancelText: 'Thoát'
+        }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.orderService.cancelOrder(orderId).subscribe({
+          next: () => {
+            const index = this.orders.findIndex(o => o.orderId === orderId);
+            if (index !== -1) {
+              this.orders[index].status = 'canceledbycustomer';
+            }
+          },
+          error: () => {
+            this.dialog.open(ConfirmDialogComponent, {
+              width: '300px',
+              data: {
+                title: 'Lỗi',
+                message: '❌ Có lỗi xảy ra khi hủy đơn hàng.',
+                confirmText: 'Đóng',
+                hideCancel: true
+              }
+            });
+          }
+        });
+      }
+    });
   }
 }

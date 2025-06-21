@@ -84,3 +84,16 @@
   gap: 10px;
   flex-wrap: wrap;
 }
+
+.empty-cart-message {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #777;
+  background: #fdfdfd;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+}

@@ -62,13 +62,21 @@ export class UserController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  async getProfile(@Req() req: AuthenticatedRequest): Promise<UserResponseDto> {
-    const userId = req.user.userId;
+  async getProfile(@Req() req: Request): Promise<UserResponseDto> {
+    const { id: userId } = req.user as { id: string };
     const user = await this.userService.findOneById(userId);
     if (!user) {
       throw new NotFoundException('Không tìm thấy thông tin người dùng.');
     }
     return new UserResponseDto(user);
+  }
+
+  @Get(':id/name')
+  @UseGuards(JwtAuthGuard)
+  async getUsernameById(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<{ username: string }> {
+    return this.userService.getUserNameById(id);
   }
 
   @Get(':id')

@@ -9,7 +9,6 @@ export class StorageService {
   private tokenKey = 'token';
   private userId = 'userid';
   private roleKey = 'role';
-  private username = 'username';
   private refreshKey = 'refresh_token';
   
   constructor() { }

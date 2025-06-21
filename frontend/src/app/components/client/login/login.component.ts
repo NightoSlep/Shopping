@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit{
 
   onLogin() {
     this.isLoggingIn = true; 
-  
+
     const loginData: Login = { username: this.username, password: this.password };
     this.authService.login(loginData).subscribe({
       next: (response: LoginResponse) => {
@@ -75,7 +75,6 @@ export class LoginComponent implements OnInit{
         this.userService.getMyProfile().subscribe({
           next: (userData) => {
             this.userService.setCurrentUser(userData);
-  
             localStorage.setItem('username', userData.username);
             this.storage.setRole(userData.role);
   

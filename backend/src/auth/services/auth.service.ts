@@ -35,6 +35,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
+    console.log('Generating token for user:', user.username, user.email);
 
     const access_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_ACCESS_SECRET,

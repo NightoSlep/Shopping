@@ -1,0 +1,6 @@
+.statusField {
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 10px;
+  width: 200px;
+  margin-top: 17px;
+}

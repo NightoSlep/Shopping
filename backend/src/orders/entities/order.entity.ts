@@ -3,12 +3,12 @@ import { OrderDetail } from 'src/orders/entities/order-detail.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum OrderStatus {
-  PROCESSING = 'Processing',
-  SHIPPING = 'Shipping',
-  DELIVERED = 'Delivered',
-  COMPLETED = 'Completed',
-  CANCELED = 'Canceled',
-  CANCELED_BY_CUSTOMER = 'CanceledByCustomer',
+  PROCESSING = 'processing',
+  SHIPPING = 'shipping',
+  DELIVERED = 'delivered',
+  COMPLETED = 'completed',
+  CANCELED = 'canceled',
+  CANCELED_BY_CUSTOMER = 'canceledbycustomer',
 }
 
 @Entity('orders')

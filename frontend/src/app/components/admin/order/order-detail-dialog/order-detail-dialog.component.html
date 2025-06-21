@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Chi tiết đơn hàng</h2>
+
+<mat-dialog-content>
+  <p><strong>Mã đơn:</strong> {{ data.order.orderId }}</p>
+  <p><strong>Khách hàng:</strong> {{ username }}</p>
+  <p><strong>Ngày tạo:</strong> {{ data.order.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+  <p><strong>Trạng thái:</strong> {{ getStatusLabel(data.order.status) }}</p>
+  <p><strong>Tổng tiền:</strong> {{ data.order.totalAmount | currency:'VND' }}</p>
+
+  <h3 style="margin-top: 16px;">Sản phẩm trong đơn:</h3>
+  <table style="width: 100%; border-collapse: collapse;" border="1">
+    <thead>
+      <tr>
+        <th style="padding: 8px;">Tên sản phẩm</th>
+        <th style="padding: 8px;">Số lượng</th>
+        <th style="padding: 8px;">Đơn giá</th>
+        <th style="padding: 8px;">Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of orderItems">
+        <td style="padding: 8px;">{{ item.productName }}</td>
+        <td style="padding: 8px;">{{ item.quantity }}</td>
+        <td style="padding: 8px;">{{ item.unitPrice | currency:'VND' }}</td>
+        <td style="padding: 8px;">{{ item.unitPrice * item.quantity | currency:'VND' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Đóng</button>
+</mat-dialog-actions>

@@ -1,6 +1,10 @@
 <div class="orders-container">
   <h2 class="orders-title">🧾 Đơn hàng của tôi</h2>
 
+  <div *ngIf="orders.length === 0" class="empty-order-message">
+    📭 Bạn chưa có đơn hàng nào cả.
+  </div>
+
   <div class="order-card" 
         *ngFor="let order of orders | paginate: { itemsPerPage: 5, currentPage: currentPage }" 
         (click)="openOrderDetail(order.orderId)">
@@ -16,7 +20,15 @@
 
     <div class="order-card-footer">
       <span class="order-total">Tổng: {{ order.totalAmount | currency:'VND' }}</span>
-      <button class="detail-btn">Xem chi tiết</button>
+        <div class="order-actions">
+          <button class="detail-btn">Xem chi tiết</button>
+          <button 
+            *ngIf="canCancelOrder(order.status)" 
+            class="cancel-btn"
+            (click)="cancelMyOrder(order.orderId, $event)">
+            ❌ Hủy đơn
+          </button>
+      </div>
     </div>
   </div>
   <pagination-controls

@@ -112,6 +112,16 @@ export class OrderService {
     });
   }
 
+  async getOrderDetailsByAdmin(orderId: string): Promise<OpenOrderDetail[]> {
+    const order = await this.orderRepository.findOneBy({ orderId });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+    const details = await this.fetchOrderDetailWithProduct(orderId);
+    return details.map(this.mapDetailRowToDTO);
+  }
+
   async updateOrderById(
     orderId: string,
     updateOrderDto: UpdateOrderDto,
@@ -129,6 +139,40 @@ export class OrderService {
     await this.orderRepository.delete(orderId);
   }
 
+  async updateOrderStatusByAdmin(
+    orderId: string,
+    status: OrderStatus,
+  ): Promise<Order> {
+    const order = await this.orderRepository.findOneBy({ orderId });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    const validStatuses = [
+      OrderStatus.PROCESSING,
+      OrderStatus.SHIPPING,
+      OrderStatus.DELIVERED,
+      OrderStatus.COMPLETED,
+      OrderStatus.CANCELED,
+    ];
+
+    if (!validStatuses.includes(status)) {
+      throw new BadRequestException('Invalid order status');
+    }
+
+    if (
+      order.status === OrderStatus.COMPLETED ||
+      order.status === OrderStatus.CANCELED
+    ) {
+      throw new BadRequestException(
+        'Cannot update a finalized or canceled order',
+      );
+    }
+    order.status = status;
+    return this.orderRepository.save(order);
+  }
+
   async cancelOrderByUser(orderId: string, userId: string): Promise<Order> {
     const order = await this.orderRepository.findOneBy({ orderId });
 
@@ -140,7 +184,7 @@ export class OrderService {
       throw new UnauthorizedException('You can only cancel your own orders');
     }
 
-    if (order.status !== OrderStatus.PROCESSING) {
+    if (order.status !== OrderStatus.SHIPPING) {
       throw new BadRequestException('Order cannot be canceled at this stage');
     }
 

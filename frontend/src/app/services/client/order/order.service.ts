@@ -34,4 +34,8 @@ export class OrderService {
   getDetailOrderById(orderId: string): Observable<OpenOrderDetail[]> {
     return this.http.get<OpenOrderDetail[]>(`${this.apiUrl}/me/${orderId}`, { withCredentials: true });
   }
+
+  cancelOrder(orderId: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${orderId}/cancel`, {}, { withCredentials: true });
+  }
 }

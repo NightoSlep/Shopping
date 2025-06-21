@@ -14,6 +14,7 @@ import { CartComponent } from './components/client/cart/cart.component';
 import { CheckoutComponent } from './components/client/checkout/checkout.component';
 import { OauthCallbackComponent } from './components/client/oauth-callback/oauth-callback.component';
 import { OrderComponent } from './components/client/order/order.component';
+import { AdminOrderComponent } from './components/admin/order/order.component';
 
 export const routes: Routes = [
     {   
@@ -36,7 +37,8 @@ export const routes: Routes = [
                 { path: 'dashboard', component: DashboardComponent },
                 { path: 'products', component: ProductComponent },
                 { path: 'categories', component: CategoryComponent },
-                { path: 'banners', component: BannerManagementComponent }
+                { path: 'banners', component: BannerManagementComponent },
+                { path: 'orders', component: AdminOrderComponent },
             ]
         },
         { path: 'oauth-callback', component: OauthCallbackComponent },

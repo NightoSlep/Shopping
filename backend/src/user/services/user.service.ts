@@ -103,16 +103,13 @@ export class UserService {
         );
       }
     }
-
     await this.userRepository.update(id, updateUserDto);
-
     const updatedUser = await this.findOneById(id);
     if (!updatedUser) {
       throw new NotFoundException(
         `Không tìm thấy người dùng với ID "${id}" sau khi cập nhật.`,
       );
     }
-
     return sanitizeUser(updatedUser);
   }
 
@@ -130,6 +127,15 @@ export class UserService {
     await this.userRepository.update(userId, {
       refreshToken: refreshTokenHash ?? undefined,
     });
+  }
+
+  async getUserNameById(id: string): Promise<{ username: string }> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      select: ['username'],
+    });
+    if (!user) throw new NotFoundException('User not found');
+    return { username: user.username };
   }
 }
 

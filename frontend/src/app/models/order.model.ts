@@ -3,7 +3,8 @@ export interface Order {
   status: string;
   createdAt: string;
   totalAmount: number;
-  orderDetail?: OrderItem[]; 
+  userId?: string;
+  orderDetail?: OrderItem[];
 }
 
 export interface OrderItem {
@@ -26,3 +27,6 @@ export interface OpenOrderDetail {
   createdAt: string;
 }
 
+export interface OrderWithUsername extends Order {
+  username?: string;
+}
