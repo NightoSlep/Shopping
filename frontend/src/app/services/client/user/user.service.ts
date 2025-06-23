@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { User } from '../../../models/user.model';
 
@@ -29,7 +29,19 @@ export class UserService {
   }
 
   getMyProfile(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/profile`, { withCredentials: true });
+    return this.http.get<User>(`${this.apiUrl}/profile`, { withCredentials: true }).pipe(
+      tap((user) => this.currentUserSubject.next(user)),
+      catchError((err) => {
+        this.currentUserSubject.next(null);
+        return of(null as unknown as User);
+      })
+    );;
+  }
+
+  loadUserProfileIfNeeded(): void {
+    if (!this.currentUserSubject.value) {
+      this.getMyProfile().subscribe();
+    }
   }
 
   updateMyProfile(user: User): Observable<User> {
@@ -42,4 +54,16 @@ export class UserService {
       newPassword
     });
   }  
+
+  logout() {
+    this.currentUserSubject.next(null);
+    return this.http.post(`${this.apiUrl}/logout`, {}, {
+      withCredentials: true,
+      responseType: 'json'
+    });
+  }
+
+  isAdmin(): boolean {
+    return this.currentUserSubject.value?.role === 'admin';
+  }
 }

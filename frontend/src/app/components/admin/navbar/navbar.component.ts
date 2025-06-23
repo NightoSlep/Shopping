@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { UserService } from '../../../services/client/user/user.service';
 
 
 @Component({
@@ -16,12 +17,10 @@ import { MatIconModule } from '@angular/material/icon';
 export class NavbarComponent {
   username: string = '';
 
-  constructor(private router: Router, private authService: AuthService) {
-    this.username = localStorage.getItem('username') ?? '';
-  }
+  constructor(private router: Router, private userService: UserService) {}
   
   logout(){
-    this.authService.logout();
+    this.userService.logout();
     this.username = '';
     this.router.navigate(['/']);
   }

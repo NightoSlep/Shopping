@@ -8,8 +8,10 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { FacebookStrategy } from './strategies/facebook.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { User } from 'src/user/entities/user.entity';
-import { JwtStrategy } from './strategies/jwt.strategies';
 import { RolesGuard } from './guards/role.guard';
+import { JwtAccessStrategy } from './strategies/jwt.strategies';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 
 @Module({
   imports: [
@@ -23,8 +25,10 @@ import { RolesGuard } from './guards/role.guard';
   providers: [
     AuthService,
     JwtAuthGuard,
+    JwtRefreshGuard,
     RolesGuard,
-    JwtStrategy,
+    JwtAccessStrategy,
+    JwtRefreshStrategy,
     GoogleStrategy,
     FacebookStrategy,
   ],

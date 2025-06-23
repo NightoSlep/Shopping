@@ -35,30 +35,23 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
-    console.log('Generating token for user:', user.username, user.email);
-
     const access_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_ACCESS_SECRET,
       expiresIn: '1d',
     });
-
     const refresh_token = this.jwtService.sign(payload, {
       secret: process.env.JWT_REFRESH_SECRET,
       expiresIn: '7d',
     });
-
     const hashedRefreshToken = await this.hashPassword(refresh_token);
-
     await this.userRepository.update(user.id, {
       refreshToken: hashedRefreshToken,
     });
-
     return { access_token, refresh_token };
   }
 
   async register(registerDto: RegisterDto) {
     const { username, email, password, phone, address, role } = registerDto;
-
     await this.isUserExist({ username, email, phone });
 
     const hashedPassword = await this.hashPassword(password);
@@ -70,28 +63,22 @@ export class AuthService {
       address: address ?? '',
       role: role ?? UserRole.USER,
     });
-
     await this.userRepository.save(user);
     return this.generateTokens(user);
   }
 
   async login(loginDto: LoginDto) {
     const { username, password } = loginDto;
-
     const user = await this.userRepository.findOne({
       where: [{ username }],
     });
-
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-
     const isMatch = await this.comparePasswords(password, user.password);
-
     if (!isMatch) {
       throw new UnauthorizedException('Invalid password');
     }
-
     return this.generateTokens(user);
   }
 
@@ -118,15 +105,12 @@ export class AuthService {
 
   async refreshToken(token: string) {
     if (!token) throw new UnauthorizedException('Refresh token is required');
-
     try {
       const decoded: JwtPayload = this.jwtService.verify(token, {
         secret: process.env.JWT_REFRESH_SECRET,
       });
-
       if (!decoded?.userId)
         throw new UnauthorizedException('Invalid refresh token');
-
       const user = await this.userRepository.findOne({
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         where: { id: decoded.userId },

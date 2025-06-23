@@ -11,8 +11,8 @@ import { Banner } from '../../../models/banner.model';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CartService } from '../../../services/client/cart/cart.service';
-import { StorageService } from '../../../services/shared/storage/storage.service';
 import { Router } from '@angular/router';
+import { UserService } from '../../../services/client/user/user.service';
 
 @Component({
     selector: 'app-home',
@@ -35,7 +35,6 @@ export class HomeComponent implements OnInit{
   selectedCategoryId: string | null = null;
   featuredProducts: Product[] = [];
   banners: Banner[] = [];
-
   currentBannerIndex = 0;
   
   bannerInterval: any;
@@ -48,13 +47,16 @@ export class HomeComponent implements OnInit{
     private categoryService: CategoryService,
     private bannerService: BannerService,  
     private cartService: CartService,
-    private storageService: StorageService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
+    this.userService.loadUserProfileIfNeeded();
+    this.userService.currentUser$.subscribe(user => {
+      this.isLoggedIn = !!user;
+    });
     this.isLoading = true;
-    this.isLoggedIn = !!this.storageService.getToken();
     Promise.all([
       this.loadCategories().catch(err => console.error(err)),
       this.loadProducts().catch(err => console.error(err)),
@@ -147,7 +149,7 @@ export class HomeComponent implements OnInit{
   }
 
   addToCart(product: Product) {
-    if (!this.storageService.getToken()) {
+    if (!this.isLoggedIn) {
       this.router.navigate(['/login']);
       return;
     }

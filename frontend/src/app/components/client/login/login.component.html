@@ -1,58 +1,56 @@
 <div class="login-container">
-  <div class="login-form">
-    <mat-card class="login-card">
-      <h2>Đăng Nhập</h2>
-      <form (submit)="onLogin()" #loginForm="ngForm">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Tên đăng nhập</mat-label>
-          <input matInput type="text" [(ngModel)]="username" name="username" required
-            #usernameInput="ngModel">
-            @if (usernameInput.invalid && usernameInput.touched) {
-              <mat-error>Vui lòng nhập tên đăng
-              nhập</mat-error>
-            }
-          </mat-form-field>
+    <div class="login-form">
+        <mat-card class="login-card">
+            <h2>Đăng Nhập</h2>
+            <form (submit)="onLogin()" #loginForm="ngForm">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Tên đăng nhập</mat-label>
+                    <input matInput type="text" [(ngModel)]="username" name="username" required
+                        #usernameInput="ngModel">
+                    <mat-error *ngIf="usernameInput.invalid && usernameInput.touched">
+                        Vui lòng nhập tên đăng nhập
+                    </mat-error>
+                </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Mật khẩu</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password"
-              required #passwordInput="ngModel">
-              <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
-                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-              </button>
-              @if (passwordInput.invalid && passwordInput.touched) {
-                <mat-error>Vui lòng nhập mật khẩu</mat-error>
-              }
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Mật khẩu</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" name="password" [(ngModel)]="password"
+                        required #passwordInput="ngModel">
+                    <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="passwordInput.invalid && passwordInput.touched">
+                        Vui lòng nhập mật khẩu
+                    </mat-error>
+                </mat-form-field>
 
-            <p class="register-text">
-              Chưa có tài khoản?
-              <a (click)="navigateToRegister()" class="register-link">Đăng ký</a>
-            </p>
-            <button mat-raised-button color="primary" class="full-width"
-              [disabled]="loginForm.invalid || isLoggingIn">
-              @if (isLoggingIn) {
-                <mat-spinner diameter="20"></mat-spinner>
-              }
-              @if (!isLoggingIn) {
-                <span>Đăng Nhập</span>
-              }
-            </button>
+                <p class="register-text">
+                    Chưa có tài khoản?
+                    <a (click)="navigateToRegister()" class="register-link">Đăng ký</a>
+                </p>
+                <button mat-raised-button color="primary" class="full-width" type="submit"
+                    [disabled]="loginForm.invalid || isLoggingIn">
+                    <ng-container *ngIf="isLoggingIn; else showLoginText">
+                        <mat-spinner diameter="20"></mat-spinner>
+                    </ng-container>
+                    <ng-template #showLoginText>
+                        <span>Đăng Nhập</span>
+                    </ng-template>
+                </button>
+            </form>
 
-          </form>
+            <div class="separator">
+                <span>hoặc</span>
+            </div>
 
-          <div class="separator">
-            <span>hoặc</span>
-          </div>
-
-          <div class="social-login">
-            <button mat-raised-button color="warn" class="social-btn google-btn" (click)="loginWithGoogle()">
-              <mat-icon>g_translate</mat-icon> Google
-            </button>
-            <button mat-raised-button color="accent" class="social-btn facebook-btn" (click)="loginWithFacebook()">
-              <mat-icon>facebook</mat-icon> Facebook
-            </button>
-          </div>
+            <div class="social-login">
+                <button mat-raised-button color="warn" class="social-btn google-btn" (click)="loginWithGoogle()">
+                    <mat-icon>g_translate</mat-icon> Google
+                </button>
+                <button mat-raised-button color="accent" class="social-btn facebook-btn" (click)="loginWithFacebook()">
+                    <mat-icon>facebook</mat-icon> Facebook
+                </button>
+            </div>
         </mat-card>
-      </div>
     </div>
+</div>

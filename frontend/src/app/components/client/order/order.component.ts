@@ -43,6 +43,7 @@ export class OrderComponent implements OnInit, OnDestroy{
   openOrderDetail(orderId: string) {
     const order = this.orders.find(o => o.orderId === orderId);
     if (!order) return;
+    console.log(order);
 
     this.orderService.getDetailOrderById(orderId).subscribe(data => {
       this.selectedOrderItems = data;
@@ -119,5 +120,14 @@ export class OrderComponent implements OnInit, OnDestroy{
         });
       }
     });
+  }
+
+  getPaymentMethodName(method: string): string {
+    const paymentMap: { [key: string]: string } = {
+      momo: 'Ví Momo',
+      cod: 'Thanh toán khi nhận hàng',
+      bank: 'Chuyển khoản ngân hàng',
+    };
+    return paymentMap[method?.toLowerCase()] || 'Không rõ';
   }
 }

@@ -52,6 +52,7 @@
           {{ getStatusText(selectedOrderMeta.status) }}
         </span>
       </p>
+      <p><strong>Phương thức thanh toán:</strong> {{ getPaymentMethodName(selectedOrderMeta.paymentMethod) }}</p>
       <p><strong>Tổng tiền:</strong> {{ selectedOrderMeta.totalAmount | currency:'VND' }}</p>
     </div>
 

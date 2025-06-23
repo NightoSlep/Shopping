@@ -1,16 +1,36 @@
-<h2>Xác nhận đơn hàng</h2>
+<mat-card class="checkout-card">
+  <mat-card-title>Xác nhận đơn hàng</mat-card-title>
+  <mat-divider></mat-divider>
 
-<div *ngFor="let item of cartItems">
-  <p>{{ item.product.productName }} x {{ item.quantity }} = {{ item.product.price * item.quantity | currency:'VND' }}</p>
-</div>
+  <div *ngFor="let item of cartItems" class="item-row">
+    <img [src]="item.product.image" alt="{{ item.product.productName }}" class="product-image" />
+    
+    <div class="item-details">
+      <div class="item-name">{{ item.product.productName }}</div>
+      <div class="item-quantity">Số lượng: {{ item.quantity }}</div>
+    </div>
 
-<p><strong>Tổng cộng: </strong>{{ totalPrice | currency:'VND' }}</p>
+    <div class="item-price">
+      {{ item.product.price * item.quantity | currency:'VND' }}
+    </div>
+  </div>
 
-<h3>Chọn phương thức thanh toán:</h3>
-<select [(ngModel)]="selectedPaymentMethod">
-  <option value="momo">Momo</option>
-  <option value="cod">Thanh toán khi nhận hàng</option>
-</select>
+  <mat-divider></mat-divider>
 
-<br /><br />
-<button (click)="checkout()">Thanh toán</button>
+  <div class="total-section">
+    <strong>Tổng cộng:</strong>
+    <span class="total-price">{{ totalPrice | currency:'VND' }}</span>
+  </div>
+
+  <mat-form-field appearance="fill" class="payment-select">
+    <mat-label>Phương thức thanh toán</mat-label>
+    <mat-select [(ngModel)]="selectedPaymentMethod">
+      <mat-option value="momo">Momo</mat-option>
+      <mat-option value="cod">Thanh toán khi nhận hàng</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="btn-container">
+    <button mat-raised-button color="primary" (click)="checkout()">Thanh toán</button>
+  </div>
+</mat-card>

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
@@ -17,7 +15,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         '⚠️ Google OAuth Config Error: Missing GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, or GOOGLE_REDIRECT_URL in environment variables.',
       );
     }
-
     super({
       clientID,
       clientSecret,
@@ -28,17 +25,19 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   validate(
     accessToken: string,
-    refreshToken: string,
-    profile: any,
+    _refreshToken: string,
+    profile: {
+      id: string;
+      displayName: string;
+      emails?: Array<{ value: string }>;
+    },
     done: VerifyCallback,
   ) {
     try {
       if (!profile) {
         throw new UnauthorizedException('Google authentication failed');
       }
-
       const { id, displayName, emails } = profile;
-
       if (!emails || emails.length === 0) {
         throw new UnauthorizedException('Email is required for authentication');
       }
@@ -50,7 +49,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         email: emails[0].value,
         accessToken,
       };
-
       done(null, user);
     } catch (error) {
       done(error, false);

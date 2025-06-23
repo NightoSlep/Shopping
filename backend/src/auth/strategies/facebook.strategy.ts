@@ -1,45 +1,51 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-facebook';
+import { Strategy, Profile as FacebookBaseProfile } from 'passport-facebook';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FacebookProfile } from 'src/user/entities/oauth-user.interface';
+
+interface FacebookEmail {
+  value: string;
+}
+
+interface FacebookProfile extends FacebookBaseProfile {
+  id: string;
+  displayName: string;
+  emails: FacebookEmail[];
+}
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   constructor(configService: ConfigService) {
+    const clientID = configService.get<string>('FACEBOOK_APP_ID');
+    const clientSecret = configService.get<string>('FACEBOOK_APP_SECRET');
+    const callbackURL = configService.get<string>('FACEBOOK_REDIRECT_URL');
+
+    if (!clientID || !clientSecret || !callbackURL) {
+      throw new Error('Missing Facebook OAuth environment configuration');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({
-      clientID: configService.get<string>('FACEBOOK_APP_ID', '') || '',
-      clientSecret: configService.get<string>('FACEBOOK_APP_SECRET', '') || '',
-      callbackURL: configService.get<string>('FACEBOOK_REDIRECT_URL', '') || '',
+      clientID,
+      clientSecret,
+      callbackURL,
       profileFields: ['id', 'displayName', 'emails'],
       scope: ['email', 'public_profile'],
     });
-
-    if (
-      !configService.get<string>('FACEBOOK_APP_ID') ||
-      !configService.get<string>('FACEBOOK_APP_SECRET') ||
-      !configService.get<string>('FACEBOOK_REDIRECT_URL')
-    ) {
-      throw new Error('Missing Facebook OAuth configuration');
-    }
   }
 
   validate(
     accessToken: string,
-    refreshToken: string,
+    _refreshToken: string,
     profile: FacebookProfile,
     done: (error: any, user?: any) => void,
   ) {
     try {
-      if (!profile) {
-        throw new UnauthorizedException('Facebook authentication failed');
-      }
-
-      const { id, displayName, emails } = profile;
-
+      const facebookProfile = profile;
+      const { id, displayName, emails } = facebookProfile;
       if (!emails || emails.length === 0) {
-        throw new UnauthorizedException('Email is required for authentication');
+        return done(new UnauthorizedException('Email is required'), false);
       }
+
       const user = {
         providerId: id,
         provider: 'facebook',
@@ -47,10 +53,12 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
         email: emails[0].value?.trim(),
         accessToken,
       };
-
       done(null, user);
-    } catch (error) {
-      done(error, false);
+    } catch (error: unknown) {
+      return done(
+        error instanceof Error ? error : new Error('Unknown error'),
+        false,
+      );
     }
   }
 }

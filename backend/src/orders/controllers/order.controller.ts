@@ -12,12 +12,13 @@ import { OrderService } from '../services/order.service';
 import { CreateOrderDetailDto } from '../dto/create-order-detail.dto';
 import { Order, OrderStatus } from '../entities/order.entity';
 import { UpdateOrderDto } from '../dto/update-order.dto';
-import { JwtAuthGuard, UserPayload } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { AuthUser } from 'src/auth/decorator/auth-user.decorator';
 import { OpenOrderDetail } from '../dto/open-order-detail.dto';
 import { RolesGuard } from 'src/auth/guards/role.guard';
 import { Roles } from 'src/auth/decorator/role.decorator';
 import { UserRole } from 'src/user/entities/user.entity';
+import { UserPayload } from 'src/auth/interfaces/jwt-payload.interface';
 
 @Controller('orders')
 export class OrderController {

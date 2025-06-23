@@ -3,6 +3,7 @@ export interface Order {
   status: string;
   createdAt: string;
   totalAmount: number;
+  paymentMethod: string;
   userId?: string;
   orderDetail?: OrderItem[];
 }

@@ -1,53 +1,42 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Login, LoginResponse, Register } from '../../../models/user.model';
-import { StorageService } from '../storage/storage.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Login, LoginResponse, Register, User } from '../../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiUrl;
-  
-  constructor(private http: HttpClient, private storage: StorageService) {}
+  private apiUrl = `${environment.apiUrl}/auth`;
+
+  constructor(private http: HttpClient) {}
   
   register(userData: Register): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, userData);
+    return this.http.post(`${this.apiUrl}/register`, userData, {
+      withCredentials: true
+    });
   }
   
   login(userData: Login): Observable<any> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, userData, {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, userData, {
       withCredentials: true
     });
   }
 
   refreshToken(): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/refresh-token`, {}, {
-      withCredentials: true
-    });
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}/refresh-token`, 
+      {}, 
+      { withCredentials: true }
+    );
   }
 
   loginWithGoogle() {
-    window.location.href = `${environment.apiUrl}/auth/google`;
+    window.location.href = `${this.apiUrl}/google`;
   }
 
   loginWithFacebook() {
-    window.location.href = `${environment.apiUrl}/auth/facebook`;
+    window.location.href = `${this.apiUrl}/facebook`;
   }
-
-  logout() {
-    this.storage.clear();
-  }
-
-  isLoggedIn(): boolean {
-    const token = this.storage.getToken();
-    return !!token;
-  }
-
-  isAdmin(): boolean {
-    const role = this.storage.getRole();
-    return role === 'AD' || role === 'admin';
-  } 
 }

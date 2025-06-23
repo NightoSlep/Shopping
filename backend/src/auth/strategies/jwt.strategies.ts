@@ -1,25 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ExtractJwt, Strategy, JwtFromRequestFunction } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { Request as ExpressRequest } from 'express';
+
+interface RequestWithCookies extends ExpressRequest {
+  cookies: {
+    access_token?: string;
+    [key: string]: any;
+  };
+}
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtAccessStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-access',
+) {
   constructor(private configService: ConfigService) {
+    const cookieExtractor: JwtFromRequestFunction = (
+      req,
+    ): string | null | undefined => {
+      const request = req as RequestWithCookies;
+      return request.cookies?.access_token || null;
+    };
+
     super({
-      jwtFromRequest: (req: Request) => {
-        const tokenExtractor = ExtractJwt.fromAuthHeaderAsBearerToken();
-        if (typeof tokenExtractor === 'function') {
-          return tokenExtractor(req);
-        }
-        return null;
-      },
-      secretOrKey: configService.get<string>('JWT_SECRET') as string,
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        cookieExtractor,
+      ]) as JwtFromRequestFunction,
+      secretOrKey: configService.get<string>('JWT_ACCESS_SECRET'),
     });
   }
 
   validate(payload: JwtPayload) {
-    return { id: payload.id, email: payload.email, role: payload.role };
+    return payload;
   }
 }

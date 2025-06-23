@@ -41,7 +41,7 @@
       <span class="icon-label">Giỏ hàng</span>
     </div>
 
-    <div *ngIf="authService.isAdmin()" class="icon-box admin-highlight" (click)="navigateToAdmin()">
+    <div *ngIf="userService.isAdmin()" class="icon-box admin-highlight" (click)="navigateToAdmin()">
       <mat-icon color="accent">admin_panel_settings</mat-icon>
       <span class="icon-label">Trang quản trị</span>
     </div>

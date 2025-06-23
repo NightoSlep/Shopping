@@ -14,7 +14,6 @@ import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/client/user/user.service';
 import { CartService } from '../../../services/client/cart/cart.service';
 import { CommonModule } from '@angular/common';
-import { StorageService } from '../../../services/shared/storage/storage.service';
 
 @Component({
   selector: 'app-navbar',
@@ -36,12 +35,13 @@ export class NavbarComponent implements OnInit{
   hideSearchBar: boolean = false;
   hideCart: boolean = false;
   cartItemCount = 0;
+  isLoggedIn = false;
+  isAdmin: boolean = false;
 
   constructor(private router: Router,
-              public authService: AuthService, 
-              private userService: UserService, 
-              private cartService: CartService,
-              private storageService: StorageService) {
+              private authService: AuthService, 
+              public userService: UserService, 
+              private cartService: CartService) {
     this.router.events.subscribe(() => this.updateViewVisibility());
     this.cartService.cartItems$.subscribe(items => {
       this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
@@ -50,7 +50,8 @@ export class NavbarComponent implements OnInit{
 
   ngOnInit() {
     this.userService.currentUser$.subscribe((user: User | null) => {
-      this.username = user?.username ?? localStorage.getItem('username') ?? '';
+      this.username = user?.username ?? '';
+      this.isLoggedIn = !!user;
     });
   }
 
@@ -66,26 +67,24 @@ export class NavbarComponent implements OnInit{
   }
 
   logout(){
-    this.authService.logout();
-    this.username = '';
-    this.cartService.clearCart();
-    this.router.navigate(['/']);
+    this.userService.logout().subscribe({
+      next: () => {
+        this.username = '';
+        this.cartService.clearCart();
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Lỗi logout:', err);
+      }
+    });
   }
 
   navigateToCart() { 
-    if (!this.storageService.getToken()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-    this.router.navigate(['/cart']); 
+    this.router.navigate(this.isLoggedIn ? ['/cart'] : ['/login']);
   }
 
   navigateToOrders() { 
-    if (!this.storageService.getToken()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-    this.router.navigate(['/order']); 
+    this.router.navigate(this.isLoggedIn ? ['/order'] : ['/login']);
   }
 
   navigateToLogin() { this.router.navigate(['/login']);}

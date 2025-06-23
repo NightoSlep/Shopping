@@ -6,10 +6,20 @@ import { CartItemModel } from '../../../models/cart.model';
 import { OrderService } from '../../../services/client/order/order.service';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/client/user/user.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-checkout',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatCardModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    FormsModule ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
