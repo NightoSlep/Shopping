@@ -23,8 +23,16 @@ import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/role.guard';
 import { Roles } from 'src/auth/decorator/role.decorator';
-import { CreateUserDto, UpdateUserDto, UserResponseDto } from '../dto/user.dto';
+import {
+  ChangePasswordDto,
+  CreateUserDto,
+  UpdateProfileDto,
+  UpdateStatusDto,
+  UserResponseDto,
+} from '../dto/user.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthUser } from 'src/auth/decorator/auth-user.decorator';
+import { UserPayload } from 'src/auth/interfaces/jwt-payload.interface';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -100,12 +108,35 @@ export class UserController {
   @Patch('me')
   @UseGuards(JwtAuthGuard)
   async updateMe(
-    @Req() req: AuthenticatedRequest,
-    @Body(new ValidationPipe({ whitelist: true })) updateUserDto: UpdateUserDto,
+    @AuthUser() user: UserPayload,
+    @Body(new ValidationPipe({ whitelist: true }))
+    updateProfileDto: UpdateProfileDto,
   ): Promise<UserResponseDto> {
-    const userId = req.user.userId;
-    const updatedUser = await this.userService.update(userId, updateUserDto);
+    const userId = user.id;
+    const updatedUser = await this.userService.update(userId, updateProfileDto);
     return new UserResponseDto(updatedUser);
+  }
+
+  @Patch('change-password')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @AuthUser() user: UserPayload,
+    @Body()
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<{ message: string }> {
+    const { oldPassword, newPassword } = changePasswordDto;
+    await this.userService.changePassword(user.id, oldPassword, newPassword);
+    return { message: 'Đổi mật khẩu thành công.' };
+  }
+
+  @Patch(':id/status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN)
+  updateStatus(
+    @Param('id') id: string,
+    @Body() dto: UpdateStatusDto,
+  ): Promise<UserResponseDto> {
+    return this.userService.updateStatus(id, dto);
   }
 
   @Patch(':id')
@@ -113,7 +144,8 @@ export class UserController {
   @Roles(UserRole.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body(new ValidationPipe({ whitelist: true })) updateUserDto: UpdateUserDto,
+    @Body(new ValidationPipe({ whitelist: true }))
+    updateUserDto: UpdateProfileDto,
   ): Promise<UserResponseDto> {
     const updatedUser = await this.userService.update(id, updateUserDto);
     return new UserResponseDto(updatedUser);

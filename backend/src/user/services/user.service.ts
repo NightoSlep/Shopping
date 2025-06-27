@@ -7,7 +7,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserRole } from '../entities/user.entity';
-import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
+import { CreateUserDto, UpdateProfileDto, UpdateStatusDto } from '../dto/user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,6 @@ export class UserService {
 
   async create(
     createUserDto: CreateUserDto,
-    hashedPassword?: string,
   ): Promise<Omit<User, 'password' | 'refreshToken'>> {
     const existingUser = await this.userRepository.findOne({
       where: [
@@ -40,17 +40,15 @@ export class UserService {
       }
     }
 
-    if (!hashedPassword) {
-      console.error(
-        'Password hashing should be done before calling UserService.create',
-      );
-      throw new InternalServerErrorException('Lỗi xử lý nội bộ.');
-    }
-
+    const hashedPassword: string = await bcrypt.hash(
+      createUserDto.password,
+      10,
+    );
     const newUser = this.userRepository.create({
       ...createUserDto,
       password: hashedPassword,
       role: createUserDto.role || UserRole.USER,
+      isActive: createUserDto.isActive ?? true,
     });
 
     try {
@@ -58,6 +56,8 @@ export class UserService {
       return sanitizeUser(newUser);
     } catch (error: any) {
       if ((error as { code?: string }).code === '23505') {
+        console.error('Error saving user:', error);
+
         throw new ConflictException('Email hoặc Username đã tồn tại.');
       }
       console.error('Error saving user:', error);
@@ -67,7 +67,16 @@ export class UserService {
 
   async findAll(): Promise<Omit<User, 'password' | 'refreshToken'>[]> {
     return this.userRepository.find({
-      select: ['id', 'email', 'username', 'phone', 'address', 'role'],
+      select: [
+        'id',
+        'accountName',
+        'email',
+        'username',
+        'phone',
+        'address',
+        'role',
+        'isActive',
+      ],
     });
   }
 
@@ -85,32 +94,31 @@ export class UserService {
 
   async update(
     id: string,
-    updateUserDto: UpdateUserDto,
+    updateProfileDto: UpdateProfileDto,
   ): Promise<Omit<User, 'password' | 'refreshToken'>> {
     const user = await this.findOneById(id);
     if (!user) {
       throw new NotFoundException(`Không tìm thấy người dùng với ID "${id}"`);
     }
 
-    if (updateUserDto.username && updateUserDto.username !== user.username) {
-      const existingUser = await this.userRepository.findOne({
-        where: { username: updateUserDto.username },
-      });
+    const updatePayload = Object.fromEntries(
+      Object.entries(updateProfileDto).filter(
+        ([, value]) => value !== undefined,
+      ),
+    );
 
-      if (existingUser && existingUser.id !== id) {
-        throw new ConflictException(
-          `Username "${updateUserDto.username}" đã được sử dụng.`,
-        );
-      }
+    if (Object.keys(updatePayload).length === 0) {
+      throw new Error('Không có dữ liệu để cập nhật.');
     }
-    await this.userRepository.update(id, updateUserDto);
-    const updatedUser = await this.findOneById(id);
-    if (!updatedUser) {
+
+    await this.userRepository.update(id, updatePayload);
+    const updatedProfile = await this.findOneById(id);
+    if (!updatedProfile) {
       throw new NotFoundException(
         `Không tìm thấy người dùng với ID "${id}" sau khi cập nhật.`,
       );
     }
-    return sanitizeUser(updatedUser);
+    return sanitizeUser(updatedProfile);
   }
 
   async remove(id: string): Promise<void> {
@@ -136,6 +144,40 @@ export class UserService {
     });
     if (!user) throw new NotFoundException('User not found');
     return { username: user.username };
+  }
+
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const user = await this.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('Không tìm thấy người dùng.');
+    }
+
+    const isMatch: boolean = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      throw new ConflictException('Mật khẩu cũ không đúng.');
+    }
+
+    const hashedPassword: string = await bcrypt.hash(newPassword, 10);
+    await this.userRepository.update(userId, { password: hashedPassword });
+  }
+
+  async updateStatus(
+    id: string,
+    dto: UpdateStatusDto,
+  ): Promise<Omit<User, 'password' | 'refreshToken'>> {
+    const user = await this.findOneById(id);
+    if (!user) {
+      throw new NotFoundException(`Không tìm thấy người dùng với ID "${id}"`);
+    }
+
+    user.isActive = dto.isActive;
+    await this.userRepository.save(user);
+
+    return sanitizeUser(user);
   }
 }
 

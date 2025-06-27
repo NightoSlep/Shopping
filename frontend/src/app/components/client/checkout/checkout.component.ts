@@ -46,7 +46,6 @@ export class CheckoutComponent implements OnInit{
       alert('Bạn cần đăng nhập trước khi thanh toán.');
       return;
     }
-    console.log("Cart Items", this.cartItems, "Payment Method", this.selectedPaymentMethod);
     this.orderService.checkout(this.cartItems, this.selectedPaymentMethod).subscribe({
       next: () => {
         alert('Đặt hàng thành công!');
@@ -55,7 +54,6 @@ export class CheckoutComponent implements OnInit{
       },
       error: err => {
         console.error('Đặt hàng thất bại:', err);
-        alert('Có lỗi xảy ra khi đặt hàng.');
       }
     });
   }

@@ -74,6 +74,7 @@ export class RegisterComponent implements AfterViewInit{
     const registerData: Register = {
       username: this.username,
       password: this.password,
+      accountName: this.username,
       email: this.email,
       phone: this.phone,
       address: this.address,

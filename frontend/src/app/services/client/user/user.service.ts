@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { User } from '../../../models/user.model';
+import { UpdatedUser, User } from '../../../models/user.model';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/users`;
+  private apiUser = `${environment.apiUrl}/users`;
+  private apiAuth = `${environment.apiUrl}/auth`; 
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
@@ -25,11 +26,11 @@ export class UserService {
   }
   
   getUserById(id : number): Observable<User>{
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+    return this.http.get<User>(`${this.apiUser}/${id}`);
   }
 
   getMyProfile(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/profile`, { withCredentials: true }).pipe(
+    return this.http.get<User>(`${this.apiUser}/profile`, { withCredentials: true }).pipe(
       tap((user) => this.currentUserSubject.next(user)),
       catchError((err) => {
         this.currentUserSubject.next(null);
@@ -44,20 +45,23 @@ export class UserService {
     }
   }
 
-  updateMyProfile(user: User): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/me`, user);
+  updateMyProfile(user: UpdatedUser): Observable<User> {
+    return this.http.patch<User>(`${this.apiUser}/me`, user);
   }
 
   changePassword(oldPassword: string, newPassword: string) {
-    return this.http.post(`${this.apiUrl}/change-password`, {
+    console.log('Sending', { oldPassword, newPassword });
+    return this.http.patch(`${this.apiUser}/change-password`, {
       oldPassword,
       newPassword
+    },{
+      withCredentials: true
     });
   }  
 
   logout() {
     this.currentUserSubject.next(null);
-    return this.http.post(`${this.apiUrl}/logout`, {}, {
+    return this.http.post(`${this.apiAuth}/logout`, {}, {
       withCredentials: true,
       responseType: 'json'
     });

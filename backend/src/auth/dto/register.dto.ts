@@ -13,6 +13,9 @@ export class RegisterDto {
   email: string;
 
   @IsNotEmpty()
+  accountName: string;
+
+  @IsNotEmpty()
   username: string;
 
   @IsNotEmpty()

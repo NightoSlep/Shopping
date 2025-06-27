@@ -18,9 +18,9 @@
       <span class="icon-label">Đơn hàng</span>
     </div>
 
-    <div *ngIf="username; else guestLogin" class="icon-box" [matMenuTriggerFor]="accountMenu">
+    <div *ngIf="accountName; else guestLogin" class="icon-box" [matMenuTriggerFor]="accountMenu">
       <mat-icon>account_circle</mat-icon>
-      <span class="icon-label">{{ username }}</span>
+      <span class="icon-label">{{ accountName }}</span>
     </div>
     <ng-template #guestLogin>
       <div class="icon-box" (click)="navigateToLogin()">

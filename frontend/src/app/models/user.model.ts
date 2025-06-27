@@ -11,28 +11,37 @@ export interface LoginResponse {
 export interface Register {
     username: string
     password: string
+    accountName: string
     email: string
     phone: string
     address: string
     role: string;
   }
 
-  export interface UpdatedUser {
-    id: string
-    email: string
-    username: string
-    phone: string
-    address: string
-  }
+export interface UpdatedUser {
+  accountName: string
+  phone: string
+  address: string
+}
 
-  export interface User {
-    id: string
-    email: string
-    username: string
-    password?: string
-    phone: string
-    address: string
-    createdOn: string
-    role: string
-    isActive: boolean
-  }
+export interface User {
+  id: string
+  email: string
+  accountName: string
+  username: string
+  password?: string
+  phone: string
+  address: string
+  role: string
+  isActive?: boolean
+}
+
+export interface ManageUser {
+  id: string
+  email: string
+  accountName: string
+  phone: string
+  address: string
+  role: string
+  isActive: boolean
+}

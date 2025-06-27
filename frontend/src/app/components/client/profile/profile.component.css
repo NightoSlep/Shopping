@@ -78,3 +78,7 @@ mat-form-field {
   --mat-form-field-container-height: 40px;
   --mat-form-field-container-vertical-padding: 10px;
 }
+
+.error-field.mat-form-field {
+  --mdc-outlined-text-field-outline-color: #f44336;
+}

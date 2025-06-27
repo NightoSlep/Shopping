@@ -51,12 +51,14 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    const { username, email, password, phone, address, role } = registerDto;
+    const { username, accountName, email, password, phone, address, role } =
+      registerDto;
     await this.isUserExist({ username, email, phone });
 
     const hashedPassword = await this.hashPassword(password);
     const user = this.userRepository.create({
       username,
+      accountName,
       email,
       phone,
       password: hashedPassword,
@@ -92,7 +94,7 @@ export class AuthService {
     if (!user) {
       user = this.userRepository.create({
         email: oAuthUser.email,
-        username: oAuthUser.username || oAuthUser.email.split('@')[0],
+        accountName: oAuthUser.username || oAuthUser.email.split('@')[0],
         password: await this.hashPassword('password'),
         phone: null,
         address: '',
@@ -134,12 +136,12 @@ export class AuthService {
   }
 
   private async isUserExist({
-    username,
+    accountName,
     email,
     phone,
   }: Partial<User>): Promise<void> {
-    const existingUsername = username
-      ? await this.userRepository.findOne({ where: { username } })
+    const existingUsername = accountName
+      ? await this.userRepository.findOne({ where: { accountName } })
       : null;
 
     if (existingUsername) {

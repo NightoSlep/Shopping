@@ -184,7 +184,7 @@ export class OrderService {
       throw new UnauthorizedException('You can only cancel your own orders');
     }
 
-    if (order.status !== OrderStatus.SHIPPING) {
+    if (order.status !== OrderStatus.PROCESSING) {
       throw new BadRequestException('Order cannot be canceled at this stage');
     }
 

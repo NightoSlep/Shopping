@@ -10,9 +10,8 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   if (!currentUser || currentUser.role !== 'admin') {
     alert('Bạn không có quyền truy cập trang này!');
-    router.navigate(['/login']);
+    router.navigate(['/']);
     return false;
   }
-
   return true; 
 };

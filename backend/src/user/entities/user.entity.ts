@@ -13,6 +13,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column()
+  accountName: string;
+
   @Column({ unique: true })
   username: string;
 
@@ -25,9 +28,12 @@ export class User {
   @Column('varchar', { nullable: true })
   address: string | null;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.ADMIN })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
   @Column({ nullable: true })
   refreshToken?: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 }

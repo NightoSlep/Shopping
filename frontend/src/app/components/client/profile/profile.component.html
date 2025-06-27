@@ -1,6 +1,5 @@
-<div class="profile-container">
+<div class="profile-container" *ngIf="currentUser$ | async as user; else loading">
   <mat-accordion multi="true" class="profile-accordion">
-
     <mat-expansion-panel [expanded]="expandedPanel === 'profile'" (opened)="expandedPanel = 'profile'" (closed)="expandedPanel = null">
       <mat-expansion-panel-header>
         <mat-panel-title>Thông tin cá nhân</mat-panel-title>
@@ -17,43 +16,49 @@
         <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
           <div class="full-width">
             <label><strong>Tên:</strong></label>
-            @if (!isEditMode) {
-              <div>{{ user.username }}</div>
-            }
-            @if (isEditMode) {
+            <ng-container *ngIf="!isEditMode; else editAccountName">
+              <div>{{ user.accountName }}</div>
+            </ng-container>
+            <ng-template #editAccountName>
               <mat-form-field appearance="outline" class="mat-field">
-                <input matInput formControlName="username" />
+                <input matInput formControlName="accountName" />
+                <mat-error *ngIf="userForm.get('accountName')?.touched && userForm.get('accountName')?.hasError('required')">
+                  Tên không được bỏ trống.
+                </mat-error>
               </mat-form-field>
-            }
+            </ng-template>
           </div>
 
           <div class="full-width">
             <label><strong>Số điện thoại:</strong></label>
-            @if (!isEditMode) {
+            <ng-container *ngIf="!isEditMode; else editPhone">
               <div>{{ user.phone }}</div>
-            }
-            @if (isEditMode) {
+            </ng-container>
+            <ng-template #editPhone>
               <mat-form-field appearance="outline" class="mat-field">
                 <input matInput formControlName="phone" />
+                <mat-error *ngIf="userForm.get('phone')?.touched && userForm.get('phone')?.hasError('required')">
+                  Số điện thoại không được bỏ trống.
+                </mat-error>
               </mat-form-field>
-            }
+            </ng-template>
           </div>
 
           <div class="full-width">
             <label><strong>Địa chỉ:</strong></label>
-            @if (!isEditMode) {
+            <ng-container *ngIf="!isEditMode; else editAddress">
               <div>{{ user.address }}</div>
-            }
-            @if (isEditMode) {
+            </ng-container>
+            <ng-template #editAddress>
               <mat-form-field appearance="outline" class="mat-field">
                 <input matInput formControlName="address" />
+                <mat-error *ngIf="userForm.get('address')?.touched && userForm.get('address')?.hasError('required')">
+                  Địa chỉ không được bỏ trống.
+                </mat-error>
               </mat-form-field>
-            }
+            </ng-template>
           </div>
-
-          @if (isEditMode) {
-            <button mat-raised-button color="primary" type="submit">Cập nhật</button>
-          }
+          <button mat-raised-button color="primary" type="submit" *ngIf="isEditMode">Cập nhật</button>
         </form>
       </mat-card>
     </mat-expansion-panel>
@@ -77,54 +82,62 @@
         </div>
       </mat-card>
     </mat-expansion-panel>
-
-    <mat-expansion-panel [expanded]="expandedPanel === 'invoices'" (opened)="expandedPanel = 'invoices'" (closed)="expandedPanel = null">
-      <mat-expansion-panel-header>
-        <mat-panel-title>Hóa đơn</mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-card class="profile-card">
-        <p>Danh sách hóa đơn sẽ hiển thị ở đây.</p>
-      </mat-card>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel [expanded]="expandedPanel === 'orders'" (opened)="expandedPanel = 'orders'" (closed)="expandedPanel = null">
-      <mat-expansion-panel-header>
-        <mat-panel-title>Đơn hàng</mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-card class="profile-card">
-        <p>Danh sách đơn hàng sẽ hiển thị ở đây.</p>
-      </mat-card>
-    </mat-expansion-panel>
   </mat-accordion>
 </div>
 
-@if (isChangingPassword) {
-  <div class="change-password-overlay">
-    <mat-card class="change-password-card">
-      <div class="header">
-        <button mat-icon-button (click)="closeChangingPassword()">
-          <mat-icon>arrow_back</mat-icon>
+<ng-template #loading>
+  <p>Đang tải thông tin người dùng...</p>
+</ng-template>
+
+<div *ngIf="isChangingPassword" class="change-password-overlay">
+  <mat-card class="change-password-card">
+    <div class="header">
+      <mat-icon>lock</mat-icon>
+      Đổi mật khẩu
+    </div>
+
+    <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+      <mat-form-field appearance="outline">
+        <mat-label>Mật khẩu cũ</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="oldPassword" />
+          <mat-error *ngIf="passwordForm.get('oldPassword')?.touched && passwordForm.get('oldPassword')?.hasError('required')">
+            Không được bỏ trống.
+          </mat-error>
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <span>Đổi mật khẩu</span>
+        
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" [ngClass]="{ 'error-field': passwordMismatch }">
+        <mat-label>Mật khẩu mới</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="newPassword" />
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.hasError('required')">
+          Mật khẩu mới là bắt buộc.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" [ngClass]="{ 'error-field': passwordMismatch }">
+        <mat-label>Xác nhận mật khẩu</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" />
+        <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="passwordForm.get('confirmPassword')?.touched && passwordForm.get('confirmPassword')?.hasError('required')">
+          Xác nhận mật khẩu là bắt buộc.
+        </mat-error>
+        <mat-error *ngIf="passwordForm.get('confirmPassword')?.touched && passwordForm.get('confirmPassword')?.hasError('passwordMismatch')">
+          Mật khẩu mới không khớp.
+        </mat-error>
+      </mat-form-field>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button mat-button type="button" (click)="closeChangingPassword()">Hủy</button>
+        <button mat-raised-button color="primary" type="submit">Lưu</button>
       </div>
-      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Mật khẩu cũ</mat-label>
-          <input matInput type="password" formControlName="oldPassword" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Mật khẩu mới</mat-label>
-          <input matInput type="password" formControlName="newPassword" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Xác nhận mật khẩu mới</mat-label>
-          <input matInput type="password" formControlName="confirmPassword" />
-        </mat-form-field>
-        <a class="forgot-password-link" (click)="onForgotPassword()">Quên mật khẩu?</a>
-        <button mat-raised-button color="primary" class="full-width" type="submit">
-          Lưu
-        </button>
-      </form>
-    </mat-card>
-  </div>
-}
+    </form>
+  </mat-card>
+</div>

@@ -52,12 +52,22 @@ export class LoginComponent implements OnInit{
   }
 
   onLogin() {
-    this.isLoggingIn = true; 
+    this.isLoggingIn = true;
     const loginData: Login = { username: this.username, password: this.password };
+
     this.authService.login(loginData).subscribe({
       next: () => {
         this.userService.getMyProfile().subscribe({
           next: (userData) => {
+            if (!userData.isActive) {
+              this.snackBar.open('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.', 'OK', {
+                duration: 4000,
+              });
+              this.userService.logout();
+              this.isLoggingIn = false;
+              return;
+            }
+
             this.userService.setCurrentUser(userData);
             this.snackBar.open('Đăng nhập thành công!', 'OK', { duration: 3000 });
             this.router.navigate(['/']);
@@ -65,16 +75,16 @@ export class LoginComponent implements OnInit{
           error: () => {
             this.snackBar.open('Không thể lấy thông tin người dùng!', 'OK', { duration: 3000 });
             this.isLoggingIn = false;
-          }
+          },
         });
       },
       error: () => {
         this.snackBar.open('Sai tên đăng nhập hoặc mật khẩu!', 'OK', { duration: 3000 });
         this.isLoggingIn = false;
-      }
+      },
     });
   }
-  
+
   loginWithGoogle() {
     this.authService.loginWithGoogle();
   }

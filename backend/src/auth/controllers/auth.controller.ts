@@ -48,7 +48,6 @@ export class AuthController {
       sameSite: 'none',
       maxAge: 24 * 60 * 60 * 1000,
     });
-
     return { access_token: tokens.access_token };
   }
 
@@ -59,8 +58,6 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleRedirect(@Req() req: Request, @Res() res: Response) {
-    console.log('Google redirect req.user:', req.user);
-
     if (!req.user) {
       return res.status(401).json({ message: 'No user found' });
     }

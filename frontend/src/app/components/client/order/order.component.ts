@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../shared/confirm-dialog/confirm-dialog.component';
+import { UserService } from '../../../services/client/user/user.service';
 @Component({
   selector: 'app-order',
   imports: [CommonModule, NgxPaginationModule, MatDialogModule],
@@ -26,9 +27,10 @@ export class OrderComponent implements OnInit, OnDestroy{
     }
   };
 
-  constructor(private orderService: OrderService, private dialog: MatDialog) {}
+  constructor(private orderService: OrderService, private dialog: MatDialog, private userService: UserService) {}
 
   ngOnInit(): void {
+    this.userService.loadUserProfileIfNeeded();
     this.orderService.getMyOrders().subscribe(data => {
       this.orders = data;
     });
@@ -81,7 +83,7 @@ export class OrderComponent implements OnInit, OnDestroy{
   canCancelOrder(status: string | undefined): boolean {
     if (!status) return false;
     const s = status.toLowerCase();
-    return !['canceled', 'canceledbycustomer', 'completed', 'delivered', 'shipping'].includes(s);
+    return ['processing'].includes(s);
   }
 
   cancelMyOrder(orderId: string, event: MouseEvent): void {
@@ -106,16 +108,8 @@ export class OrderComponent implements OnInit, OnDestroy{
               this.orders[index].status = 'canceledbycustomer';
             }
           },
-          error: () => {
-            this.dialog.open(ConfirmDialogComponent, {
-              width: '300px',
-              data: {
-                title: 'Lỗi',
-                message: '❌ Có lỗi xảy ra khi hủy đơn hàng.',
-                confirmText: 'Đóng',
-                hideCancel: true
-              }
-            });
+          error: (e) => {
+            console.log(e);
           }
         });
       }
@@ -126,7 +120,7 @@ export class OrderComponent implements OnInit, OnDestroy{
     const paymentMap: { [key: string]: string } = {
       momo: 'Ví Momo',
       cod: 'Thanh toán khi nhận hàng',
-      bank: 'Chuyển khoản ngân hàng',
+      // bank: 'Chuyển khoản ngân hàng',
     };
     return paymentMap[method?.toLowerCase()] || 'Không rõ';
   }

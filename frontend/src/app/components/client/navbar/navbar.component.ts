@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select'; 
-import { AuthService } from '../../../services/shared/auth/auth.service';
 
 import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/client/user/user.service';
@@ -31,7 +30,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit{
-  username: string = '';
+  accountName: string = '';
   hideSearchBar: boolean = false;
   hideCart: boolean = false;
   cartItemCount = 0;
@@ -39,7 +38,6 @@ export class NavbarComponent implements OnInit{
   isAdmin: boolean = false;
 
   constructor(private router: Router,
-              private authService: AuthService, 
               public userService: UserService, 
               private cartService: CartService) {
     this.router.events.subscribe(() => this.updateViewVisibility());
@@ -50,7 +48,7 @@ export class NavbarComponent implements OnInit{
 
   ngOnInit() {
     this.userService.currentUser$.subscribe((user: User | null) => {
-      this.username = user?.username ?? '';
+      this.accountName = user?.accountName ?? '';
       this.isLoggedIn = !!user;
     });
   }
@@ -69,7 +67,7 @@ export class NavbarComponent implements OnInit{
   logout(){
     this.userService.logout().subscribe({
       next: () => {
-        this.username = '';
+        this.accountName = '';
         this.cartService.clearCart();
         this.router.navigate(['/']);
       },
