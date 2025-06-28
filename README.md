@@ -64,6 +64,7 @@ src/app/
 **📦 Install dependencies**
 
 cd backend
+
 npm install
 
 **🔐 Configure environment variables**
@@ -90,7 +91,9 @@ FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
 **Adjust values to match your local or production setup.**
 
 **🧪 Run database migrations (if needed) and seed data**
+
 #Run the seed script
+
 npm run seed
 
 **▶️ Start the backend server**
