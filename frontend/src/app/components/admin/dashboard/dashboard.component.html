@@ -1,1 +1,52 @@
-<p>dashboard works!</p>
+<mat-toolbar color="primary">
+  <span>Dashboard Cửa Hàng</span>
+</mat-toolbar>
+
+<div class="dashboard-container">
+  <div class="stat-box" *ngFor="let stat of statistics">
+    <mat-card>
+      <mat-card-title>{{ stat.label }}</mat-card-title>
+      <mat-card-content>
+        <h2>{{ stat.value }}</h2>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="chart-container">
+    <mat-card>
+      <mat-card-title>Doanh thu theo tháng</mat-card-title>
+      <mat-button-toggle-group
+        [(ngModel)]="selectedRange"
+        (change)="onRangeChange()"
+        aria-label="Chọn khoảng thời gian"
+        appearance="legacy">
+        <mat-button-toggle value="week">Tuần</mat-button-toggle>
+        <mat-button-toggle value="month">Tháng</mat-button-toggle>
+        <mat-button-toggle value="year">Năm</mat-button-toggle>
+      </mat-button-toggle-group>
+      <canvas baseChart
+              [data]="revenueData"
+              [labels]="revenueLabels"
+              [type]="'bar'">
+      </canvas>
+    </mat-card>
+  </div>
+
+  <mat-card>
+    <mat-card-title>Top sản phẩm bán chạy</mat-card-title>
+    <table mat-table [dataSource]="topProducts" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Sản phẩm </th>
+        <td mat-cell *matCellDef="let item"> {{ item.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="sold">
+        <th mat-header-cell *matHeaderCellDef> Số lượng bán </th>
+        <td mat-cell *matCellDef="let item"> {{ item.sold }} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['name', 'sold']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['name', 'sold'];"></tr>
+    </table>
+  </mat-card>
+</div>

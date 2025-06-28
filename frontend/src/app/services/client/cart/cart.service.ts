@@ -53,4 +53,14 @@ export class CartService {
     return this.cartItemsSubject.getValue();
   }
 
+  updateQuantity(productId: string, quantity: number) {
+    const currentCart = this.cartItemsSubject.getValue();
+    const updatedCart = currentCart.map(item => {
+      if (item.product.id === productId) {
+        return { ...item, quantity };
+      }
+      return item;
+    });
+    this.cartItemsSubject.next(updatedCart);
+  }
 }

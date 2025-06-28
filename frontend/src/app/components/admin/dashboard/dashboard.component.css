@@ -1,0 +1,19 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.stat-box mat-card {
+  text-align: center;
+}
+
+.chart-container {
+  grid-column: span 2;
+}
+
+table {
+  width: 100%;
+  margin-top: 1rem;
+}

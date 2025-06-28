@@ -20,7 +20,16 @@
         </div>
         <div class="cell name">{{ item.product.productName }}</div>
         <div class="cell price">{{ item.product.price | currency:'VND' }}</div>
-        <div class="cell quantity">{{ item.quantity }}</div>
+        <div class="cell quantity">
+        <input
+          type="number"
+          [min]="1"
+          [value]="item.quantity"
+          (change)="onQuantityChange($event, item.product.id)"
+          class="quantity-input"
+        />
+      </div>
+
         <div class="cell total">{{ item.product.price * item.quantity | currency:'VND' }}</div>
         <div class="cell action">
           <button mat-icon-button color="warn" (click)="removeItem(item.product.id)">

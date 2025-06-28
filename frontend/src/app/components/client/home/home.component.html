@@ -30,7 +30,6 @@
               [alt]="banners[currentBannerIndex].name"
               class="banner-image"
           />
-
           <div class="banner-dots">
             <button
               class="dot"
@@ -48,11 +47,11 @@
     <h2>Sản phẩm nổi bật</h2>
     <div class="product-grid">
       @for (product of featuredProducts; track product) {
-        <mat-card class="product-card" @fadeInUp>
+        <mat-card class="product-card">
           <img mat-card-image [src]="product.image" alt="{{ product.productName }}" />
-          <mat-card-title>{{ product.productName }}</mat-card-title>
+          <mat-card-title  style="flex-grow: 1;">{{ product.productName }}</mat-card-title>
           <mat-card-subtitle>{{ product.price | currency:'VND' }}</mat-card-subtitle>
-          <button mat-raised-button color="primary" (click)="addToCart(product)">Thêm vào giỏ</button>
+          <button mat-raised-button color="primary" style="margin-top: auto;" (click)="addToCart(product)">Thêm vào giỏ</button>
         </mat-card>
       }
     </div>

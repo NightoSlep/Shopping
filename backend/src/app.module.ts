@@ -12,6 +12,7 @@ import { CloudinaryModule } from './common/providers/cloudinary/cloudinary.modul
 import { CloudinaryProvider } from './common/providers/cloudinary/cloudinary.provider';
 import { BannerModule } from './banner/banner.module';
 import { OrderModule } from './orders/order.module';
+import { StatisticModule } from './statistic/statistic.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { OrderModule } from './orders/order.module';
     CloudinaryModule,
     BannerModule,
     OrderModule,
+    StatisticModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],

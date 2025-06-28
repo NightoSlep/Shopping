@@ -44,4 +44,14 @@ export class CartComponent implements OnInit{
   checkout() {
     this.router.navigate(['/checkout']);
   }
+
+
+  onQuantityChange(event: Event, productId: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const newQuantity = parseInt(inputElement.value, 10);
+
+    if (!isNaN(newQuantity) && newQuantity > 0) {
+      this.cartService.updateQuantity(productId, newQuantity);
+    }
+  }
 }

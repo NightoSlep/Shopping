@@ -57,4 +57,16 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
   }
+  async getTopSellingProducts(limit = 5) {
+    return this.productRepo
+      .createQueryBuilder('product')
+      .leftJoin('product.orderDetails', 'orderDetail')
+      .select('product.id', 'id')
+      .addSelect('product.productName', 'name')
+      .addSelect('SUM(orderDetail.quantity)', 'sold')
+      .groupBy('product.id')
+      .orderBy('sold', 'DESC')
+      .limit(limit)
+      .getRawMany();
+  }
 }

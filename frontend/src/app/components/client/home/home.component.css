@@ -135,17 +135,33 @@
   border-radius: 8px;
   border: 1px solid #eee;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 360px;
   transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-grid {
+  align-items: stretch;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .product-card img {
   border-radius: 12px;
 }
+
+.product-card mat-card-title {
+  font-size: 20px; 
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 @media (max-width: 768px) {
   .banner-section {
@@ -213,3 +229,4 @@ box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 .close-button:hover {
   color: #000;
 }
+
