@@ -10,24 +10,8 @@ Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL**
 🖥️ Backend (/backend)
 
 src/
-
-  └── auth/             # Google & Facebook OAuth, JWT auth
   
-  ├── banner/           # Media or promotional content (can rename to media)
-  
-  ├── category/         # Product categories
-  
-  ├── common/           # Shared utilities, exceptions, decorators
-  
-  ├── orders/           # Order management
-  
-  ├── product/          # Product catalog and inventory
-  
-  ├── statistic/        # Admin statistics and analytics
-  
-  ├── user/             # User management
-  
-  ├── product/
+  └── product/
   
   │       ├── controller/      → Contains route handlers (e.g. GET, POST)
 
