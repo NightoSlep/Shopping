@@ -1,7 +1,7 @@
 # 🛒 Technology Store Web Application
 
 This is a fullstack web application for a technology e-commerce store.  
-Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL** as the database. Cloudinary is used for image uploads, and Google OAuth2 for authentication.
+Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL** as the database. Cloudinary is used for image uploads, and Google OAuth 2.0 is used for authentication.
 
 ---
 
@@ -11,36 +11,64 @@ Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL**
 
 src/
   └── auth/             # Google & Facebook OAuth, JWT auth
+  
   ├── banner/           # Media or promotional content (can rename to media)
+  
   ├── category/         # Product categories
+  
   ├── common/           # Shared utilities, exceptions, decorators
+  
   ├── orders/           # Order management
+  
   ├── product/          # Product catalog and inventory
+  
   ├── statistic/        # Admin statistics and analytics
+  
   ├── user/             # User management
+  
   ├── product/
+  
   │   ├── controller/      → Contains route handlers (e.g. GET, POST)
+  
   │   ├── dto/             → Data Transfer Objects (request/response schemas)
+  
   │   ├── entities/        → Database models (typically with decorators like @Entity)
+  
   │   ├── services/        → Business logic, called from controller
+  
   │   └── product.module.ts → Main module file that ties everything together
+  
   ├── app.module.ts     # Root module
+  
   └── main.ts      
+  
 
 🌐 Frontend (/frontend)
 
 src/app/
+
 ├── components/
+
 │   ├── admin/        # Admin pages (dashboard, product mgmt...)
+
 │   └── client/       # Client-facing UI (homepage, product list...)
+
 ├── services/
+
 │   ├── admin/        # API services for admin features
+
 │   ├── client/       # API services for client side
+
 │   └── shared/       # Reusable services (e.g., auth, toast)
+
 ├── guards/           # Route guards (auth, role-based access)
+
 ├── interceptor/      # HTTP interceptors (e.g., token injection)
+
 ├── models/           # Interface and types (Product, User...)
+
 ├── shared/           # Shared components (e.g., confirm dialog)
+
 ├── app.component.*   # Root app component (HTML/CSS/TS)
 
 ---
