@@ -30,7 +30,7 @@ src/
   ├── product/
   
   │       ├── controller/      → Contains route handlers (e.g. GET, POST)
-  
+
   │       ├── dto/             → Data Transfer Objects (request/response schemas)
   
   │       ├── entities/        → Database models (typically with decorators like @Entity)
