@@ -29,7 +29,7 @@ src/
   
   ├── product/
   
-  │                 ├── controller/      → Contains route handlers (e.g. GET, POST)
+  │                           ├── controller/      → Contains route handlers (e.g. GET, POST)
   
   │       ├── dto/             → Data Transfer Objects (request/response schemas)
   
