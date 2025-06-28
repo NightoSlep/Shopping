@@ -13,15 +13,15 @@ src/
   
   └── product/
   
-  │       ├── controller/      → Contains route handlers (e.g. GET, POST)
+         ├── controller/      → Contains route handlers (e.g. GET, POST)
 
-  │       ├── dto/             → Data Transfer Objects (request/response schemas)
+         ├── dto/             → Data Transfer Objects (request/response schemas)
   
-  │       ├── entities/        → Database models (typically with decorators like @Entity)
+         ├── entities/        → Database models (typically with decorators like @Entity)
   
-  │       ├── services/        → Business logic, called from controller
+         ├── services/        → Business logic, called from controller
   
-  │       └── product.module.ts → Main module file that ties everything together
+         └── product.module.ts → Main module file that ties everything together
   
   ├── app.module.ts     # Root module
   
