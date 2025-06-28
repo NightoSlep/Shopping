@@ -1,13 +1,13 @@
-interface TopProductRaw {
+export interface TopProductRaw {
   name: string | null;
   sold: string;
 }
 
-interface RevenueRaw {
+export interface RevenueRaw {
   label: string;
   total: string;
 }
 
-interface TotalRevenueRaw {
+export interface TotalRevenueRaw {
   total: string | null;
 }

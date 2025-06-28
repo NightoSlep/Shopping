@@ -70,7 +70,7 @@ export class ProductFormComponent implements OnInit{
       this.imageFile = file;
 
       const selectedCategory = this.categoryList.find(c => c.id === this.productData.categoryId);
-      let categoryName = selectedCategory?.name?.toLowerCase() || 'default';
+      let categoryName = selectedCategory?.category_name?.toLowerCase() || 'default';
       categoryName = categoryName.replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
 
       const formData = new FormData();
@@ -93,10 +93,6 @@ export class ProductFormComponent implements OnInit{
   }
 
   save() {
-  //     console.log('🧪 Dữ liệu sắp gửi:', {
-  //   ...this.productData,
-  //   image: this.imageUrl
-  // });
     if (this.productData.productName && this.productData.price > 0) {
       const productToSave = {
         ...this.productData,

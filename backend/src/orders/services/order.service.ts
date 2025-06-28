@@ -208,12 +208,12 @@ export class OrderService {
       .getRawMany();
   }
 
-  private mapDetailRowToDTO = (row: OrderDetailRow): OpenOrderDetail => ({
-    orderDetailId: row.detail_orderDetailId,
-    productId: row.detail_productId,
-    quantity: row.detail_quantity,
-    unitPrice: row.detail_unitPrice,
-    totalPrice: row.detail_totalPrice,
-    productName: row.product_productName,
+  private mapDetailRowToDTO = (row: OrderDetail): OpenOrderDetail => ({
+    orderDetailId: row.orderDetailId,
+    productId: row.productId,
+    quantity: row.quantity,
+    unitPrice: row.unitPrice,
+    totalPrice: row.totalPrice,
+    productName: row.productId,
   });
 }

@@ -5,6 +5,11 @@ import { Order } from '../../orders/entities/order.entity';
 import { OrderDetail } from '../../orders/entities/order-detail.entity';
 import { Product } from 'src/product/entities/product.entity';
 import { User } from 'src/user/entities/user.entity';
+import {
+  TotalRevenueRaw,
+  RevenueRaw,
+  TopProductRaw,
+} from '../interfaces/statistic.interface';
 
 @Injectable()
 export class StatisticService {

@@ -1,6 +1,7 @@
 import { IsUUID } from 'class-validator';
 import { OrderDetail } from 'src/orders/entities/order-detail.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum OrderStatus {
   PROCESSING = 'processing',
@@ -35,6 +36,10 @@ export class Order {
     default: OrderStatus.PROCESSING,
   })
   status: OrderStatus;
+
+  @ManyToOne(() => User, { nullable: false })
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
   orderDetails: OrderDetail[];

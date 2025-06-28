@@ -13,12 +13,12 @@
               style="cursor: pointer;">
           Tất cả
         </span>
-        @for (category of categories; track category) {
-          <span class="category-inline-item" (click)="filterByCategory(category.id || null)" 
+        <span class="category-inline-item"
+              *ngFor="let category of categories"
+              (click)="filterByCategory(category.id || null)"
               [class.active-category]="category.id === selectedCategoryId">
-            {{ category.name }}
-          </span>
-        }
+          {{ category.category_name }}
+        </span>
       </div>
     </div>
 
@@ -46,15 +46,20 @@
   <section class="product-section">
     <h2>Sản phẩm nổi bật</h2>
     <div class="product-grid">
-      @for (product of featuredProducts; track product) {
-        <mat-card class="product-card">
-          <img mat-card-image [src]="product.image" alt="{{ product.productName }}" />
-          <mat-card-title  style="flex-grow: 1;">{{ product.productName }}</mat-card-title>
-          <mat-card-subtitle>{{ product.price | currency:'VND' }}</mat-card-subtitle>
-          <button mat-raised-button color="primary" style="margin-top: auto;" (click)="addToCart(product)">Thêm vào giỏ</button>
-        </mat-card>
-      }
+      <mat-card class="product-card" *ngFor="let product of featuredProducts">
+        <img mat-card-image
+            [src]="product.image"
+             [alt]="product.productName" />
+        <mat-card-title style="flex-grow: 1;">
+          {{ product.productName }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ product.price | currency:'VND' }}
+        </mat-card-subtitle>
+        <button mat-raised-button color="primary" style="margin-top: auto;" (click)="addToCart(product)">
+          Thêm vào giỏ
+        </button>
+      </mat-card>
     </div>
   </section>
 </div>
-

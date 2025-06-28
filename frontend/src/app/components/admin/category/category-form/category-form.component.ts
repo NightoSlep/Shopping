@@ -39,7 +39,7 @@ export class CategoryFormComponent {
                 }) {
     const input = data?.category || this.category;
     if (input) {
-      this.categoryName = input.name;
+      this.categoryName = input.category_name;
       this.isEditMode = true;
     }
   }
@@ -48,7 +48,7 @@ export class CategoryFormComponent {
      if (this.categoryName.trim()) {
       const result: Category = {
         id: this.data.category?.id,
-        name: this.categoryName
+        category_name: this.categoryName
       };
       this.saved.emit(result);
       this.dialogRef.close(result);

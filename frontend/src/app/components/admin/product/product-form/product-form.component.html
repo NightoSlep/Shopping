@@ -11,7 +11,7 @@
     <mat-select [(ngModel)]="productData.categoryId" name="categoryId" required>
       @for (category of categoryList; track category) {
         <mat-option [value]="category.id">
-          {{ category.name }}
+          {{ category.category_name }}
         </mat-option>
       }
     </mat-select>

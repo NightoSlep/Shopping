@@ -45,7 +45,6 @@ export class OrderComponent implements OnInit, OnDestroy{
   openOrderDetail(orderId: string) {
     const order = this.orders.find(o => o.orderId === orderId);
     if (!order) return;
-    console.log(order);
 
     this.orderService.getDetailOrderById(orderId).subscribe(data => {
       this.selectedOrderItems = data;

@@ -153,6 +153,6 @@ export class ProductComponent implements OnInit, AfterViewInit{
 
   getCategoryName(categoryId: string): string {
     const category = this.categories.find(c => c.id === categoryId);
-    return category ? category.name : 'Không rõ';
+    return category ? category.category_name : 'Không rõ';
   }
 }
