@@ -19,17 +19,28 @@ npm install
 **🔐 Configure environment variables**
 Create a .env file in /backend directory. Example:
 
-JWT_SECRET=your_jwt_secret
+JWT_ACCESS_SECRET=your_jwt_access_secret
 
-CLOUDINARY_CLOUD_NAME=your_cloud_name
+JWT_REFRESH_SECRET=your_jwt_refresh_secret
 
-CLOUDINARY_API_KEY=your_api_key
-
-CLOUDINARY_API_SECRET=your_api_secret
+Visit https://console.cloud.google.com/ and Go to https://developers.facebook.com/ to get those ID
 
 GOOGLE_CLIENT_ID=your_google_client_id
 
 GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+GOOGLE_REDIRECT_URL=https://localhost/api/auth/google/redirect
+
+FACEBOOK_APP_ID=your_facebook_app_id
+
+FACEBOOK_APP_SECRET=your_facebook_app_secret
+
+FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
+
+# Facebook OAuth
+FACEBOOK_APP_ID=675946521577798
+FACEBOOK_APP_SECRET=bd2e7890203f4210829f790be4c1969d
+FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
 
 **Adjust values to match your local or production setup.**
 
