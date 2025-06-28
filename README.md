@@ -7,16 +7,54 @@ Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL**
 
 ## 📁 Project Structure
 
+🖥️ Backend (/backend)
+
+src/
+  └── auth/             # Google & Facebook OAuth, JWT auth
+  ├── banner/           # Media or promotional content (can rename to media)
+  ├── category/         # Product categories
+  ├── common/           # Shared utilities, exceptions, decorators
+  ├── orders/           # Order management
+  ├── product/          # Product catalog and inventory
+  ├── statistic/        # Admin statistics and analytics
+  ├── user/             # User management
+  ├── product/
+  │   ├── controller/      → Contains route handlers (e.g. GET, POST)
+  │   ├── dto/             → Data Transfer Objects (request/response schemas)
+  │   ├── entities/        → Database models (typically with decorators like @Entity)
+  │   ├── services/        → Business logic, called from controller
+  │   └── product.module.ts → Main module file that ties everything together
+  ├── app.module.ts     # Root module
+  └── main.ts      
+
+🌐 Frontend (/frontend)
+
+src/app/
+├── components/
+│   ├── admin/        # Admin pages (dashboard, product mgmt...)
+│   └── client/       # Client-facing UI (homepage, product list...)
+├── services/
+│   ├── admin/        # API services for admin features
+│   ├── client/       # API services for client side
+│   └── shared/       # Reusable services (e.g., auth, toast)
+├── guards/           # Route guards (auth, role-based access)
+├── interceptor/      # HTTP interceptors (e.g., token injection)
+├── models/           # Interface and types (Product, User...)
+├── shared/           # Shared components (e.g., confirm dialog)
+├── app.component.*   # Root app component (HTML/CSS/TS)
+
 ---
 
 ## 🚀 Getting Started
 
 ### 1️⃣ Clone the Repository
 **📦 Install dependencies**
+
 cd backend
 npm install
 
 **🔐 Configure environment variables**
+
 Create a .env file in /backend directory. Example:
 
 JWT_ACCESS_SECRET=your_jwt_access_secret
@@ -36,12 +74,6 @@ FACEBOOK_APP_ID=your_facebook_app_id
 FACEBOOK_APP_SECRET=your_facebook_app_secret
 
 FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
-
-# Facebook OAuth
-FACEBOOK_APP_ID=675946521577798
-FACEBOOK_APP_SECRET=bd2e7890203f4210829f790be4c1969d
-FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
-
 **Adjust values to match your local or production setup.**
 
 **🧪 Run database migrations (if needed) and seed data**
@@ -59,18 +91,18 @@ cd frontend
 npm install
 
 **⚙️ Configure environment variables**
-Check or create the environment file at:
-
-bash
-Copy
-Edit
+Create the environment file at:
 
 src/environments/environment.ts
 
+export const environment = {
+  production: false,
+  googleClientId: 'your_google_client_id',
+  facebookAppId: 'your_facebook_app_id',
+  apiUrl: '/api'
+};
+
 **▶️ Start the Angular development server**
-bash
-Copy
-Edit
 
 ng serve
 
