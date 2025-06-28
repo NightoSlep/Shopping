@@ -1,6 +1,6 @@
 # 🛒 Technology Store Web Application
 
-This is a fullstack web application for a technology e-commerce store.  
+This is a full-stack web application for a technology e-commerce store.  
 Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL** as the database. Cloudinary is used for image uploads, and Google OAuth 2.0 is used for authentication.
 
 ---
@@ -10,6 +10,7 @@ Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL**
 🖥️ Backend (/backend)
 
 src/
+
   └── auth/             # Google & Facebook OAuth, JWT auth
   
   ├── banner/           # Media or promotional content (can rename to media)
@@ -28,48 +29,48 @@ src/
   
   ├── product/
   
-  │   ├── controller/      → Contains route handlers (e.g. GET, POST)
+  │       ├── controller/      → Contains route handlers (e.g. GET, POST)
   
-  │   ├── dto/             → Data Transfer Objects (request/response schemas)
+  │       ├── dto/             → Data Transfer Objects (request/response schemas)
   
-  │   ├── entities/        → Database models (typically with decorators like @Entity)
+  │       ├── entities/        → Database models (typically with decorators like @Entity)
   
-  │   ├── services/        → Business logic, called from controller
+  │       ├── services/        → Business logic, called from controller
   
-  │   └── product.module.ts → Main module file that ties everything together
+  │       └── product.module.ts → Main module file that ties everything together
   
   ├── app.module.ts     # Root module
   
   └── main.ts      
-  
 
+  
 🌐 Frontend (/frontend)
 
 src/app/
 
 ├── components/
 
-│   ├── admin/        # Admin pages (dashboard, product mgmt...)
+│      ├── admin/        # Admin pages (dashboard, product mgmt...)
 
-│   └── client/       # Client-facing UI (homepage, product list...)
+│      └── client/       # Client-facing UI (homepage, product list...)
 
-├── services/
+├──    services/
 
-│   ├── admin/        # API services for admin features
+│      ├── admin/        # API services for admin features
 
-│   ├── client/       # API services for client side
+│      ├── client/       # API services for client side
 
-│   └── shared/       # Reusable services (e.g., auth, toast)
+│      └── shared/       # Reusable services (e.g., auth, toast)
 
-├── guards/           # Route guards (auth, role-based access)
+├──    guards/           # Route guards (auth, role-based access)
 
-├── interceptor/      # HTTP interceptors (e.g., token injection)
+├──    interceptor/      # HTTP interceptors (e.g., token injection)
 
-├── models/           # Interface and types (Product, User...)
+├──    models/           # Interface and types (Product, User...)
 
-├── shared/           # Shared components (e.g., confirm dialog)
+├──    shared/           # Shared components (e.g., confirm dialog)
 
-├── app.component.*   # Root app component (HTML/CSS/TS)
+├──    app.component.*   # Root app component (HTML/CSS/TS)
 
 ---
 
