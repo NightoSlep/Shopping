@@ -18,7 +18,7 @@ npm install
 
 **🔐 Configure environment variables**
 Create a .env file in /backend directory. Example:
-DATABASE_URL=postgres://user:password@localhost:5432/your_db
+
 JWT_SECRET=your_jwt_secret
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
@@ -28,7 +28,7 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 **Adjust values to match your local or production setup.**
 
 **🧪 Run database migrations (if needed) and seed data**
-# Run the seed script
+#Run the seed script
 npm run seed
 
 **▶️ Start the backend server**
