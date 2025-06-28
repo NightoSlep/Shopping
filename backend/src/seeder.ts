@@ -57,6 +57,19 @@ async function bootstrap() {
     ]);
 
   // Sản phẩm
+  const imageUrls = [
+    'https://example.com/images/iphone15.jpg',
+    'https://example.com/images/galaxy-s24.jpg',
+    'https://example.com/images/sony-whch520.jpg',
+    'https://example.com/images/oppo-reno10.jpg',
+    'https://example.com/images/vivo-v30.jpg',
+    'https://example.com/images/anker-cable.jpg',
+    'https://example.com/images/nokia-xr21.jpg',
+    'https://example.com/images/asus-rog7.jpg',
+    'https://example.com/images/iphone15-case.jpg',
+    'https://example.com/images/huawei-p60.jpg',
+  ];
+
   const sampleProductNames = [
     'iPhone 15',
     'Samsung Galaxy S24',
@@ -75,6 +88,7 @@ async function bootstrap() {
       productName: name,
       price: randomInt(800_000, 3_000_000),
       quantity: randomInt(20, 100),
+      image: imageUrls[index],
       category: categories[index % categories.length],
     })),
   );
