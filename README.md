@@ -51,9 +51,9 @@ npm install
 ```
 
 **🔐 Configure environment variables**
-```
-Create a .env file in /backend directory. Example:
 
+Create a .env file in /backend directory. Example:
+```
 JWT_ACCESS_SECRET=your_jwt_access_secret
 
 JWT_REFRESH_SECRET=your_jwt_refresh_secret
