@@ -44,13 +44,14 @@ Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL**
 
 #### 📦 Install dependencies
 
-```bash
+```
 cd backend
-npm install
 
+npm install
+```
 
 **🔐 Configure environment variables**
-
+```
 Create a .env file in /backend directory. Example:
 
 JWT_ACCESS_SECRET=your_jwt_access_secret
@@ -71,32 +72,34 @@ FACEBOOK_APP_SECRET=your_facebook_app_secret
 
 FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
 
+```
+
 **Adjust values to match your local or production setup.**
 
 **🧪 Run database migrations (if needed) and seed data**
 
 #Run the seed script
-
+```
 npm run seed
-
+```
 **▶️ Start the backend server**
-
+```
 npm run start:dev
-
+```
 **Frontend**
 
 **📦 Install dependencies**
-
+```
 cd frontend
 
 npm install
-
+```
 **⚙️ Configure environment variables**
 
 Create the environment file at:
 
 src/environments/environment.ts
-
+```
 export const environment = {
 
   production: false,
@@ -108,9 +111,9 @@ export const environment = {
   apiUrl: '/api'
   
 };
-
+```
 **▶️ Start the Angular development server**
-
+```
 ng serve
-
+```
 You can now access the full app by navigating to the frontend URL. It will communicate with your backend via the configured apiUrl.
