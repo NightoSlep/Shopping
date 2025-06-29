@@ -97,7 +97,7 @@ FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
 
 #Run the seed script
 
-`npm run seed`
+npm run seed
 
 **▶️ Start the backend server**
 
