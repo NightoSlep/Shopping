@@ -77,7 +77,7 @@ JWT_ACCESS_SECRET=your_jwt_access_secret
 
 JWT_REFRESH_SECRET=your_jwt_refresh_secret
 
-Visit https://console.cloud.google.com/ and Go to https://developers.facebook.com/ to get those ID
+Visit https://console.cloud.google.com/ and go to https://developers.facebook.com/ to get those ID
 
 GOOGLE_CLIENT_ID=your_google_client_id
 
@@ -97,7 +97,7 @@ FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
 
 #Run the seed script
 
-npm run seed
+`npm run seed`
 
 **▶️ Start the backend server**
 
