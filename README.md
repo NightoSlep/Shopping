@@ -8,54 +8,33 @@ Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL**
 
 ## 📁 Project Structure
 
-🖥️ Backend (/backend)
+### 🖥️ Backend (`/backend`)
 
-src/
-  
-  └── product/
-  
-         ├── controller/      → Contains route handlers (e.g. GET, POST)
+- `src/`
+  - `product/`
+    - `controller/` → Contains route handlers (e.g. GET, POST)
+    - `dto/` → Data Transfer Objects (request/response schemas)
+    - `entities/` → Database models (typically with decorators like @Entity)
+    - `services/` → Business logic, called from controller
+    - `product.module.ts` → Main module file that ties everything together
+  - `app.module.ts` → Root module
+  - `main.ts`
 
-         ├── dto/             → Data Transfer Objects (request/response schemas)
-  
-         ├── entities/        → Database models (typically with decorators like @Entity)
-  
-         ├── services/        → Business logic, called from controller
-  
-         └── product.module.ts → Main module file that ties everything together
-  
-  ├── app.module.ts     # Root module
-  
-  └── main.ts      
+### 🌐 Frontend (`/frontend`)
 
-  
-🌐 Frontend (/frontend)
-
-src/app/
-
-├── components/
-
-│      ├── admin/        # Admin pages (dashboard, product mgmt...)
-
-│      └── client/       # Client-facing UI (homepage, product list...)
-
-├──    services/
-
-│      ├── admin/        # API services for admin features
-
-│      ├── client/       # API services for client side
-
-│      └── shared/       # Reusable services (e.g., auth, toast)
-
-├──    guards/           # Route guards (auth, role-based access)
-
-├──    interceptor/      # HTTP interceptors (e.g., token injection)
-
-├──    models/           # Interface and types (Product, User...)
-
-├──    shared/           # Shared components (e.g., confirm dialog)
-
-├──    app.component.*   # Root app component (HTML/CSS/TS)
+- `src/app/`
+  - `components/`
+    - `admin/` → Admin pages (dashboard, product mgmt...)
+    - `client/` → Client-facing UI (homepage, product list...)
+  - `services/`
+    - `admin/` → API services for admin features
+    - `client/` → API services for client side
+    - `shared/` → Reusable services (e.g., auth, toast)
+  - `guards/` → Route guards (auth, role-based access)
+  - `interceptor/` → HTTP interceptors (e.g., token injection)
+  - `models/` → Interface and types (Product, User...)
+  - `shared/` → Shared components (e.g., confirm dialog)
+  - `app.component.*` → Root app component (HTML/CSS/TS)
 
 ---
 
@@ -63,11 +42,12 @@ src/app/
 
 ### 1️⃣ Clone the Repository
 
-**📦 Install dependencies**
+#### 📦 Install dependencies
 
+```bash
 cd backend
-
 npm install
+
 
 **🔐 Configure environment variables**
 
