@@ -1,6 +1,7 @@
 # 🛒 Technology Store Web Application
 
 This is a full-stack web application for a technology e-commerce store.  
+
 Built with **Angular** (frontend) and **NestJS** (backend), using **PostgreSQL** as the database. Cloudinary is used for image uploads, and Google OAuth 2.0 is used for authentication.
 
 ---
@@ -61,6 +62,7 @@ src/app/
 ## 🚀 Getting Started
 
 ### 1️⃣ Clone the Repository
+
 **📦 Install dependencies**
 
 cd backend
@@ -88,6 +90,7 @@ FACEBOOK_APP_ID=your_facebook_app_id
 FACEBOOK_APP_SECRET=your_facebook_app_secret
 
 FACEBOOK_REDIRECT_URL=https://localhost/api/auth/facebook/redirect
+
 **Adjust values to match your local or production setup.**
 
 **🧪 Run database migrations (if needed) and seed data**
@@ -101,21 +104,29 @@ npm run seed
 npm run start:dev
 
 **Frontend**
+
 **📦 Install dependencies**
 
 cd frontend
+
 npm install
 
 **⚙️ Configure environment variables**
+
 Create the environment file at:
 
 src/environments/environment.ts
 
 export const environment = {
+
   production: false,
+  
   googleClientId: 'your_google_client_id',
+  
   facebookAppId: 'your_facebook_app_id',
+  
   apiUrl: '/api'
+  
 };
 
 **▶️ Start the Angular development server**
